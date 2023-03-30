@@ -18,6 +18,7 @@ class AppHttpResultData {
   num? code;
   dynamic data;
   String? msg;
+  int? sourceStatusCode;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

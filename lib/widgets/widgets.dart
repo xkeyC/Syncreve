@@ -8,15 +8,15 @@ export 'src/smart_refresher.dart';
 
 AppBar makeAppbar(BuildContext context, String title,
     {Color? backgroundColor,
-      GestureTapCallback? onBack,
-      List<Widget>? actions,
-      Widget? titleWidget,
-      Widget? backIcon,
-      PreferredSizeWidget? bottom,
-      bool showBack = true,
-      bool centerTitle = true,
-      Color? textColor,
-      Widget? leadingWidget}) {
+    GestureTapCallback? onBack,
+    List<Widget>? actions,
+    Widget? titleWidget,
+    Widget? backIcon,
+    PreferredSizeWidget? bottom,
+    bool showBack = true,
+    bool centerTitle = false,
+    Color? textColor,
+    Widget? leadingWidget}) {
   return AppBar(
     title: titleWidget ??
         GestureDetector(
@@ -27,13 +27,11 @@ AppBar makeAppbar(BuildContext context, String title,
         ),
     centerTitle: centerTitle,
     automaticallyImplyLeading: false,
-    elevation: 0,
+    elevation: .1,
     bottom: bottom,
     backgroundColor: backgroundColor,
     systemOverlayStyle: SystemUiOverlayStyle(
-      statusBarBrightness: Theme
-          .of(context)
-          .brightness,
+      statusBarBrightness: Theme.of(context).brightness,
       statusBarIconBrightness: getAndroidIconBrightness(context),
     ),
     actions: actions,
@@ -41,35 +39,30 @@ AppBar makeAppbar(BuildContext context, String title,
     leading: leadingWidget ??
         (showBack
             ? InkResponse(
-          onTap: onBack ??
-                  () {
-                Navigator.of(context).pop();
-              },
-          child: backIcon ??
-              Icon(
-                Icons.arrow_back_ios,
-                color: textColor ??
-                    Theme
-                        .of(context)
-                        .appBarTheme
-                        .titleTextStyle
-                        ?.color,
-                size: 20,
-              ),
-        )
+                onTap: onBack ??
+                    () {
+                      Navigator.of(context).pop();
+                    },
+                child: backIcon ??
+                    Icon(
+                      Icons.arrow_back_ios,
+                      color: textColor ??
+                          Theme.of(context).appBarTheme.titleTextStyle?.color,
+                      size: 20,
+                    ),
+              )
             : null),
   );
 }
 
 getAndroidIconBrightness(BuildContext context) {
-  return Theme
-      .of(context)
-      .brightness == Brightness.light
+  return Theme.of(context).brightness == Brightness.light
       ? Brightness.dark
       : Brightness.light;
 }
 
-Widget makeLoading(BuildContext context, {
+Widget makeLoading(
+  BuildContext context, {
   double? width,
 }) {
   width ??= 30;
@@ -82,8 +75,6 @@ Widget makeLoading(BuildContext context, {
     ),
   );
 }
-
-
 
 class MyEasyLoadingAnimation extends EasyLoadingAnimation {
   @override
@@ -110,27 +101,38 @@ class MyEasyLoadingAnimation extends EasyLoadingAnimation {
 Widget makeSafeAre(BuildContext context, {bool withKeyboard = true}) {
   return SafeArea(
       child: Column(
-        children: [
-          const SizedBox(height: 4),
-          if (withKeyboard)
-            SizedBox(
-              height: MediaQuery
-                  .of(context)
-                  .viewInsets
-                  .bottom,
-            ),
-        ],
-      ));
+    children: [
+      const SizedBox(height: 4),
+      if (withKeyboard)
+        SizedBox(
+          height: MediaQuery.of(context).viewInsets.bottom,
+        ),
+    ],
+  ));
 }
 
 makeSvgColor(Color color) {
   return ui.ColorFilter.mode(color, ui.BlendMode.srcIn);
 }
 
+fastPadding(
+    {required double? all,
+    required Widget child,
+    double left = 0.0,
+    double top = 0.0,
+    double right = 0.0,
+    double bottom = 0.0}) {
+  return Padding(
+      padding: all != null
+          ? EdgeInsets.all(all)
+          : EdgeInsets.only(left: left, top: top, right: right, bottom: bottom),
+      child: child);
+}
+
 class NoScrollBehavior extends ScrollBehavior {
   @override
-  Widget buildOverscrollIndicator(BuildContext context, Widget child,
-      ScrollableDetails details) {
+  Widget buildOverscrollIndicator(
+      BuildContext context, Widget child, ScrollableDetails details) {
     return child;
   }
 }

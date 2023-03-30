@@ -21,7 +21,7 @@ class BaseUIModel extends ChangeNotifier {
 
   @mustCallSuper
   void initModel() {
-    gPrint("[base] <$runtimeType> Model Init");
+    dPrint("[base] <$runtimeType> Model Init");
     loadData();
   }
 
@@ -33,7 +33,7 @@ class BaseUIModel extends ChangeNotifier {
       (value as BaseUIModel).dispose();
       _childUIModels?[k] = null;
     });
-    gPrint("[base] <$runtimeType> Model Disposed");
+    dPrint("[base] <$runtimeType> Model Disposed");
     super.dispose();
   }
 
@@ -49,7 +49,6 @@ class BaseUIModel extends ChangeNotifier {
     super.notifyListeners();
   }
 
-
   Future<T?> handleError<T>(Future<T> Function() requestFunc,
       {bool showFullScreenError = false}) async {
     uiErrorMsg = "";
@@ -57,7 +56,7 @@ class BaseUIModel extends ChangeNotifier {
     try {
       return await requestFunc();
     } catch (e) {
-      gPrint("UIModel.handleError Error:$e");
+      dPrint("UIModel.handleError Error:$e");
       String errorMsg = "Unknown Error";
       if (e is AppHttpResultData && stringIsNotEmpty(e.msg)) {
         errorMsg = e.msg!;
@@ -80,7 +79,6 @@ class BaseUIModel extends ChangeNotifier {
   Map<dynamic, dynamic>? _childUIProviders;
 
   BaseUIModel? onCreateChildUIModel(modelKey) => null;
-
 
   dynamic _getChildUIModel(modelKey) {
     _childUIModels ??= {};
@@ -105,7 +103,6 @@ class BaseUIModel extends ChangeNotifier {
     return _childUIProviders![modelKey]!;
   }
 
-
   T? getCreatedChildUIModel<T extends BaseUIModel>(String modelKey) {
     return _childUIModels?[modelKey] as T?;
   }
@@ -118,5 +115,9 @@ class BaseUIModel extends ChangeNotifier {
     }
     await Future.wait(futureList);
     notifyListeners();
+  }
+
+  dismissKeyBoard() {
+    FocusManager.instance.primaryFocus?.unfocus();
   }
 }

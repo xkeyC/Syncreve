@@ -95,14 +95,14 @@ abstract class BaseUI<T extends BaseUIModel>
   @mustCallSuper
   @override
   void initState() {
-    gPrint("[base] <$runtimeType> UI Init");
+    dPrint("[base] <$runtimeType> UI Init");
     super.initState();
   }
 
   @mustCallSuper
   @override
   void dispose() {
-    gPrint("[base] <$runtimeType> UI Disposed");
+    dPrint("[base] <$runtimeType> UI Disposed");
     _needDisposeModel?.dispose();
     _needDisposeModel = null;
     super.dispose();

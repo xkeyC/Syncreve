@@ -4,7 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'dart:ui' as ui;
 import 'package:fluttertoast/fluttertoast.dart';
 
-void gPrint(src) {
+void dPrint(src) {
   if (kDebugMode) {
     print(src);
   }
