@@ -28,4 +28,10 @@ class SetupWebviewUIModel extends BaseUIModel {
       }
     }
   }
+
+  @override
+  void dispose() {
+    cookieManager.deleteAllCookies();
+    super.dispose();
+  }
 }
