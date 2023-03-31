@@ -72,10 +72,11 @@ class HomeFileUI extends BaseUI<HomeFileUIModel> {
         all: null,
         left: 6,
         right: 6,
-        top: 6,
+        top: 0,
         child: AlignedGridView.count(
           crossAxisCount: 3,
           itemCount: model.files?.objects?.length ?? 0,
+          padding: const EdgeInsets.only(top: 6),
           itemBuilder: (BuildContext context, int index) {
             final file = model.files!.objects![index];
             return Card(
