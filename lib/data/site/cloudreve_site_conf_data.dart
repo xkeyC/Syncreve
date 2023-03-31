@@ -60,17 +60,6 @@ class CloudreveSiteConfData {
   }
 }
 
-/// id : "kRfO"
-/// user_name : "xkeyc@xkeyc.com"
-/// nickname : "xkeyC"
-/// status : 0
-/// avatar : "file"
-/// created_at : "2023-03-17T11:07:59.476419969+08:00"
-/// preferred_theme : ""
-/// anonymous : false
-/// group : {"id":1,"name":"Admin","allowShare":true,"allowRemoteDownload":true,"allowArchiveDownload":true,"shareDownload":true,"compress":true,"webdav":true,"sourceBatch":1000,"advanceDelete":true}
-/// tags : []
-
 class CloudreveSiteConfUserData {
   CloudreveSiteConfUserData({
     this.id,
@@ -135,17 +124,6 @@ class CloudreveSiteConfUserData {
     return map;
   }
 }
-
-/// id : 1
-/// name : "Admin"
-/// allowShare : true
-/// allowRemoteDownload : true
-/// allowArchiveDownload : true
-/// shareDownload : true
-/// compress : true
-/// webdav : true
-/// sourceBatch : 1000
-/// advanceDelete : true
 
 class CloudreveSiteConfGroupData {
   CloudreveSiteConfGroupData({

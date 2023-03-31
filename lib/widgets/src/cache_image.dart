@@ -21,34 +21,32 @@ class CacheImage extends StatefulWidget {
 class _CacheImageState extends State<CacheImage>
     with AutomaticKeepAliveClientMixin {
   File? imageFile;
-  StreamSubscription? fileStream;
+  bool isLoadingFailed = false;
+  String curUrl = "";
 
-  @override
-  void initState() {
-    if (fileStream != null || widget.url == null || widget.url == "") {
+  _loadImage() async {
+    if (curUrl == widget.url) return;
+    if (widget.url == null || widget.url == "") {
       return;
     }
-    fileStream =
-        AppCacheManager.getFile(widget.url!)!.asStream().listen((file) {
+    curUrl = widget.url!;
+    try {
+      final file = await AppCacheManager.getFile(curUrl);
       setState(() {
         imageFile = file;
       });
-    });
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    if (fileStream != null) {
-      fileStream!.cancel();
+    } catch (e) {
+      await Future.delayed(const Duration(milliseconds: 16));
+      setState(() {
+        isLoadingFailed = true;
+      });
     }
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
+    _loadImage();
     if (widget.url == null || widget.url == "") {
       if (widget.nullUrlWidget != null) {
         return widget.nullUrlWidget!;
@@ -56,13 +54,16 @@ class _CacheImageState extends State<CacheImage>
       return const SizedBox();
     }
 
-    return imageFile == null
-        ? Icon(
-            Icons.image,
-            size: widget.loaderSize,
-            color: Colors.grey,
-          )
-        : Image.file(imageFile!);
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 300),
+      child: imageFile == null
+          ? Icon(
+              isLoadingFailed ? Icons.error_outlined : Icons.image,
+              size: widget.loaderSize,
+              color: Colors.grey,
+            )
+          : Image.file(imageFile!),
+    );
   }
 
   @override

@@ -62,6 +62,7 @@ class AppCacheManager {
 
   static Future<File> _getFileWithUrl(
       File file, String url, String fileName) async {
+    dPrint("[AppCacheManager] _getFileWithUrl $url");
     final req = await _httpClient.getUrl(Uri.parse(url));
     // req.headers.add("User-Agent",
     //     "Fluam/cache_manager A cross-platform flarum client. (github.com/fluam/fluam_app)");

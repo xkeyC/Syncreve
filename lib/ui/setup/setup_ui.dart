@@ -35,7 +35,7 @@ class SetupUI extends BaseUI<SetupUIModel> {
                           TextField(
                             controller: model.urlTextCtrl,
                             decoration: const InputDecoration(
-                              hintText: "Cloudreve Instance Url",
+                              hintText: "Cloudreve Instance URL",
                             ),
                           ),
                         ] else ...[

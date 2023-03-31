@@ -23,6 +23,7 @@ dependencies:
   flutter_screenutil: ^5.7.0
   crypto: ^3.0.2
   flutter_inappwebview: ^6.0.0-beta.22
+  path_provider: ^2.0.14
 
   cupertino_icons: ^1.0.2
 

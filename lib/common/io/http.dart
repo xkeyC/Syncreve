@@ -100,7 +100,9 @@ class AppHttp {
   }
 
   static Map<String, dynamic>? _getHeaders(String path) {
-    final Map<String, dynamic> headers = {};
+    final Map<String, dynamic> headers = {
+      "cookie": AppConf.cloudreveSession,
+    };
     headers.removeWhere((key, value) => value == null);
     return headers;
   }

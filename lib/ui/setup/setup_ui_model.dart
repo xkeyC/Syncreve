@@ -14,6 +14,8 @@ class SetupUIModel extends BaseUIModel {
 
   bool isEnterButtonLoading = false;
 
+  bool _isJumped = false;
+
   _setLoading(bool b) {
     isEnterButtonLoading = b;
     notifyListeners();
@@ -52,6 +54,8 @@ class SetupUIModel extends BaseUIModel {
   }
 
   onWebviewLogin(String cookies) {
+    if (_isJumped) return;
+    _isJumped = true;
     BaseUIContainer(
             uiCreate: () => SetupAccountUI(),
             modelCreate: () =>

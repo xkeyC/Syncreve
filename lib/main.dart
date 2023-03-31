@@ -5,15 +5,25 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:syncreve/base/ui_model.dart';
+import 'package:syncreve/common/account_manager.dart';
+import 'package:syncreve/common/io/cache_manager.dart';
 import 'package:syncreve/global_ui_model.dart';
+import 'package:syncreve/ui/home/home_ui.dart';
+import 'package:syncreve/ui/home/home_ui_model.dart';
 import 'package:syncreve/ui/setup/setup_ui.dart';
 import 'package:syncreve/ui/setup/setup_ui_model.dart';
 import 'package:syncreve/widgets/src/fade_transition_route.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Hive.initFlutter("Syncrever/db");
+  await AppCacheManager.init(
+      "${(await getTemporaryDirectory()).absolute.path}/Syncrever/cache", 1000);
+  await AppAccountManager.init();
+
   runApp(ProviderScope(
     child: BaseUIContainer(
       uiCreate: () => SplashUI(),
@@ -97,6 +107,13 @@ class SplashUI extends BaseUI<AppGlobalUIModel> {
   }
 
   _goNext() async {
+    if (AppAccountManager.workingAccount != null) {
+      // TODO check account
+      BaseUIContainer(
+              uiCreate: () => HomeUI(), modelCreate: () => HomeUIModel())
+          .pushAndRemoveUntil(scaffoldState.currentContext!);
+      return;
+    }
     Navigator.pushAndRemoveUntil(scaffoldState.currentContext!,
         FadeTransitionRoute(builder: (BuildContext context) {
       return BaseUIContainer(
