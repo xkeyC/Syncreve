@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:hive/hive.dart';
 import 'package:syncreve/base/base_utils.dart';
+import 'package:syncreve/common/account_manager.dart';
+import 'package:syncreve/common/conf.dart';
 import 'package:syncreve/common/utils/string.dart';
 
 class AppCacheManager {
@@ -64,9 +66,18 @@ class AppCacheManager {
       File file, String url, String fileName) async {
     dPrint("[AppCacheManager] _getFileWithUrl $url");
     final req = await _httpClient.getUrl(Uri.parse(url));
+
+    if (url.contains(AppAccountManager.workingAccount?.instanceUrl ?? "")) {
+      req.headers.add("cookie", AppConf.cloudreveSession);
+    }
+
     // req.headers.add("User-Agent",
     //     "Fluam/cache_manager A cross-platform flarum client. (github.com/fluam/fluam_app)");
     final result = await req.close();
+    final codeStr = result.statusCode.toString();
+    if (codeStr.startsWith("4") || codeStr.startsWith("5")) {
+      throw "loading Error";
+    }
     file.create(recursive: true);
     final w = file.openWrite();
     await w.addStream(result);

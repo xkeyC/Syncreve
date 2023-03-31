@@ -154,6 +154,7 @@ Widget makeUserAvatar(double size) {
           child: CacheImage(
             "${account.instanceUrl}/api/v3/user/avatar/${account.userID}/l",
             loaderSize: size,
+            cacheWidth: (size * 3).toInt(),
           )),
     );
   } else {

@@ -7,12 +7,24 @@ import 'package:syncreve/common/io/cache_manager.dart';
 class CacheImage extends StatefulWidget {
   final String? url;
   final Widget? nullUrlWidget;
+  final BoxFit? fit;
+  final double? height;
+  final double? width;
+  final int? cacheHeight;
+  final int? cacheWidth;
 
   /// loader
   final double loaderSize;
 
   const CacheImage(this.url,
-      {super.key, this.loaderSize = 64, this.nullUrlWidget});
+      {super.key,
+      this.loaderSize = 64,
+      this.nullUrlWidget,
+      this.fit,
+      this.height,
+      this.width,
+      this.cacheHeight,
+      this.cacheWidth});
 
   @override
   State<CacheImage> createState() => _CacheImageState();
@@ -60,9 +72,16 @@ class _CacheImageState extends State<CacheImage>
           ? Icon(
               isLoadingFailed ? Icons.error_outlined : Icons.image,
               size: widget.loaderSize,
-              color: Colors.grey,
+              color: Colors.grey.withAlpha(100),
             )
-          : Image.file(imageFile!),
+          : Image.file(
+              imageFile!,
+              fit: widget.fit,
+              height: widget.height,
+              width: widget.width,
+              cacheHeight: widget.cacheHeight,
+              cacheWidth: widget.cacheWidth,
+            ),
     );
   }
 
