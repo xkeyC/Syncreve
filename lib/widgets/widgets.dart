@@ -115,6 +115,11 @@ makeSvgColor(Color color) {
   return ui.ColorFilter.mode(color, ui.BlendMode.srcIn);
 }
 
+bool isPadUI(BuildContext context) {
+  final size = MediaQuery.of(context).size;
+  return size.width >= size.height;
+}
+
 fastPadding(
     {required double? all,
     required Widget child,

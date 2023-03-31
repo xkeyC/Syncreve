@@ -24,6 +24,7 @@ dependencies:
   crypto: ^3.0.2
   flutter_inappwebview: ^6.0.0-beta.22
   path_provider: ^2.0.14
+  font_awesome_flutter: ^10.4.0
 
   cupertino_icons: ^1.0.2
 
