@@ -1,5 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:syncreve/common/account_manager.dart';
+import 'package:syncreve/widgets/src/cache_image.dart';
 import 'dart:ui' as ui;
 
 import '../base/ui_model.dart';
@@ -139,5 +141,22 @@ class NoScrollBehavior extends ScrollBehavior {
   Widget buildOverscrollIndicator(
       BuildContext context, Widget child, ScrollableDetails details) {
     return child;
+  }
+}
+
+Widget makeUserAvatar(double size) {
+  final account = AppAccountManager.workingAccount;
+  if (account != null && account.cloudreveSiteConfData.user?.avatar == "file") {
+    return ClipOval(
+      child: SizedBox(
+          width: size,
+          height: size,
+          child: CacheImage(
+            "${account.instanceUrl}/api/v3/user/avatar/${account.userID}/l",
+            loaderSize: size,
+          )),
+    );
+  } else {
+    return const Icon(Icons.account_circle, size: 64);
   }
 }

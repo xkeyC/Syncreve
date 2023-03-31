@@ -43,6 +43,10 @@ class BaseUIModel extends ChangeNotifier {
     return loadData();
   }
 
+  Future onErrorReloadData() async {
+    return loadData();
+  }
+
   @override
   void notifyListeners() {
     if (!mounted) return;

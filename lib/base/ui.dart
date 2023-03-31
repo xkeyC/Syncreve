@@ -132,7 +132,7 @@ abstract class BaseUI<T extends BaseUIModel>
           ],
         )),
         onTap: () async {
-          await model.reloadData();
+          await model.onErrorReloadData();
         },
       );
     }
