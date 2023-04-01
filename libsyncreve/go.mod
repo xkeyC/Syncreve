@@ -1,3 +1,3 @@
-module github.com/xkeyC/LibSyncreve
+module github.com/xkeyC/Syncreve/libsyncreve
 
 go 1.20
