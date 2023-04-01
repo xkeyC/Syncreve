@@ -5,10 +5,8 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:syncreve/base/ui_model.dart';
 import 'package:syncreve/common/account_manager.dart';
-import 'package:syncreve/common/io/cache_manager.dart';
 import 'package:syncreve/global_ui_model.dart';
 import 'package:syncreve/ui/home_ui.dart';
 import 'package:syncreve/ui/home_ui_model.dart';
@@ -20,8 +18,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Hive.initFlutter("Syncrever/db");
-  await AppCacheManager.init(
-      "${(await getTemporaryDirectory()).absolute.path}/Syncrever/cache", 1000);
   await AppAccountManager.init();
 
   runApp(ProviderScope(

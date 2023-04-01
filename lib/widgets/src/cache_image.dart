@@ -1,8 +1,7 @@
-import 'dart:async';
-import 'dart:io';
-
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:syncreve/common/io/cache_manager.dart';
+import 'package:syncreve/common/account_manager.dart';
+import 'package:syncreve/common/conf.dart';
 
 class CacheImage extends StatefulWidget {
   final String? url;
@@ -13,100 +12,111 @@ class CacheImage extends StatefulWidget {
   final int? cacheHeight;
   final int? cacheWidth;
   final BorderRadius? borderRadius;
+  final bool clearMemoryCacheWhenDispose;
 
   /// loader
   final double loaderSize;
 
   const CacheImage(this.url,
       {super.key,
-      this.loaderSize = 64,
+      this.loaderSize = 32,
       this.nullUrlWidget,
       this.fit,
       this.height,
       this.width,
       this.cacheHeight,
       this.cacheWidth,
-      this.borderRadius});
+      this.borderRadius,
+      this.clearMemoryCacheWhenDispose = false});
 
   @override
   State<CacheImage> createState() => _CacheImageState();
 }
 
-class _CacheImageState extends State<CacheImage>
-    with AutomaticKeepAliveClientMixin {
-  File? imageFile;
-  bool isLoadingFailed = false;
-  String curUrl = "";
-
-  _loadImage() async {
-    if (curUrl == widget.url) return;
-    if (widget.url == null || widget.url == "") {
-      return;
-    }
-    curUrl = widget.url!;
-    try {
-      final file = await AppCacheManager.getFile(curUrl);
-      await Future.delayed(const Duration(milliseconds: 200));
-      if (mounted) {
-        setState(() {
-          imageFile = file;
-        });
-      }
-    } catch (e) {
-      await Future.delayed(const Duration(milliseconds: 16));
-      if (mounted) {
-        setState(() {
-          isLoadingFailed = true;
-        });
-      }
-    }
-  }
+class _CacheImageState extends State<CacheImage> with TickerProviderStateMixin {
+  late final AnimationController controller = AnimationController(
+      vsync: this, duration: const Duration(milliseconds: 300));
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-    _loadImage();
     if (widget.url == null || widget.url == "") {
-      if (widget.nullUrlWidget != null) {
-        return widget.nullUrlWidget!;
-      }
-      return const SizedBox();
+      return SizedBox(
+        width: widget.width,
+        height: widget.height,
+        child: widget.nullUrlWidget,
+      );
     }
+    return widget.borderRadius == null
+        ? getImageWidget()
+        : ClipRRect(
+            borderRadius: widget.borderRadius,
+            child: getImageWidget(),
+          );
+  }
 
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 300),
-      child: imageFile == null
-          ? SizedBox(
+  Widget getImageWidget() {
+    return ExtendedImage.network(
+      widget.url ?? "",
+      width: widget.width,
+      height: widget.height,
+      cacheWidth: widget.cacheHeight,
+      cacheHeight: widget.cacheHeight,
+      headers: _getHttpHeaders(),
+      enableLoadState: true,
+      clearMemoryCacheWhenDispose: widget.clearMemoryCacheWhenDispose,
+      loadStateChanged: (state) {
+        switch (state.extendedImageLoadState) {
+          case LoadState.loading:
+            controller.reset();
+            return SizedBox(
               width: widget.width,
               height: widget.height,
               child: Center(
                 child: Icon(
-                  isLoadingFailed ? Icons.error_outlined : Icons.image,
-                  size: widget.loaderSize,
+                  Icons.image,
                   color: Colors.grey.withAlpha(100),
+                  size: widget.loaderSize,
                 ),
               ),
-            )
-          : widget.borderRadius == null
-              ? getImageWidget()
-              : ClipRRect(
-                  borderRadius: widget.borderRadius,
-                  child: getImageWidget(),
+            );
+          case LoadState.completed:
+            controller.forward();
+            return FadeTransition(
+                opacity: controller,
+                child: ExtendedRawImage(
+                  image: state.extendedImageInfo?.image,
+                  fit: widget.fit,
+                ));
+          case LoadState.failed:
+            controller.reset();
+            return SizedBox(
+              width: widget.width,
+              height: widget.height,
+              child: Center(
+                child: Icon(
+                  Icons.error,
+                  color: Colors.grey.withAlpha(100),
+                  size: widget.loaderSize,
                 ),
+              ),
+            );
+        }
+      },
     );
   }
 
-  Widget getImageWidget() {
-    return Image.file(
-      imageFile!,
-      fit: widget.fit,
-      height: widget.height,
-      width: widget.width,
-      cacheHeight: widget.cacheHeight,
-      cacheWidth: widget.cacheWidth,
-    );
+  Map<String, String> _getHttpHeaders() {
+    Map<String, String> h = {};
+    if (widget.url!
+        .contains(AppAccountManager.workingAccount?.instanceUrl ?? "")) {
+      h["cookie"] = AppConf.cloudreveSession;
+    }
+    return h;
   }
 
   @override
-  bool get wantKeepAlive => true;
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 }
