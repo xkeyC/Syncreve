@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:syncreve/base/ui_model.dart';
 import 'package:syncreve/common/account_manager.dart';
+import 'package:syncreve/common/conf.dart';
 import 'package:syncreve/global_ui_model.dart';
 import 'package:syncreve/ui/home_ui.dart';
 import 'package:syncreve/ui/home_ui_model.dart';
@@ -14,11 +15,15 @@ import 'package:syncreve/ui/setup/setup_ui.dart';
 import 'package:syncreve/ui/setup/setup_ui_model.dart';
 import 'package:syncreve/widgets/src/fade_transition_route.dart';
 
+import 'common/grpc/grpc_manager.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Hive.initFlutter("Syncrever/db");
+  await AppConf.init();
   await AppAccountManager.init();
+  await AppGRPCManager.init();
 
   runApp(ProviderScope(
     child: BaseUIContainer(
@@ -38,6 +43,7 @@ class SplashUI extends BaseUI<AppGlobalUIModel> {
   Widget build(BuildContext context) {
     ref.watch(provider);
     return MaterialApp(
+      title: "Syncreve",
       theme: ThemeData(
         useMaterial3: true,
         scaffoldBackgroundColor: const Color.fromARGB(255, 242, 241, 246),
@@ -98,7 +104,11 @@ class SplashUI extends BaseUI<AppGlobalUIModel> {
 
   _initApp() async {
     EasyLoading.instance.customAnimation = MyEasyLoadingAnimation();
-    await Future.delayed(const Duration(seconds: 2));
+    await AppGRPCManager.pingServer();
+    if (!AppGRPCManager.isConnected) {
+      showToast("Syncrever Service Error");
+      return;
+    }
     _goNext();
   }
 

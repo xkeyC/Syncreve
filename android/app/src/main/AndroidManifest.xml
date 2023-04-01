@@ -3,13 +3,16 @@
     package="com.xkeyc.apps.syncreve.syncreve">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
 
     <application
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:label="Syncreve">
         <service
-            android:name=".SyncreveService"
+            android:name=".service.SyncreveService"
             android:enabled="true"
             android:exported="false"
             android:process=":SyncreveService" />
