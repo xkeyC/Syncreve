@@ -1,8 +1,13 @@
 import 'package:syncreve/api/cloudreve_file_api.dart';
 import 'package:syncreve/base/ui_model.dart';
 import 'package:syncreve/data/file/cloudreve_file_data.dart';
+import 'package:syncreve/ui/home_ui_model.dart';
 
 class HomeFileUIModel extends BaseUIModel {
+  final HomeUIModel homeUIModel;
+
+  HomeFileUIModel({required this.homeUIModel});
+
   List<String> path = [];
 
   CloudreveFileData? files;
@@ -19,9 +24,11 @@ class HomeFileUIModel extends BaseUIModel {
   }
 
   @override
-  Future reloadData() {
-    files = null;
-    notifyListeners();
+  Future reloadData({bool? skipClean}) {
+    if (skipClean != true) {
+      files = null;
+      notifyListeners();
+    }
     return super.reloadData();
   }
 
@@ -38,6 +45,7 @@ class HomeFileUIModel extends BaseUIModel {
   void onChangeListStyle() {}
 
   Future<void> onChangeDir(List<String> path) async {
+    if (files == null) return;
     this.path = path;
     reloadData();
     await Future.delayed(const Duration(milliseconds: 32));
@@ -49,5 +57,14 @@ class HomeFileUIModel extends BaseUIModel {
     if (file.type == "dir") {
       onChangeDir(path..add(file.name!));
     }
+  }
+
+  Future<bool> willPop() async {
+    if (homeUIModel.curPageIndex == 0 && path.isNotEmpty) {
+      path.remove(path.last);
+      onChangeDir(path);
+      return false;
+    }
+    return true;
   }
 }

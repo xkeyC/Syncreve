@@ -20,18 +20,19 @@ class SetupAccountUI extends BaseUI<SetupAccountUIModel> {
                     all: 12,
                     child: Column(
                       children: [
-                        if (data.user?.avatar == "file")
-                          ClipOval(
-                            child: SizedBox(
-                                width: 64,
-                                height: 64,
-                                child: CacheImage(
-                                  "${model.workingUrl}/api/v3/user/avatar/${data.user?.id}/l",
-                                  loaderSize: 64,
-                                )),
-                          )
-                        else
-                          const Icon(Icons.account_circle, size: 64),
+                        Hero(
+                            tag: "app_logo",
+                            child: data.user?.avatar == "file"
+                                ? ClipOval(
+                                    child: SizedBox(
+                                        width: 64,
+                                        height: 64,
+                                        child: CacheImage(
+                                          "${model.workingUrl}/api/v3/user/avatar/${data.user?.id}/l",
+                                          loaderSize: 64,
+                                        )),
+                                  )
+                                : const Icon(Icons.account_circle, size: 64)),
                         const SizedBox(height: 6),
                         Text(
                           "${data.user?.nickname}",

@@ -31,9 +31,11 @@ class HomeUI extends BaseUI<HomeUIModel> with SingleTickerProviderStateMixin {
           BottomNavigationBarItem(
               icon: FaIcon(FontAwesomeIcons.arrowsRotate), label: "Sync"),
           BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.user), label: "Account"),
+              icon: FaIcon(FontAwesomeIcons.userLarge), label: "Account"),
         ],
-        onTap: onChangePageIndex,
+        onTap: (index) {
+          onChangePageIndex(index, model);
+        },
       ),
     );
   }
@@ -42,9 +44,10 @@ class HomeUI extends BaseUI<HomeUIModel> with SingleTickerProviderStateMixin {
     return Container();
   }
 
-  void onChangePageIndex(int value) {
+  void onChangePageIndex(int value, HomeUIModel model) {
+    if (!model.canChangePageIndex) return;
     tabCtrl.index = value;
-    setState(() {});
+    model.onChangePageIndex(value);
   }
 
   Widget makeTabPageView(BuildContext context, HomeUIModel model) {

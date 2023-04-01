@@ -12,6 +12,7 @@ class CacheImage extends StatefulWidget {
   final double? width;
   final int? cacheHeight;
   final int? cacheWidth;
+  final BorderRadius? borderRadius;
 
   /// loader
   final double loaderSize;
@@ -24,7 +25,8 @@ class CacheImage extends StatefulWidget {
       this.height,
       this.width,
       this.cacheHeight,
-      this.cacheWidth});
+      this.cacheWidth,
+      this.borderRadius});
 
   @override
   State<CacheImage> createState() => _CacheImageState();
@@ -44,14 +46,19 @@ class _CacheImageState extends State<CacheImage>
     curUrl = widget.url!;
     try {
       final file = await AppCacheManager.getFile(curUrl);
-      setState(() {
-        imageFile = file;
-      });
+      await Future.delayed(const Duration(milliseconds: 200));
+      if (mounted) {
+        setState(() {
+          imageFile = file;
+        });
+      }
     } catch (e) {
       await Future.delayed(const Duration(milliseconds: 16));
-      setState(() {
-        isLoadingFailed = true;
-      });
+      if (mounted) {
+        setState(() {
+          isLoadingFailed = true;
+        });
+      }
     }
   }
 
@@ -69,19 +76,34 @@ class _CacheImageState extends State<CacheImage>
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 300),
       child: imageFile == null
-          ? Icon(
-              isLoadingFailed ? Icons.error_outlined : Icons.image,
-              size: widget.loaderSize,
-              color: Colors.grey.withAlpha(100),
-            )
-          : Image.file(
-              imageFile!,
-              fit: widget.fit,
-              height: widget.height,
+          ? SizedBox(
               width: widget.width,
-              cacheHeight: widget.cacheHeight,
-              cacheWidth: widget.cacheWidth,
-            ),
+              height: widget.height,
+              child: Center(
+                child: Icon(
+                  isLoadingFailed ? Icons.error_outlined : Icons.image,
+                  size: widget.loaderSize,
+                  color: Colors.grey.withAlpha(100),
+                ),
+              ),
+            )
+          : widget.borderRadius == null
+              ? getImageWidget()
+              : ClipRRect(
+                  borderRadius: widget.borderRadius,
+                  child: getImageWidget(),
+                ),
+    );
+  }
+
+  Widget getImageWidget() {
+    return Image.file(
+      imageFile!,
+      fit: widget.fit,
+      height: widget.height,
+      width: widget.width,
+      cacheHeight: widget.cacheHeight,
+      cacheWidth: widget.cacheWidth,
     );
   }
 

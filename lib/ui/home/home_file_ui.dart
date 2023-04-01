@@ -7,7 +7,12 @@ import 'package:syncreve/widgets/src/cache_image.dart';
 class HomeFileUI extends BaseUI<HomeFileUIModel> {
   @override
   Widget? buildBody(BuildContext context, HomeFileUIModel model) {
-    return makeFileList(context, model);
+    return WillPopScope(
+        onWillPop: model.willPop,
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          child: makeFileList(context, model),
+        ));
   }
 
   Widget makePathRow(BuildContext context, HomeFileUIModel model) {
@@ -76,68 +81,73 @@ class HomeFileUI extends BaseUI<HomeFileUIModel> {
         left: 6,
         right: 6,
         top: 0,
-        child: AlignedGridView.count(
-          crossAxisCount: 3,
-          cacheExtent: 100,
-          itemCount: model.files?.objects?.length ?? 0,
-          padding: const EdgeInsets.only(top: 6),
-          itemBuilder: (BuildContext context, int index) {
-            final file = model.files!.objects![index];
-            final isPic = file.pic?.isNotEmpty ?? false;
-            return Padding(
-              padding: const EdgeInsets.all(5.5),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).cardColor,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: InkWell(
-                  onTap: () {
-                    model.onTapFile(file);
-                  },
-                  child: Column(
-                    children: [
-                      SizedBox(height: isPic ? 0 : 6),
-                      isPic
-                          ? ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(12),
-                                  topRight: Radius.circular(12)),
-                              child: CacheImage(
-                                "${AppAccountManager.workingAccount?.instanceUrl}/api/v3/file/thumb/${file.id}",
-                                loaderSize: 64,
-                                fit: BoxFit.cover,
-                                height: 90,
-                                width: widgetWidth,
-                                cacheWidth: widgetWidth.toInt() * 3,
-                              ),
-                            )
-                          : Icon(
-                              file.type == "dir"
-                                  ? Icons.folder
-                                  : Icons.file_present_sharp,
-                              color:
-                                  Theme.of(context).textTheme.bodySmall?.color,
-                              size: 28,
+        child: RefreshIndicator(
+            onRefresh: () {
+              return model.reloadData(skipClean: true);
+            },
+            child: AlignedGridView.count(
+              crossAxisCount: 3,
+              cacheExtent: 20,
+              itemCount: model.files?.objects?.length ?? 0,
+              padding: const EdgeInsets.only(top: 6),
+              itemBuilder: (BuildContext context, int index) {
+                final file = model.files!.objects![index];
+                final isPic = file.pic?.isNotEmpty ?? false;
+                return ExcludeSemantics(
+                    child: Padding(
+                  padding: const EdgeInsets.all(5.5),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: InkWell(
+                      onTap: () {
+                        model.onTapFile(file);
+                      },
+                      child: Column(
+                        children: [
+                          SizedBox(height: isPic ? 0 : 6),
+                          isPic
+                              ? CacheImage(
+                                  "${AppAccountManager.workingAccount?.instanceUrl}/api/v3/file/thumb/${file.id}",
+                                  loaderSize: 64,
+                                  fit: BoxFit.cover,
+                                  height: 90,
+                                  width: widgetWidth,
+                                  cacheWidth: widgetWidth.toInt() * 3,
+                                  borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(12),
+                                      topRight: Radius.circular(12)),
+                                )
+                              : Icon(
+                                  file.type == "dir"
+                                      ? Icons.folder
+                                      : Icons.file_present_sharp,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.color,
+                                  size: 28,
+                                ),
+                          const SizedBox(height: 6),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 12, right: 12),
+                            child: Text(
+                              file.name ?? "<NO_NAME>",
+                              style: const TextStyle(fontSize: 11),
+                              maxLines: isPic ? 1 : 2,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                      const SizedBox(height: 6),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 12, right: 12),
-                        child: Text(
-                          file.name ?? "<NO_NAME>",
-                          style: const TextStyle(fontSize: 11),
-                          maxLines: isPic ? 1 : 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                          ),
+                          const SizedBox(height: 6),
+                        ],
                       ),
-                      const SizedBox(height: 6),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-            );
-          },
-        ));
+                ));
+              },
+            )));
   }
 
   @override
@@ -167,7 +177,10 @@ class HomeFileUI extends BaseUI<HomeFileUIModel> {
           leadingWidget: IconButton(
               tooltip: "Account",
               onPressed: model.tapHome,
-              icon: makeUserAvatar(28)),
+              icon: Hero(
+                tag: "app_logo",
+                child: makeUserAvatar(28),
+              )),
           bottom: PreferredSize(
               preferredSize: Size(MediaQuery.of(context).size.width, 24),
               child: makePathRow(context, model)),

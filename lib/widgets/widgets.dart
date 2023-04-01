@@ -147,15 +147,13 @@ class NoScrollBehavior extends ScrollBehavior {
 Widget makeUserAvatar(double size) {
   final account = AppAccountManager.workingAccount;
   if (account != null && account.cloudreveSiteConfData.user?.avatar == "file") {
-    return ClipOval(
-      child: SizedBox(
-          width: size,
-          height: size,
-          child: CacheImage(
-            "${account.instanceUrl}/api/v3/user/avatar/${account.userID}/l",
-            loaderSize: size,
-            cacheWidth: (size * 3).toInt(),
-          )),
+    return CacheImage(
+      "${account.instanceUrl}/api/v3/user/avatar/${account.userID}/l",
+      loaderSize: size,
+      cacheWidth: (size * 3).toInt(),
+      width: size,
+      height: size,
+      borderRadius: BorderRadius.circular(1000),
     );
   } else {
     return const Icon(Icons.account_circle, size: 64);
