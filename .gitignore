@@ -43,3 +43,5 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 /pubspec.lock
+/android/app/libs/libsyncreve.aar
+/android/app/libs/libsyncreve-sources.jar
