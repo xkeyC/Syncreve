@@ -1,0 +1,90 @@
+///
+//  Generated code. Do not modify.
+//  source: libsyncreve/protos/file_sync.proto
+//
+// @dart = 2.12
+// ignore_for_file: annotate_overrides,camel_case_types,constant_identifier_names,directives_ordering,library_prefixes,non_constant_identifier_names,prefer_final_fields,return_of_invalid_type,unnecessary_const,unnecessary_import,unnecessary_this,unused_import,unused_shown_name
+
+import 'dart:async' as $async;
+
+import 'dart:core' as $core;
+
+import 'package:grpc/service_api.dart' as $grpc;
+import 'file_sync.pb.dart' as $0;
+export 'file_sync.pb.dart';
+
+class FileSyncServiceClient extends $grpc.Client {
+  static final _$addDownloadTask =
+      $grpc.ClientMethod<$0.DownloadTaskRequest, $0.DownloadTaskResult>(
+          '/FileSyncService/AddDownloadTask',
+          ($0.DownloadTaskRequest value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) =>
+              $0.DownloadTaskResult.fromBuffer(value));
+  static final _$getDownloadInfoStream =
+      $grpc.ClientMethod<$0.DownloadInfoRequest, $0.DownLoadInfoResult>(
+          '/FileSyncService/GetDownloadInfoStream',
+          ($0.DownloadInfoRequest value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) =>
+              $0.DownLoadInfoResult.fromBuffer(value));
+
+  FileSyncServiceClient($grpc.ClientChannel channel,
+      {$grpc.CallOptions? options,
+      $core.Iterable<$grpc.ClientInterceptor>? interceptors})
+      : super(channel, options: options, interceptors: interceptors);
+
+  $grpc.ResponseFuture<$0.DownloadTaskResult> addDownloadTask(
+      $0.DownloadTaskRequest request,
+      {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$addDownloadTask, request, options: options);
+  }
+
+  $grpc.ResponseStream<$0.DownLoadInfoResult> getDownloadInfoStream(
+      $0.DownloadInfoRequest request,
+      {$grpc.CallOptions? options}) {
+    return $createStreamingCall(
+        _$getDownloadInfoStream, $async.Stream.fromIterable([request]),
+        options: options);
+  }
+}
+
+abstract class FileSyncServiceBase extends $grpc.Service {
+  $core.String get $name => 'FileSyncService';
+
+  FileSyncServiceBase() {
+    $addMethod(
+        $grpc.ServiceMethod<$0.DownloadTaskRequest, $0.DownloadTaskResult>(
+            'AddDownloadTask',
+            addDownloadTask_Pre,
+            false,
+            false,
+            ($core.List<$core.int> value) =>
+                $0.DownloadTaskRequest.fromBuffer(value),
+            ($0.DownloadTaskResult value) => value.writeToBuffer()));
+    $addMethod(
+        $grpc.ServiceMethod<$0.DownloadInfoRequest, $0.DownLoadInfoResult>(
+            'GetDownloadInfoStream',
+            getDownloadInfoStream_Pre,
+            false,
+            true,
+            ($core.List<$core.int> value) =>
+                $0.DownloadInfoRequest.fromBuffer(value),
+            ($0.DownLoadInfoResult value) => value.writeToBuffer()));
+  }
+
+  $async.Future<$0.DownloadTaskResult> addDownloadTask_Pre(
+      $grpc.ServiceCall call,
+      $async.Future<$0.DownloadTaskRequest> request) async {
+    return addDownloadTask(call, await request);
+  }
+
+  $async.Stream<$0.DownLoadInfoResult> getDownloadInfoStream_Pre(
+      $grpc.ServiceCall call,
+      $async.Future<$0.DownloadInfoRequest> request) async* {
+    yield* getDownloadInfoStream(call, await request);
+  }
+
+  $async.Future<$0.DownloadTaskResult> addDownloadTask(
+      $grpc.ServiceCall call, $0.DownloadTaskRequest request);
+  $async.Stream<$0.DownLoadInfoResult> getDownloadInfoStream(
+      $grpc.ServiceCall call, $0.DownloadInfoRequest request);
+}

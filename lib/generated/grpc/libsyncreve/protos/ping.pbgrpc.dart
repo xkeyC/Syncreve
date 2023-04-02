@@ -10,21 +10,21 @@ import 'dart:async' as $async;
 import 'dart:core' as $core;
 
 import 'package:grpc/service_api.dart' as $grpc;
-import 'ping.pb.dart' as $0;
+import 'ping.pb.dart' as $1;
 export 'ping.pb.dart';
 
 class PingServiceClient extends $grpc.Client {
-  static final _$pingServer = $grpc.ClientMethod<$0.PingRequest, $0.PingResult>(
+  static final _$pingServer = $grpc.ClientMethod<$1.PingRequest, $1.PingResult>(
       '/PingService/PingServer',
-      ($0.PingRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.PingResult.fromBuffer(value));
+      ($1.PingRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $1.PingResult.fromBuffer(value));
 
   PingServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
       $core.Iterable<$grpc.ClientInterceptor>? interceptors})
       : super(channel, options: options, interceptors: interceptors);
 
-  $grpc.ResponseFuture<$0.PingResult> pingServer($0.PingRequest request,
+  $grpc.ResponseFuture<$1.PingResult> pingServer($1.PingRequest request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$pingServer, request, options: options);
   }
@@ -34,20 +34,20 @@ abstract class PingServiceBase extends $grpc.Service {
   $core.String get $name => 'PingService';
 
   PingServiceBase() {
-    $addMethod($grpc.ServiceMethod<$0.PingRequest, $0.PingResult>(
+    $addMethod($grpc.ServiceMethod<$1.PingRequest, $1.PingResult>(
         'PingServer',
         pingServer_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $0.PingRequest.fromBuffer(value),
-        ($0.PingResult value) => value.writeToBuffer()));
+        ($core.List<$core.int> value) => $1.PingRequest.fromBuffer(value),
+        ($1.PingResult value) => value.writeToBuffer()));
   }
 
-  $async.Future<$0.PingResult> pingServer_Pre(
-      $grpc.ServiceCall call, $async.Future<$0.PingRequest> request) async {
+  $async.Future<$1.PingResult> pingServer_Pre(
+      $grpc.ServiceCall call, $async.Future<$1.PingRequest> request) async {
     return pingServer(call, await request);
   }
 
-  $async.Future<$0.PingResult> pingServer(
-      $grpc.ServiceCall call, $0.PingRequest request);
+  $async.Future<$1.PingResult> pingServer(
+      $grpc.ServiceCall call, $1.PingRequest request);
 }

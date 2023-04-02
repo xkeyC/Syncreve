@@ -25,5 +25,7 @@ func StartService(confPath string) error {
 }
 
 func StopService() error {
+	fmt.Println("[libsyncreve] StopService")
+	service.StopGRPCService()
 	return nil
 }

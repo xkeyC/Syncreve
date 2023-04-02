@@ -18,4 +18,8 @@ class CloudreveFileApi extends BaseApi {
     return CloudreveFileData.fromJson(
         (await AppHttp.get("/api/v3/directory$ps")).data);
   }
+
+  static Future<String> download(String id) async {
+    return (await AppHttp.put("/api/v3/file/download/$id")).data;
+  }
 }

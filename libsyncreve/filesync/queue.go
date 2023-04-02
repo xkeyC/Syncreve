@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/google/uuid"
 	"github.com/imroc/req/v3"
 	"github.com/xkeyC/Syncreve/libsyncreve/protos"
@@ -59,6 +60,11 @@ type FileDownloadingInfo struct {
 	InfoMap    map[uuid.UUID]*FileDownloadingInfoItemData `json:"infoMap,omitempty"`
 	QueueLen   int                                        `json:"queueLen,omitempty"`
 	WorkingLen int                                        `json:"workingLen,omitempty"`
+}
+
+func init() {
+	fileDownloadQueues.queuesMap = make(map[uuid.UUID]*FileDownloadQueueTaskData)
+	fileDownloadingInfo.InfoMap = make(map[uuid.UUID]*FileDownloadingInfoItemData)
 }
 
 func AddDownloadTask(url string, savePath string, fileName string, cookie string, downLoadType protos.DownloadInfoRequestType) (uuid.UUID, error) {
@@ -142,24 +148,28 @@ func downloadAndListen(k uuid.UUID) {
 		if info.Response.Response == nil {
 			return
 		}
-		updateDownloadInfo(k, *taskInfo, &info, FileDownloadQueueStatusDownloading, "")
+		go updateDownloadInfo(k, *taskInfo, &info, FileDownloadQueueStatusDownloading, "")
 	})
 
 	// download complete remove Queue
+	fmt.Println("[libsyncreve] filesync.downloadAndListen complete,err ==", err)
 	fileDownloadQueues.mutex.Lock()
 	defer fileDownloadQueues.mutex.Unlock()
 	delete(fileDownloadQueues.queuesMap, k)
 	fileDownloadQueues.workingLen--
 	fileDownloadQueues.queueLen--
+	fmt.Println("[libsyncreve] filesync.downloadAndListen fileDownloadQueues mutex updated")
+
 	if err != nil {
-		updateDownloadInfo(k, *taskInfo, nil, FileDownloadQueueStatusError, err.Error())
+		go updateDownloadInfo(k, *taskInfo, nil, FileDownloadQueueStatusError, err.Error())
 	} else {
-		updateDownloadInfo(k, *taskInfo, nil, FileDownloadQueueStatusDone, "")
+		go updateDownloadInfo(k, *taskInfo, nil, FileDownloadQueueStatusDone, "")
 	}
 	go UpdateWorkingTask()
 }
 
 func updateDownloadInfo(k uuid.UUID, taskInfo FileDownloadQueueTaskData, info *req.DownloadInfo, status FileDownloadQueueStatusType, errorInfo string) {
+	fmt.Println("[libsyncreve] filesync.updateDownloadInfo ID == ", taskInfo.ID, "Status==", taskInfo.Status, "errorInfo==", errorInfo)
 	// update download info
 	fileDownloadingInfo.Mutex.Lock()
 	defer fileDownloadingInfo.Mutex.Unlock()
@@ -183,13 +193,13 @@ func updateDownloadInfo(k uuid.UUID, taskInfo FileDownloadQueueTaskData, info *r
 		fileDownloadingInfo.InfoMap[k] = downloadInfo
 	} else {
 		// update progress only
+		downloadInfo := fileDownloadingInfo.InfoMap[k]
 		if info != nil {
-			downloadInfo := fileDownloadingInfo.InfoMap[k]
 			downloadInfo.DownloadedSize = info.DownloadedSize
 			downloadInfo.ContentLength = info.Response.ContentLength
-			downloadInfo.Status = status
-			downloadInfo.ErrorInfo = errorInfo
 		}
+		downloadInfo.Status = status
+		downloadInfo.ErrorInfo = errorInfo
 	}
 	fileDownloadingInfo.QueueLen = GetTaskLen()
 	fileDownloadingInfo.WorkingLen = GetWorkingTaskLen()
@@ -201,6 +211,9 @@ func GetDownloadInfoJson(id *uuid.UUID, t protos.DownloadInfoRequestType) ([]byt
 	var info FileDownloadingInfo
 	if id != nil {
 		data := fileDownloadingInfo.InfoMap[*id]
+		if data == nil {
+			return nil, nil
+		}
 		newMap := map[uuid.UUID]*FileDownloadingInfoItemData{}
 		newMap[*id] = data
 		info = FileDownloadingInfo{
@@ -214,6 +227,9 @@ func GetDownloadInfoJson(id *uuid.UUID, t protos.DownloadInfoRequestType) ([]byt
 			if t == protos.DownloadInfoRequestType_All || data.DownLoadType == t {
 				newMap[u] = data
 			}
+		}
+		if len(newMap) == 0 {
+			return nil, nil
 		}
 		info = FileDownloadingInfo{
 			InfoMap:    newMap,

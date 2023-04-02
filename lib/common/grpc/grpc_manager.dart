@@ -2,12 +2,13 @@ import 'package:grpc/grpc.dart';
 import 'package:syncreve/base/base_utils.dart';
 import 'package:syncreve/common/channel/app_service_channel.dart';
 import 'package:syncreve/common/conf.dart';
+import 'package:syncreve/generated/grpc/libsyncreve/protos/file_sync.pbgrpc.dart';
 import 'package:syncreve/generated/grpc/libsyncreve/protos/ping.pbgrpc.dart';
 
 import 'grpc_conf_tools.dart';
 
 class AppGRPCManager {
-  static final channel = ClientChannel(
+  static final _channel = ClientChannel(
     'localhost',
     port: 39399,
     options: ChannelOptions(
@@ -17,7 +18,9 @@ class AppGRPCManager {
     ),
   );
 
-  static final pingClient = PingServiceClient(channel);
+  static final _pingClient = PingServiceClient(_channel);
+
+  static final _fileSyncClient = FileSyncServiceClient(_channel);
 
   static bool _isConnected = true;
 
@@ -33,7 +36,7 @@ class AppGRPCManager {
 
   static Future pingServer() async {
     try {
-      final result = await pingClient.pingServer(PingRequest(name: "ping"));
+      final result = await _pingClient.pingServer(PingRequest(name: "ping"));
       if (result.pong == "pong") {
         dPrint("[AppGRPCManager] gRPC service Connected");
         _isConnected = true;
@@ -43,5 +46,15 @@ class AppGRPCManager {
       dPrint("[GRPCManager] pingServer Error: $e");
     }
     _isConnected = false;
+  }
+
+  static Future<String> addDownloadTask(DownloadTaskRequest request) async {
+    final r = await _fileSyncClient.addDownloadTask(request);
+    return r.id;
+  }
+
+  static ResponseStream<DownLoadInfoResult> getDownloadInfoStream(
+      DownloadInfoRequest request) {
+    return _fileSyncClient.getDownloadInfoStream(request);
   }
 }

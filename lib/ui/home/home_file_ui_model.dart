@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:syncreve/api/cloudreve_file_api.dart';
 import 'package:syncreve/base/ui_model.dart';
 import 'package:syncreve/data/file/cloudreve_file_data.dart';
+import 'package:syncreve/ui/file/file_open_temp_dialog_ui.dart';
+import 'package:syncreve/ui/file/file_open_temp_dialog_ui_model.dart';
 import 'package:syncreve/ui/home_ui_model.dart';
 
 class HomeFileUIModel extends BaseUIModel {
@@ -53,9 +57,20 @@ class HomeFileUIModel extends BaseUIModel {
         duration: const Duration(milliseconds: 100), curve: Curves.linear);
   }
 
-  void onTapFile(CloudreveFileObjectsData file) {
+  Future<void> onTapFile(CloudreveFileObjectsData file) async {
     if (file.type == "dir") {
       onChangeDir(path..add(file.name!));
+    } else {
+      showDialog(
+        context: context!,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return BaseUIContainer(
+              uiCreate: () => FileOpenTempDialogUI(),
+              modelCreate: () =>
+                  FileOpenTempDialogUIModel(fileObjectsData: file));
+        },
+      );
     }
   }
 

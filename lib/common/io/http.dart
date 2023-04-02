@@ -27,6 +27,19 @@ class AppHttp {
         throwError: throwError);
   }
 
+  /// [put]
+  static Future<AppHttpResultData> put(String path,
+      {data,
+      Map<String, dynamic>? queryParameters,
+      bool showLoading = false,
+      bool showError = true}) async {
+    return await _doRequest("PUT", path,
+        data: data,
+        queryParameters: queryParameters,
+        showLoading: showLoading,
+        throwError: showError);
+  }
+
   /// [post]
   static Future<AppHttpResultData> post(String path,
       {data,
