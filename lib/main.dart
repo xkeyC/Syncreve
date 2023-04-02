@@ -111,7 +111,6 @@ class SplashUI extends BaseUI<AppGlobalUIModel> {
 
   _goNext() async {
     if (AppAccountManager.workingAccount != null) {
-      AppAccountManager.workingAccount?.workingUrl = "";
       HomeUI.pushAndRemove(scaffoldState.currentContext!);
       return;
     }
