@@ -1,5 +1,4 @@
 import 'package:hive/hive.dart';
-import 'package:syncreve/common/conf.dart';
 import 'package:syncreve/data/app/account.dart';
 import 'package:syncreve/data/site/cloudreve_site_conf_data.dart';
 import 'package:syncreve/global_ui_model.dart';
@@ -29,11 +28,10 @@ class AppAccountManager {
 
   static Future setWorkingAccount(String id) async {
     final accountBox = await Hive.openBox("account");
-    final acJson = await accountBox.get(id);
-    if (acJson == null) return;
-    _workingAccount = AppAccountData.formJson(acJson);
+    final a = await getAccount(id);
+    if (a == null) return;
+    _workingAccount = a;
     accountBox.put("working_account_id", _workingAccount?.id);
-    AppConf.baseUrl = _workingAccount!.instanceUrl;
     globalUIModel.notifyListeners();
   }
 
@@ -77,5 +75,20 @@ class AppAccountManager {
       }
     }
     return "";
+  }
+
+  static Future<void> updateAccountData(AppAccountData accountData) async {
+    final accountBox = await Hive.openBox("account");
+    accountBox.put(accountData.id, accountData.toJson());
+    if (accountData.id == workingAccount?.id) {
+      setWorkingAccount(accountData.id);
+    }
+  }
+
+  static Future<AppAccountData?> getAccount(String id) async {
+    final accountBox = await Hive.openBox("account");
+    final acJson = await accountBox.get(id);
+    if (acJson == null) return null;
+    return AppAccountData.formJson(acJson);
   }
 }

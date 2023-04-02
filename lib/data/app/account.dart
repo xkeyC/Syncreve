@@ -1,3 +1,5 @@
+import 'package:syncreve/api/cloudreve_site_api.dart';
+import 'package:syncreve/base/base_utils.dart';
 import 'package:syncreve/common/utils/string.dart';
 import 'package:syncreve/data/site/cloudreve_site_conf_data.dart';
 
@@ -6,6 +8,7 @@ class AppAccountData {
   String cloudreveSession;
   String instanceUrl;
   List<String>? aliasHost;
+  late String workingUrl = instanceUrl;
 
   AppAccountData(
       this.cloudreveSiteConfData, this.cloudreveSession, this.instanceUrl,
@@ -16,6 +19,7 @@ class AppAccountData {
       "cloudreveSiteConfData": cloudreveSiteConfData.toJson(),
       "cloudreveSession": cloudreveSession,
       "instanceUrl": instanceUrl,
+      "aliasHost": aliasHost,
     };
   }
 
@@ -35,4 +39,31 @@ class AppAccountData {
   String? get userName => cloudreveSiteConfData.user?.userName;
 
   String? get userID => cloudreveSiteConfData.user?.id;
+
+  Future checkNewWorkingUrl() async {
+    if (aliasHost == null) {
+      return;
+    }
+    bool getAlia = false;
+    for (var url in aliasHost!) {
+      try {
+        final u = await CloudreveSiteApi.getConfData(url);
+        if (u.user?.userName == userName) {
+          workingUrl = url;
+          getAlia = true;
+          dPrint("[AppAccountData] checkNewWorkingUrl pass ($url)");
+          return;
+        }
+        dPrint(
+            "[AppAccountData] checkNewWorkingUrl ($url) ${u.user?.userName} <> $userName");
+      } catch (e) {
+        dPrint("[AppAccountData] checkNewWorkingUrl Error:$e");
+
+        continue;
+      }
+    }
+    if (!getAlia) {
+      workingUrl = instanceUrl;
+    }
+  }
 }

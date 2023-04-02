@@ -16,11 +16,16 @@ class AccountSwitchBottomSheetUIModel extends BaseUIModel {
   Future loadData() async {
     checkAccount.clear();
     accounts = await AppAccountManager.getAccounts();
+    final index = accounts?.indexWhere(
+        (element) => element.id == AppAccountManager.workingAccount?.id);
+    if (index != null) {
+      accounts?[index] = AppAccountManager.workingAccount!;
+    }
     notifyListeners();
     if (accounts != null) {
       for (var value in accounts!) {
         try {
-          final c = await CloudreveSiteApi.getConfData(value.instanceUrl);
+          final c = await CloudreveSiteApi.getConfData(value.workingUrl);
           if (c.user != null) {
             checkAccount[value.id] = true;
           }

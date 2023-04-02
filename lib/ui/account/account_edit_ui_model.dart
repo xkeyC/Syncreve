@@ -8,7 +8,9 @@ import 'package:syncreve/ui/setup/setup_ui_model.dart';
 import 'package:syncreve/widgets/dialogs.dart';
 
 class AccountEditUIModel extends BaseUIModel {
-  final AppAccountData accountData;
+  AppAccountData accountData;
+
+  final aliasHostCtrl = TextEditingController();
 
   AccountEditUIModel({required this.accountData});
 
@@ -16,6 +18,12 @@ class AccountEditUIModel extends BaseUIModel {
 
   @override
   Future loadData() async {
+    aliasHostCtrl.text = "";
+    if (accountData.aliasHost != null) {
+      for (var ah in accountData.aliasHost!) {
+        aliasHostCtrl.text += "$ah\n";
+      }
+    }
     try {
       final c = await CloudreveSiteApi.getConfData(accountData.instanceUrl);
       if (c.user != null) {
@@ -26,6 +34,10 @@ class AccountEditUIModel extends BaseUIModel {
       notifyListeners();
     } catch (e) {
       accountStatus = e.toString();
+    }
+    if (accountData.id == AppAccountManager.workingAccount?.id) {
+      await AppAccountManager.workingAccount?.checkNewWorkingUrl();
+      notifyListeners();
     }
   }
 
@@ -52,5 +64,43 @@ class AccountEditUIModel extends BaseUIModel {
         modelCreate: () => SetupUIModel(
             isFirstLaunch: false,
             initUrl: accountData.instanceUrl)).push(context!);
+  }
+
+  void doUpdateAliasHost() {
+    if (aliasHostCtrl.text.isNotEmpty) {
+      final lines = aliasHostCtrl.text.split("\n");
+      if (lines.last == "") {
+        lines.removeLast();
+      }
+      final List<String> newLines = [];
+      try {
+        for (var ah in lines) {
+          if (ah.startsWith("http://") || ah.startsWith("http://")) {
+            newLines.add(
+                ah.substring(0, ah.endsWith("/") ? ah.length - 1 : ah.length));
+          } else {
+            throw "$ah must start with http:// or https://";
+          }
+        }
+        dPrint("newLines == $newLines");
+        accountData.aliasHost = newLines;
+        AppAccountManager.updateAccountData(accountData);
+        if (AppAccountManager.workingAccount?.id == accountData.id) {
+          accountData.workingUrl = "";
+          loadData();
+        }
+        showToast("Success");
+      } catch (e) {
+        showToast(e.toString());
+        return;
+      }
+    }
+  }
+
+  String? getWorkingUrl() {
+    if (accountData.id == AppAccountManager.workingAccount?.id) {
+      return AppAccountManager.workingAccount?.workingUrl;
+    }
+    return accountData.instanceUrl;
   }
 }

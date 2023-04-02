@@ -58,10 +58,11 @@ class AppHttp {
       {data,
       Map<String, dynamic>? queryParameters,
       required bool showLoading,
-      required bool throwError}) async {
+      required bool throwError,
+      bool firstError = true}) async {
     var url = path;
     if (!(url.startsWith("http://") || url.startsWith("https://"))) {
-      url = AppConf.baseUrl + path;
+      url = "${AppAccountManager.workingAccount?.workingUrl}$path";
     }
     try {
       _onStartRequest(showLoading);
@@ -96,6 +97,13 @@ class AppHttp {
       return resultData;
     } catch (e) {
       dPrint("[http.onError]($method $path),error==$e");
+      if (firstError) {
+        await AppAccountManager.workingAccount?.checkNewWorkingUrl();
+        return _doRequest(method, path,
+            showLoading: showLoading,
+            throwError: throwError,
+            firstError: false);
+      }
       if (e is AppHttpResultData) {
         if (throwError) {
           rethrow;

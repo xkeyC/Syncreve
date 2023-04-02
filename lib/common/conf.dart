@@ -1,8 +1,6 @@
 import 'package:path_provider/path_provider.dart';
 
 class AppConf {
-  static String baseUrl = "";
-
   static String _appWorkingDir = "";
   static String _appTempDir = "";
 

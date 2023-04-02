@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:syncreve/base/base_utils.dart';
+import 'package:syncreve/common/account_manager.dart';
 import 'package:syncreve/common/grpc/grpc_manager.dart';
 import 'package:syncreve/data/app/grpc_file_download_info_data.dart';
 import 'package:syncreve/generated/grpc/libsyncreve/protos/file_sync.pbgrpc.dart';
@@ -19,6 +20,12 @@ class Downloader {
       required String fileName,
       required String cookie,
       required DownloadInfoRequestType type}) async {
+    if (AppAccountManager.workingAccount!.aliasHost != null) {
+      if (url.contains(AppAccountManager.workingAccount!.instanceUrl)) {
+        url = url.replaceAll(AppAccountManager.workingAccount!.instanceUrl,
+            AppAccountManager.workingAccount!.workingUrl);
+      }
+    }
     final r = DownloadTaskRequest(
         url: url,
         savePath: savePath,

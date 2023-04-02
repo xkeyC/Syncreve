@@ -1,5 +1,5 @@
 import 'package:syncreve/base/ui.dart';
-import 'package:syncreve/common/conf.dart';
+import 'package:syncreve/common/account_manager.dart';
 
 import 'account_switch_bottom_sheet_ui_model.dart';
 
@@ -51,7 +51,7 @@ class AccountSwitchBottomSheetUI
             final account = model.accounts![index];
             final accountChecked = model.checkAccount[account.id];
             return Card(
-              color: account.instanceUrl == AppConf.baseUrl
+              color: account.id == AppAccountManager.workingAccount?.id
                   ? Colors.purpleAccent.withAlpha(10)
                   : null,
               child: InkWell(
