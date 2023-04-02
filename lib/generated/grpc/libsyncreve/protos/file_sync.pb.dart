@@ -163,6 +163,100 @@ class DownloadTaskResult extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 }
 
+class DownloadTaskCancelRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DownloadTaskCancelRequest', createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
+    ..hasRequiredFields = false
+  ;
+
+  DownloadTaskCancelRequest._() : super();
+  factory DownloadTaskCancelRequest({
+    $core.String? id,
+  }) {
+    final _result = create();
+    if (id != null) {
+      _result.id = id;
+    }
+    return _result;
+  }
+  factory DownloadTaskCancelRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DownloadTaskCancelRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  DownloadTaskCancelRequest clone() => DownloadTaskCancelRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  DownloadTaskCancelRequest copyWith(void Function(DownloadTaskCancelRequest) updates) => super.copyWith((message) => updates(message as DownloadTaskCancelRequest)) as DownloadTaskCancelRequest; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static DownloadTaskCancelRequest create() => DownloadTaskCancelRequest._();
+  DownloadTaskCancelRequest createEmptyInstance() => create();
+  static $pb.PbList<DownloadTaskCancelRequest> createRepeated() => $pb.PbList<DownloadTaskCancelRequest>();
+  @$core.pragma('dart2js:noInline')
+  static DownloadTaskCancelRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DownloadTaskCancelRequest>(create);
+  static DownloadTaskCancelRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+}
+
+class DownloadTaskCancelResult extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DownloadTaskCancelResult', createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'status')
+    ..hasRequiredFields = false
+  ;
+
+  DownloadTaskCancelResult._() : super();
+  factory DownloadTaskCancelResult({
+    $core.String? status,
+  }) {
+    final _result = create();
+    if (status != null) {
+      _result.status = status;
+    }
+    return _result;
+  }
+  factory DownloadTaskCancelResult.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DownloadTaskCancelResult.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  DownloadTaskCancelResult clone() => DownloadTaskCancelResult()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  DownloadTaskCancelResult copyWith(void Function(DownloadTaskCancelResult) updates) => super.copyWith((message) => updates(message as DownloadTaskCancelResult)) as DownloadTaskCancelResult; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static DownloadTaskCancelResult create() => DownloadTaskCancelResult._();
+  DownloadTaskCancelResult createEmptyInstance() => create();
+  static $pb.PbList<DownloadTaskCancelResult> createRepeated() => $pb.PbList<DownloadTaskCancelResult>();
+  @$core.pragma('dart2js:noInline')
+  static DownloadTaskCancelResult getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DownloadTaskCancelResult>(create);
+  static DownloadTaskCancelResult? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get status => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set status($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasStatus() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearStatus() => clearField(1);
+}
+
 class DownloadInfoRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DownloadInfoRequest', createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')

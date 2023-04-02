@@ -4,6 +4,7 @@ option go_package = "../protos";
 service FileSyncService {
   rpc AddDownloadTask(DownloadTaskRequest) returns (DownloadTaskResult) {}
   rpc GetDownloadInfoStream(DownloadInfoRequest) returns (stream DownLoadInfoResult) {}
+  rpc CancelDownloadTask(DownloadTaskCancelRequest) returns (DownloadTaskCancelResult) {}
 }
 
 message DownloadTaskRequest {
@@ -17,6 +18,15 @@ message DownloadTaskRequest {
 message DownloadTaskResult {
   string id = 1;
 }
+
+message DownloadTaskCancelRequest {
+  string id = 1;
+}
+
+message DownloadTaskCancelResult {
+  string status = 1;
+}
+
 
 enum DownloadInfoRequestType {
   All = 0;

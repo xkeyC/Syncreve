@@ -25,6 +25,20 @@ func (*fileSyncServerImpl) AddDownloadTask(_ context.Context, req *protos.Downlo
 		Id: id.String(),
 	}, err
 }
+
+func (*fileSyncServerImpl) CancelDownloadTask(_ context.Context, req *protos.DownloadTaskCancelRequest) (*protos.DownloadTaskCancelResult, error) {
+	id, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, err
+	}
+	err = filesync.CancelDownloadTask(id)
+	if err != nil {
+		return nil, err
+	}
+	return &protos.DownloadTaskCancelResult{
+		Status: "ok",
+	}, nil
+}
 func (*fileSyncServerImpl) GetDownloadInfoStream(req *protos.DownloadInfoRequest, stream protos.FileSyncService_GetDownloadInfoStreamServer) error {
 	fmt.Println("[libsyncreve] service.GetDownloadInfoStream")
 	var id *uuid.UUID

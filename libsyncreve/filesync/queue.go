@@ -31,6 +31,7 @@ type FileDownloadQueueTaskData struct {
 	Cookie       string                         `json:"cookie,omitempty"`
 	DownLoadType protos.DownloadInfoRequestType `json:"downLoadType,omitempty"`
 	Status       FileDownloadQueueStatusType    `json:"status,omitempty"`
+	CancelFunc   context.CancelFunc
 }
 
 type FileDownloadQueues struct {
@@ -69,9 +70,11 @@ func init() {
 
 func AddDownloadTask(url string, savePath string, fileName string, cookie string, downLoadType protos.DownloadInfoRequestType) (uuid.UUID, error) {
 	id := uuid.New()
+	c, cancel := context.WithCancel(context.Background())
 	queueData := &FileDownloadQueueTaskData{
 		ID:           id,
-		Context:      context.Background(),
+		Context:      c,
+		CancelFunc:   cancel,
 		URL:          url,
 		SavePath:     savePath,
 		FileName:     fileName,
@@ -81,6 +84,19 @@ func AddDownloadTask(url string, savePath string, fileName string, cookie string
 	}
 	err := addTaskToList(queueData)
 	return id, err
+}
+
+func CancelDownloadTask(id uuid.UUID) error {
+	fileDownloadQueues.mutex.Lock()
+	defer fileDownloadQueues.mutex.Unlock()
+	task := fileDownloadQueues.queuesMap[id]
+	if task != nil {
+		task.CancelFunc()
+		fmt.Println("[libsyncreve] filesync.CancelDownloadTask id ==", id)
+	} else {
+		fmt.Println("[libsyncreve] filesync.CancelDownloadTask error ==", "task not found")
+	}
+	return nil
 }
 
 func addTaskToList(queueData *FileDownloadQueueTaskData) error {
@@ -144,13 +160,14 @@ func downloadAndListen(k uuid.UUID) {
 	if taskInfo == nil {
 		return
 	}
-	err := DoDownload(*taskInfo, func(info req.DownloadInfo) {
+	err := DoDownload(taskInfo, func(info req.DownloadInfo) {
 		if info.Response.Response == nil {
 			return
 		}
 		go updateDownloadInfo(k, *taskInfo, &info, FileDownloadQueueStatusDownloading, "")
 	})
 
+	taskInfo.CancelFunc()
 	// download complete remove Queue
 	fmt.Println("[libsyncreve] filesync.downloadAndListen complete,err ==", err)
 	fileDownloadQueues.mutex.Lock()

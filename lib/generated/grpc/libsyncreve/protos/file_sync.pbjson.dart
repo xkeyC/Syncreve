@@ -44,6 +44,26 @@ const DownloadTaskResult$json = const {
 
 /// Descriptor for `DownloadTaskResult`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List downloadTaskResultDescriptor = $convert.base64Decode('ChJEb3dubG9hZFRhc2tSZXN1bHQSDgoCaWQYASABKAlSAmlk');
+@$core.Deprecated('Use downloadTaskCancelRequestDescriptor instead')
+const DownloadTaskCancelRequest$json = const {
+  '1': 'DownloadTaskCancelRequest',
+  '2': const [
+    const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+  ],
+};
+
+/// Descriptor for `DownloadTaskCancelRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List downloadTaskCancelRequestDescriptor = $convert.base64Decode('ChlEb3dubG9hZFRhc2tDYW5jZWxSZXF1ZXN0Eg4KAmlkGAEgASgJUgJpZA==');
+@$core.Deprecated('Use downloadTaskCancelResultDescriptor instead')
+const DownloadTaskCancelResult$json = const {
+  '1': 'DownloadTaskCancelResult',
+  '2': const [
+    const {'1': 'status', '3': 1, '4': 1, '5': 9, '10': 'status'},
+  ],
+};
+
+/// Descriptor for `DownloadTaskCancelResult`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List downloadTaskCancelResultDescriptor = $convert.base64Decode('ChhEb3dubG9hZFRhc2tDYW5jZWxSZXN1bHQSFgoGc3RhdHVzGAEgASgJUgZzdGF0dXM=');
 @$core.Deprecated('Use downloadInfoRequestDescriptor instead')
 const DownloadInfoRequest$json = const {
   '1': 'DownloadInfoRequest',

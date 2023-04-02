@@ -45,7 +45,7 @@ class FileOpenTempDialogUIModel extends BaseUIModel {
         return;
       }
       showToast("$e");
-      onCancel();
+      onCancel(doCancel: false);
     }
     if (downloadID == null) return;
     notifyListeners();
@@ -53,7 +53,14 @@ class FileOpenTempDialogUIModel extends BaseUIModel {
         id: downloadID!, onData: _onDownloadInfoUpdate);
   }
 
-  void onCancel() {
+  void onCancel({doCancel = true}) async {
+    if (doCancel && downloadID != null) {
+      final ok =
+          await handleError(() => Downloader.cancelDownloadTask(downloadID!));
+      if (ok == null) {
+        return;
+      }
+    }
     downloadSub?.cancel();
     downloadSub = null;
     Navigator.pop(context!);
@@ -71,7 +78,7 @@ class FileOpenTempDialogUIModel extends BaseUIModel {
               fileDownloadInfoItemData!.fileName!));
         } else if (fileDownloadInfoItemData?.status ==
             Downloader.fileDownloadQueueStatusError) {
-          onCancel();
+          onCancel(doCancel: false);
           showToast(fileDownloadInfoItemData?.errorInfo ?? "Download Error");
         }
       }
@@ -80,7 +87,7 @@ class FileOpenTempDialogUIModel extends BaseUIModel {
 
   void doOpenFile(String filePath) {
     OpenFile.open(filePath);
-    onCancel();
+    onCancel(doCancel: false);
   }
 
   @override

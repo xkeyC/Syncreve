@@ -8,13 +8,9 @@ import (
 	"os"
 )
 
-var httpClient = req.C()
-
-func init() {
+func DoDownload(taskInfo *FileDownloadQueueTaskData, callback req.DownloadCallback) error {
+	var httpClient = req.C()
 	httpClient.DisableAutoDecode()
-}
-func DoDownload(taskInfo FileDownloadQueueTaskData, callback req.DownloadCallback) error {
-
 	filePath := taskInfo.SavePath + "/" + taskInfo.FileName
 	fmt.Println("[libsyncreve] filesync.DoDownload filePath ==", filePath)
 
@@ -28,7 +24,7 @@ func DoDownload(taskInfo FileDownloadQueueTaskData, callback req.DownloadCallbac
 		httpClient.Headers = make(map[string][]string)
 	}
 	httpClient.Headers.Set("cookie", taskInfo.Cookie)
-	_, err := req.R().SetContext(taskInfo.Context).SetOutputFile(tempFilePath).SetDownloadCallback(callback).Get(taskInfo.URL)
+	_, err := req.R().SetOutputFile(tempFilePath).SetDownloadCallback(callback).SetContext(taskInfo.Context).Get(taskInfo.URL)
 	if err != nil {
 		fmt.Println("[libsyncreve] filesync.DoDownload (Error) Error ==", err)
 		return err

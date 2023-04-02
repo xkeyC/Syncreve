@@ -50,6 +50,10 @@ class Downloader {
     }, onDone: () {}, onError: (error, stackTrace) {}, cancelOnError: true);
   }
 
+  static Future<String> cancelDownloadTask(String id) {
+    return AppGRPCManager.cancelDownloadTask(id);
+  }
+
   static String getFilePath(String savePath, String fileName) {
     return "$savePath/$fileName";
   }
