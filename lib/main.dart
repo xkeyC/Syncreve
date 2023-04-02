@@ -104,10 +104,10 @@ class SplashUI extends BaseUI<AppGlobalUIModel> {
 
   _initApp() async {
     EasyLoading.instance.customAnimation = MyEasyLoadingAnimation();
+    await Future.delayed(const Duration(seconds: 1));
     await AppGRPCManager.pingServer();
     if (!AppGRPCManager.isConnected) {
       showToast("Syncrever Service Error");
-      return;
     }
     _goNext();
   }

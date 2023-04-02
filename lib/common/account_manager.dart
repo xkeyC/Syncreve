@@ -34,12 +34,40 @@ class AppAccountManager {
     _workingAccount = AppAccountData.formJson(acJson);
     accountBox.put("working_account_id", _workingAccount?.id);
     AppConf.baseUrl = _workingAccount!.instanceUrl;
-    AppConf.cloudreveSession = _workingAccount!.cloudreveSession;
     globalUIModel.notifyListeners();
+  }
+
+  static Future<List<AppAccountData>> getAccounts() async {
+    final accountBox = await Hive.openBox("account");
+    List<AppAccountData> l = [];
+    for (var k in accountBox.keys) {
+      final acJson = await accountBox.get(k);
+      if (acJson == null || acJson is String) continue;
+      final account = AppAccountData.formJson(acJson);
+      l.add(account);
+    }
+    return l;
   }
 
   static Future delAccount(String id) async {
     final accountBox = await Hive.openBox("account");
     await accountBox.delete(id);
+  }
+
+  static Future<String> getUrlCookie(String url) async {
+    final l = await getAccounts();
+    for (var value in l) {
+      if (url.contains(value.instanceUrl)) {
+        return value.cloudreveSession;
+      }
+      if (value.aliasHost != null) {
+        for (var host in value.aliasHost!) {
+          if (url.contains(host)) {
+            return value.cloudreveSession;
+          }
+        }
+      }
+    }
+    return "";
   }
 }

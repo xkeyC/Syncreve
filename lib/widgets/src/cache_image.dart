@@ -1,7 +1,6 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:syncreve/common/account_manager.dart';
-import 'package:syncreve/common/conf.dart';
 
 class CacheImage extends StatefulWidget {
   final String? url;
@@ -34,8 +33,16 @@ class CacheImage extends StatefulWidget {
 }
 
 class _CacheImageState extends State<CacheImage> with TickerProviderStateMixin {
-  late final AnimationController controller = AnimationController(
-      vsync: this, duration: const Duration(milliseconds: 300));
+  AnimationController? controller;
+
+  String? urlCookies;
+
+  @override
+  void initState() {
+    controller = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 300));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +53,8 @@ class _CacheImageState extends State<CacheImage> with TickerProviderStateMixin {
         child: widget.nullUrlWidget,
       );
     }
+    _updateImageCookies();
+
     return widget.borderRadius == null
         ? getImageWidget()
         : ClipRRect(
@@ -55,6 +64,7 @@ class _CacheImageState extends State<CacheImage> with TickerProviderStateMixin {
   }
 
   Widget getImageWidget() {
+    if (urlCookies == null) return makeLoadingWidget();
     return ExtendedImage.network(
       widget.url ?? "",
       width: widget.width,
@@ -67,28 +77,18 @@ class _CacheImageState extends State<CacheImage> with TickerProviderStateMixin {
       loadStateChanged: (state) {
         switch (state.extendedImageLoadState) {
           case LoadState.loading:
-            controller.reset();
-            return SizedBox(
-              width: widget.width,
-              height: widget.height,
-              child: Center(
-                child: Icon(
-                  Icons.image,
-                  color: Colors.grey.withAlpha(100),
-                  size: widget.loaderSize,
-                ),
-              ),
-            );
+            controller?.reset();
+            return makeLoadingWidget();
           case LoadState.completed:
-            controller.forward();
+            controller?.forward();
             return FadeTransition(
-                opacity: controller,
+                opacity: controller!,
                 child: ExtendedRawImage(
                   image: state.extendedImageInfo?.image,
                   fit: widget.fit,
                 ));
           case LoadState.failed:
-            controller.reset();
+            controller?.reset();
             return SizedBox(
               width: widget.width,
               height: widget.height,
@@ -107,16 +107,34 @@ class _CacheImageState extends State<CacheImage> with TickerProviderStateMixin {
 
   Map<String, String> _getHttpHeaders() {
     Map<String, String> h = {};
-    if (widget.url!
-        .contains(AppAccountManager.workingAccount?.instanceUrl ?? "")) {
-      h["cookie"] = AppConf.cloudreveSession;
-    }
+    h["cookie"] = urlCookies ?? "";
     return h;
+  }
+
+  Widget makeLoadingWidget() {
+    return SizedBox(
+      width: widget.width,
+      height: widget.height,
+      child: Center(
+        child: Icon(
+          Icons.image,
+          color: Colors.grey.withAlpha(100),
+          size: widget.loaderSize,
+        ),
+      ),
+    );
   }
 
   @override
   void dispose() {
-    controller.dispose();
+    controller?.dispose();
+    controller = null;
     super.dispose();
+  }
+
+  void _updateImageCookies() async {
+    urlCookies = await AppAccountManager.getUrlCookie(widget.url!);
+    if (!mounted) return;
+    setState(() {});
   }
 }

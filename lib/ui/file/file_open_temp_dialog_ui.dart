@@ -13,11 +13,11 @@ class FileOpenTempDialogUI extends BaseUI<FileOpenTempDialogUIModel> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
               LinearProgressIndicator(
                 value: model.getDownloadProgressValue(),
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
             ],
           ),
           actions: [

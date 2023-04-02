@@ -5,9 +5,11 @@ class AppAccountData {
   CloudreveSiteConfData cloudreveSiteConfData;
   String cloudreveSession;
   String instanceUrl;
+  List<String>? aliasHost;
 
   AppAccountData(
-      this.cloudreveSiteConfData, this.cloudreveSession, this.instanceUrl);
+      this.cloudreveSiteConfData, this.cloudreveSession, this.instanceUrl,
+      {this.aliasHost});
 
   Map<String, dynamic> toJson() {
     return {
@@ -23,7 +25,8 @@ class AppAccountData {
           json["cloudreveSiteConfData"],
         ),
         json["cloudreveSession"],
-        json["instanceUrl"]);
+        json["instanceUrl"],
+        aliasHost: json["aliasHost"]);
   }
 
   String get id =>

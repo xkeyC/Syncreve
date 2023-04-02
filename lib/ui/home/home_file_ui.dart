@@ -10,7 +10,7 @@ class HomeFileUI extends BaseUI<HomeFileUIModel> {
     return WillPopScope(
         onWillPop: model.willPop,
         child: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 100),
           child: makeFileList(context, model),
         ));
   }
@@ -176,7 +176,7 @@ class HomeFileUI extends BaseUI<HomeFileUIModel> {
           ],
           leadingWidget: IconButton(
               tooltip: "Account",
-              onPressed: model.tapHome,
+              onPressed: model.onTapAvatar,
               icon: Hero(
                 tag: "app_logo",
                 child: makeUserAvatar(28),

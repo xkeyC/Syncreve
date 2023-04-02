@@ -2,10 +2,11 @@ import 'package:path_provider/path_provider.dart';
 
 class AppConf {
   static String baseUrl = "";
-  static String cloudreveSession = "";
 
   static String _appWorkingDir = "";
   static String _appTempDir = "";
+
+  static String? tempSession;
 
   static String get appWorkingDir => _appWorkingDir;
 

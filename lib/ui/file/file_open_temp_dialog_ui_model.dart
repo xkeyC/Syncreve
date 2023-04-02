@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:open_file_plus/open_file_plus.dart';
 import 'package:syncreve/api/cloudreve_file_api.dart';
 import 'package:syncreve/base/ui_model.dart';
+import 'package:syncreve/common/account_manager.dart';
 import 'package:syncreve/common/conf.dart';
 import 'package:syncreve/common/io/downloader.dart';
 import 'package:syncreve/data/app/grpc_file_download_info_data.dart';
@@ -36,7 +37,7 @@ class FileOpenTempDialogUIModel extends BaseUIModel {
           url: url,
           savePath: savePath,
           fileName: fileName,
-          cookie: AppConf.cloudreveSession,
+          cookie: await AppAccountManager.getUrlCookie(url),
           type: DownloadInfoRequestType.Temp);
     } catch (e) {
       if (e == "file exists") {

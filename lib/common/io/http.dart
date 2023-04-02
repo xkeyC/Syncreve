@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:syncreve/common/account_manager.dart';
 import 'package:syncreve/common/conf.dart';
 import 'package:syncreve/data/http_result.dart';
 import 'package:syncreve/base/base_utils.dart';
@@ -65,7 +66,7 @@ class AppHttp {
     try {
       _onStartRequest(showLoading);
 
-      final headers = _getHeaders(path);
+      final headers = await _getHeaders(url);
       dPrint(
           "[http.onRequest]($method $url),query==$queryParameters,data== $data,header == $headers");
 
@@ -112,10 +113,13 @@ class AppHttp {
     }
   }
 
-  static Map<String, dynamic>? _getHeaders(String path) {
+  static Future<Map<String, dynamic>?> _getHeaders(String path) async {
     final Map<String, dynamic> headers = {
-      "cookie": AppConf.cloudreveSession,
+      "cookie": await AppAccountManager.getUrlCookie(path),
     };
+    if (path.contains("/api/v3/site/config") && AppConf.tempSession != null) {
+      headers["cookie"] = AppConf.tempSession;
+    }
     headers.removeWhere((key, value) => value == null);
     return headers;
   }

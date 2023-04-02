@@ -32,6 +32,7 @@ class SetupWebviewUIModel extends BaseUIModel {
   @override
   void dispose() {
     cookieManager.deleteAllCookies();
+    webViewController?.clearCache();
     super.dispose();
   }
 }

@@ -6,6 +6,10 @@ import 'package:syncreve/ui/setup/setup_account_ui_model.dart';
 import 'package:syncreve/ui/setup/setup_webview_ui_model.dart';
 
 class SetupUIModel extends BaseUIModel {
+  final bool isFirstLaunch;
+
+  SetupUIModel({this.isFirstLaunch = true});
+
   CloudreveSiteConfData? cloudreveSiteConfData;
 
   final urlTextCtrl = TextEditingController();
@@ -57,9 +61,10 @@ class SetupUIModel extends BaseUIModel {
     if (_isJumped) return;
     _isJumped = true;
     BaseUIContainer(
-            uiCreate: () => SetupAccountUI(),
-            modelCreate: () =>
-                SetupAccountUIModel(workingUrl: workingUrl, cookies: cookies))
-        .pushAndRemoveUntil(context!);
+        uiCreate: () => SetupAccountUI(),
+        modelCreate: () => SetupAccountUIModel(
+            workingUrl: workingUrl,
+            cookies: cookies,
+            isFirstLaunch: isFirstLaunch)).pushAndRemoveUntil(context!);
   }
 }

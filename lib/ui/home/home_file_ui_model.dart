@@ -2,7 +2,11 @@ import 'dart:async';
 
 import 'package:syncreve/api/cloudreve_file_api.dart';
 import 'package:syncreve/base/ui_model.dart';
+import 'package:syncreve/common/account_manager.dart';
+import 'package:syncreve/data/app/account.dart';
 import 'package:syncreve/data/file/cloudreve_file_data.dart';
+import 'package:syncreve/ui/account/account_switch_bottom_sheet_ui.dart';
+import 'package:syncreve/ui/account/account_switch_bottom_sheet_ui_model.dart';
 import 'package:syncreve/ui/file/file_open_temp_dialog_ui.dart';
 import 'package:syncreve/ui/file/file_open_temp_dialog_ui_model.dart';
 import 'package:syncreve/ui/home_ui_model.dart';
@@ -42,7 +46,22 @@ class HomeFileUIModel extends BaseUIModel {
     return super.onErrorReloadData();
   }
 
-  void tapHome() {}
+  Future<void> onTapAvatar() async {
+    final a = await showModalBottomSheet(
+      context: context!,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return BaseUIContainer(
+            uiCreate: () => AccountSwitchBottomSheetUI(),
+            modelCreate: () => AccountSwitchBottomSheetUIModel());
+      },
+    );
+    if (a is AppAccountData) {
+      await AppAccountManager.setWorkingAccount(a.id);
+      reloadData();
+      homeUIModel.notifyListeners();
+    }
+  }
 
   void goDownload() {}
 

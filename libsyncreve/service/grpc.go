@@ -16,6 +16,7 @@ func StartGRPCService(port int) {
 	grpcServer = grpc.NewServer()
 	protos.RegisterPingServiceServer(grpcServer, &pingServerImpl{})
 	protos.RegisterFileSyncServiceServer(grpcServer, &fileSyncServerImpl{})
+	fmt.Println("[libsyncreve] GRPCService started port==", port)
 	utils.IfPanic(grpcServer.Serve(lis))
 }
 

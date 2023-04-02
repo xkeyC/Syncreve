@@ -9,8 +9,12 @@ import 'package:syncreve/ui/home_ui_model.dart';
 class SetupAccountUIModel extends BaseUIModel {
   final String workingUrl;
   final String cookies;
+  final bool isFirstLaunch;
 
-  SetupAccountUIModel({required this.workingUrl, required this.cookies});
+  SetupAccountUIModel(
+      {required this.workingUrl,
+      required this.cookies,
+      this.isFirstLaunch = true});
 
   CloudreveSiteConfData? cloudreveSiteConfData;
 
@@ -21,10 +25,11 @@ class SetupAccountUIModel extends BaseUIModel {
   }
 
   _getUserData() async {
-    AppConf.cloudreveSession = cookies;
+    AppConf.tempSession = cookies;
     final conf = await handleError(
         () => CloudreveSiteApi.getConfData(workingUrl),
         showFullScreenError: true);
+    AppConf.tempSession = null;
     if (conf == null) return;
     if (conf.user == null || conf.user?.anonymous != false) {
       uiErrorMsg = "login Failed";

@@ -67,6 +67,7 @@ class SetupUI extends BaseUI<SetupUIModel> {
 
   @override
   PreferredSizeWidget? buildAppbar(BuildContext context, SetupUIModel model) {
-    return makeAppbar(context, getUITitle(context, model), showBack: false);
+    return makeAppbar(context, getUITitle(context, model),
+        showBack: model.isFirstLaunch ? false : true);
   }
 }
