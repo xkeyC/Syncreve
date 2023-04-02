@@ -148,7 +148,7 @@ class NoScrollBehavior extends ScrollBehavior {
 Widget makeUserAvatar(double size, {AppAccountData? accountData}) {
   final account = accountData ?? AppAccountManager.workingAccount;
   if (account != null && account.cloudreveSiteConfData.user?.avatar == "file") {
-    final url = "${account.instanceUrl}/api/v3/user/avatar/${account.userID}/l";
+    final url = "${account.workingUrl}/api/v3/user/avatar/${account.userID}/l";
     return CacheImage(
       url,
       key: Key(url),

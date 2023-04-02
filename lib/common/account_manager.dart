@@ -22,6 +22,10 @@ class AppAccountManager {
     final accountBox = await Hive.openBox("account");
     final accountData =
         AppAccountData(cloudreveSiteConfData, cloudreveSession, instanceUrl);
+    final oldData = await getAccount(accountData.id);
+    if (oldData != null) {
+      accountData.aliasHost = oldData.aliasHost;
+    }
     await accountBox.put(accountData.id, accountData.toJson());
     return accountData;
   }

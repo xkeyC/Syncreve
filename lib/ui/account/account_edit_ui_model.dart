@@ -25,7 +25,7 @@ class AccountEditUIModel extends BaseUIModel {
       }
     }
     try {
-      final c = await CloudreveSiteApi.getConfData(accountData.instanceUrl);
+      final c = await CloudreveSiteApi.getConfData(accountData.workingUrl);
       if (c.user != null) {
         accountStatus = "ok";
       } else {
