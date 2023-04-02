@@ -19,6 +19,8 @@ class FileOpenTempDialogUIModel extends BaseUIModel {
   StreamSubscription? downloadSub;
   GrpcFileDownloadInfoItemData? fileDownloadInfoItemData;
 
+  num downloadSpeed = 0;
+
   Future<bool> willPop() async {
     return false;
   }
@@ -70,7 +72,15 @@ class FileOpenTempDialogUIModel extends BaseUIModel {
     if (downloadSub == null) return;
     info.infoMap?.forEach((key, value) {
       if (key == downloadID) {
-        fileDownloadInfoItemData = GrpcFileDownloadInfoItemData.fromJson(value);
+        final itemData = GrpcFileDownloadInfoItemData.fromJson(value);
+        if (fileDownloadInfoItemData != null) {
+          downloadSpeed = (itemData.downloadedSize ?? 0) -
+              (fileDownloadInfoItemData!.downloadedSize ?? 0);
+          notifyListeners();
+        } else {
+          downloadSpeed = itemData.downloadedSize ?? 0;
+        }
+        fileDownloadInfoItemData = itemData;
         notifyListeners();
         if (fileDownloadInfoItemData?.status ==
             Downloader.fileDownloadQueueStatusDone) {
@@ -99,12 +109,9 @@ class FileOpenTempDialogUIModel extends BaseUIModel {
   double? getDownloadProgressValue() {
     final fileSize = getFileSize();
     if (fileSize == 0) return null;
-    if (downloadID == null && fileDownloadInfoItemData == null) return null;
-    if (downloadID != null && fileDownloadInfoItemData == null) return 0;
+    if (downloadID == null || fileDownloadInfoItemData == null) return null;
     final p = (fileDownloadInfoItemData?.downloadedSize?.toDouble() ?? 0.0) /
         fileSize.toDouble();
-    dPrint(
-        "getDownloadProgressValue ${(fileDownloadInfoItemData?.downloadedSize?.toDouble() ?? 0)} / ${fileSize.toDouble()}} == $p");
     return p;
   }
 

@@ -30,6 +30,7 @@ dependencies:
   protobuf: ^2.1.0
   grpc: ^3.1.0
   open_file_plus: ^3.4.0
+  filesize: ^2.0.1
 
   cupertino_icons: ^1.0.2
 
