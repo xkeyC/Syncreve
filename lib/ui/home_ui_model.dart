@@ -1,4 +1,5 @@
 import 'package:syncreve/base/ui_model.dart';
+import 'package:syncreve/common/grpc/grpc_manager.dart';
 import 'package:syncreve/ui/home/home_account_ui_model.dart';
 import 'package:syncreve/ui/home/home_file_ui_model.dart';
 import 'package:syncreve/ui/home/home_sync_ui_model.dart';
@@ -10,6 +11,12 @@ class HomeUIModel extends BaseUIModel {
 
   bool get canChangePageIndex =>
       DateTime.now().millisecondsSinceEpoch - _lastChangePageTime >= 300;
+
+  @override
+  void initModel() {
+    AppGRPCManager.pingServer();
+    super.initModel();
+  }
 
   @override
   BaseUIModel? onCreateChildUIModel(modelKey) {

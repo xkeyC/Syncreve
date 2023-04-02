@@ -8,10 +8,17 @@ import (
 	"net"
 )
 
+var grpcServer *grpc.Server
+
 func StartGRPCService(port int) {
 	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", port))
 	utils.IfPanic(err)
-	grpcServer := grpc.NewServer()
+	grpcServer = grpc.NewServer()
 	protos.RegisterPingServiceServer(grpcServer, &pingServerImpl{})
+	protos.RegisterFileSyncServiceServer(grpcServer, &fileSyncServerImpl{})
 	utils.IfPanic(grpcServer.Serve(lis))
+}
+
+func StopGRPCService() {
+	grpcServer.Stop()
 }

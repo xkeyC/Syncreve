@@ -1,0 +1,35 @@
+syntax = "proto3";
+option go_package = "../protos";
+
+service FileSyncService {
+  rpc AddDownloadTask(DownloadTaskRequest) returns (DownloadTaskResult) {}
+  rpc GetDownloadInfoStream(DownloadInfoRequest) returns (stream DownLoadInfoResult) {}
+}
+
+message DownloadTaskRequest {
+  string  url = 1;
+  string  savePath = 2;
+  string  fileName = 3;
+  string  cookie = 4;
+  DownloadInfoRequestType downLoadType = 5;
+}
+
+message DownloadTaskResult {
+  string id = 1;
+}
+
+enum DownloadInfoRequestType {
+  All = 0;
+  Queue = 1;
+  Temp = 2;
+}
+
+message DownloadInfoRequest {
+  optional string  id = 1;
+  DownloadInfoRequestType type = 2;
+}
+
+message DownLoadInfoResult {
+  DownloadInfoRequestType type = 1;
+  bytes data = 2;
+}

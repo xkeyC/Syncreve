@@ -12,55 +12,34 @@ class SetupUI extends BaseUI<SetupUIModel> {
         child: Column(
           children: [
             if (confData == null) const SizedBox(height: 12),
-            AnimatedSize(
-              duration: const Duration(milliseconds: 800),
-              child: Card(
+            if (confData == null)
+              Card(
                 elevation: .3,
                 child: fastPadding(
                     all: 12,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (confData == null) ...[
-                          const Center(
-                            child: Hero(
-                                tag: "app_logo",
-                                child: Icon(
-                                  Icons.cloud_circle,
-                                  color: Colors.indigoAccent,
-                                  size: 120,
-                                )),
+                        const Center(
+                          child: Hero(
+                              tag: "app_logo",
+                              child: Icon(
+                                Icons.cloud_circle,
+                                color: Colors.indigoAccent,
+                                size: 120,
+                              )),
+                        ),
+                        const SizedBox(height: 12),
+                        TextField(
+                          controller: model.urlTextCtrl,
+                          decoration: const InputDecoration(
+                            hintText: "Cloudreve Instance URL",
                           ),
-                          const SizedBox(height: 12),
-                          TextField(
-                            controller: model.urlTextCtrl,
-                            decoration: const InputDecoration(
-                              hintText: "Cloudreve Instance URL",
-                            ),
-                          ),
-                        ] else ...[
-                          Center(
-                            child: Row(
-                              children: [
-                                const Icon(
-                                  Icons.cloud_circle,
-                                  color: Colors.green,
-                                  size: 64,
-                                ),
-                                const SizedBox(width: 12),
-                                Text(
-                                  confData.title ?? "",
-                                  style: const TextStyle(fontSize: 18),
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
+                        ),
                       ],
                     )),
               ),
-            ),
-            const SizedBox(height: 12),
+            if (confData == null) const SizedBox(height: 12),
             if (confData == null)
               Center(
                 child: FloatingActionButton(
