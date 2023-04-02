@@ -84,4 +84,10 @@ class HomeUI extends BaseUI<HomeUIModel> with SingleTickerProviderStateMixin {
   @override
   PreferredSizeWidget? buildAppbar(BuildContext context, HomeUIModel model) =>
       null;
+
+  static pushAndRemove(BuildContext context) {
+    return BaseUIContainer(
+        uiCreate: () => HomeUI(),
+        modelCreate: () => HomeUIModel()).pushAndRemoveUntil(context);
+  }
 }

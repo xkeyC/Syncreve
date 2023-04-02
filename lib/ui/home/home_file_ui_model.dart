@@ -43,6 +43,7 @@ class HomeFileUIModel extends BaseUIModel {
   @override
   Future onErrorReloadData() {
     path = [];
+    files = null;
     return super.onErrorReloadData();
   }
 
@@ -58,7 +59,7 @@ class HomeFileUIModel extends BaseUIModel {
     );
     if (a is AppAccountData) {
       await AppAccountManager.setWorkingAccount(a.id);
-      reloadData();
+      onErrorReloadData();
       homeUIModel.notifyListeners();
     }
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:syncreve/common/account_manager.dart';
+import 'package:syncreve/data/app/account.dart';
 import 'package:syncreve/widgets/src/cache_image.dart';
 import 'dart:ui' as ui;
 
@@ -144,11 +145,10 @@ class NoScrollBehavior extends ScrollBehavior {
   }
 }
 
-Widget makeUserAvatar(double size, {String? instanceUrl}) {
-  final account = AppAccountManager.workingAccount;
+Widget makeUserAvatar(double size, {AppAccountData? accountData}) {
+  final account = accountData ?? AppAccountManager.workingAccount;
   if (account != null && account.cloudreveSiteConfData.user?.avatar == "file") {
-    final url =
-        "${instanceUrl ?? account.instanceUrl}/api/v3/user/avatar/${account.userID}/l";
+    final url = "${account.instanceUrl}/api/v3/user/avatar/${account.userID}/l";
     return CacheImage(
       url,
       key: Key(url),

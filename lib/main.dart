@@ -10,10 +10,7 @@ import 'package:syncreve/common/account_manager.dart';
 import 'package:syncreve/common/conf.dart';
 import 'package:syncreve/global_ui_model.dart';
 import 'package:syncreve/ui/home_ui.dart';
-import 'package:syncreve/ui/home_ui_model.dart';
 import 'package:syncreve/ui/setup/setup_ui.dart';
-import 'package:syncreve/ui/setup/setup_ui_model.dart';
-import 'package:syncreve/widgets/src/fade_transition_route.dart';
 
 import 'common/grpc/grpc_manager.dart';
 
@@ -114,16 +111,9 @@ class SplashUI extends BaseUI<AppGlobalUIModel> {
 
   _goNext() async {
     if (AppAccountManager.workingAccount != null) {
-      // TODO check account
-      BaseUIContainer(
-              uiCreate: () => HomeUI(), modelCreate: () => HomeUIModel())
-          .pushAndRemoveUntil(scaffoldState.currentContext!);
+      HomeUI.pushAndRemove(context);
       return;
     }
-    Navigator.pushAndRemoveUntil(scaffoldState.currentContext!,
-        FadeTransitionRoute(builder: (BuildContext context) {
-      return BaseUIContainer(
-          uiCreate: () => SetupUI(), modelCreate: () => SetupUIModel());
-    }), (_) => false);
+    SetupUI.pushAndRemove(scaffoldState.currentContext!);
   }
 }

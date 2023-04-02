@@ -4,7 +4,6 @@ import 'package:syncreve/common/account_manager.dart';
 import 'package:syncreve/common/conf.dart';
 import 'package:syncreve/data/site/cloudreve_site_conf_data.dart';
 import 'package:syncreve/ui/home_ui.dart';
-import 'package:syncreve/ui/home_ui_model.dart';
 
 class SetupAccountUIModel extends BaseUIModel {
   final String workingUrl;
@@ -44,7 +43,6 @@ class SetupAccountUIModel extends BaseUIModel {
     final account = await AppAccountManager.addAccount(
         cloudreveSiteConfData!, cookies, workingUrl);
     await AppAccountManager.setWorkingAccount(account.id);
-    BaseUIContainer(uiCreate: () => HomeUI(), modelCreate: () => HomeUIModel())
-        .pushAndRemoveUntil(context!);
+    HomeUI.pushAndRemove(context!);
   }
 }

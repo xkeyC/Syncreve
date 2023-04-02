@@ -8,8 +8,12 @@ import 'package:syncreve/ui/setup/setup_webview_ui_model.dart';
 class SetupUIModel extends BaseUIModel {
   final bool isFirstLaunch;
 
-  SetupUIModel({this.isFirstLaunch = true});
+  SetupUIModel({
+    this.isFirstLaunch = true,
+    this.initUrl = "",
+  });
 
+  String initUrl;
   CloudreveSiteConfData? cloudreveSiteConfData;
 
   final urlTextCtrl = TextEditingController();
@@ -19,6 +23,15 @@ class SetupUIModel extends BaseUIModel {
   bool isEnterButtonLoading = false;
 
   bool _isJumped = false;
+
+  @override
+  initModel() {
+    super.initModel();
+    urlTextCtrl.text = initUrl;
+    if (initUrl.isNotEmpty) {
+      onEnterUrl();
+    }
+  }
 
   _setLoading(bool b) {
     isEnterButtonLoading = b;

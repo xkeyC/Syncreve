@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:open_file_plus/open_file_plus.dart';
 import 'package:syncreve/api/cloudreve_file_api.dart';
@@ -27,12 +28,19 @@ class FileOpenTempDialogUIModel extends BaseUIModel {
 
   @override
   Future loadData() async {
-    final url =
-        await handleError(() => CloudreveFileApi.download(fileObjectsData.id!));
-    if (url == null) return;
     final savePath =
         "${AppConf.appTempDir}/temp_file/${fileObjectsData.id ?? "no_id"}/";
     final fileName = fileObjectsData.name ?? fileObjectsData.id ?? "no_name";
+
+    final filePath = Downloader.getFilePath(savePath, fileName);
+    if (await File(filePath).exists()) {
+      doOpenFile(filePath);
+      return;
+    }
+
+    final url =
+        await handleError(() => CloudreveFileApi.download(fileObjectsData.id!));
+    if (url == null) return;
 
     try {
       downloadID = await Downloader.addDownloadTask(
@@ -82,12 +90,18 @@ class FileOpenTempDialogUIModel extends BaseUIModel {
         }
         fileDownloadInfoItemData = itemData;
         notifyListeners();
+        final filePath = Downloader.getFilePath(
+            fileDownloadInfoItemData!.savePath!,
+            fileDownloadInfoItemData!.fileName!);
         if (fileDownloadInfoItemData?.status ==
             Downloader.fileDownloadQueueStatusDone) {
-          doOpenFile(Downloader.getFilePath(fileDownloadInfoItemData!.savePath!,
-              fileDownloadInfoItemData!.fileName!));
+          doOpenFile(filePath);
         } else if (fileDownloadInfoItemData?.status ==
             Downloader.fileDownloadQueueStatusError) {
+          if (fileDownloadInfoItemData?.errorInfo == "file exist") {
+            doOpenFile(filePath);
+            return;
+          }
           onCancel(doCancel: false);
           showToast(fileDownloadInfoItemData?.errorInfo ?? "Download Error");
         }

@@ -52,6 +52,14 @@ class AppAccountManager {
   static Future delAccount(String id) async {
     final accountBox = await Hive.openBox("account");
     await accountBox.delete(id);
+    if (id == workingAccount?.id) {
+      await accountBox.delete("working_account_id");
+      final as = (await getAccounts());
+      if (as.isEmpty) {
+        throw "no_account";
+      }
+      setWorkingAccount(as.first.id);
+    }
   }
 
   static Future<String> getUrlCookie(String url) async {

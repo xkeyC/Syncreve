@@ -85,8 +85,7 @@ class AccountSwitchBottomSheetUI
                               ),
                             ),
                             const SizedBox(width: 12),
-                            makeUserAvatar(48,
-                                instanceUrl: account.instanceUrl),
+                            makeUserAvatar(48, accountData: account),
                             const SizedBox(width: 12),
                             Expanded(
                                 child: Column(
@@ -101,7 +100,7 @@ class AccountSwitchBottomSheetUI
                                     Text(
                                       "${account.instanceUrl} -> ${account.userName}",
                                       style: TextStyle(
-                                          fontSize: 11,
+                                          fontSize: 10.3,
                                           color: Theme.of(context)
                                               .unselectedWidgetColor),
                                     ),

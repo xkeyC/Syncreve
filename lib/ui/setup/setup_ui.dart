@@ -1,6 +1,7 @@
 import 'package:syncreve/base/ui.dart';
 import 'package:syncreve/ui/setup/setup_webview_ui.dart';
 import 'package:syncreve/ui/setup/setup_webview_ui_model.dart';
+import 'package:syncreve/widgets/src/fade_transition_route.dart';
 import 'setup_ui_model.dart';
 
 class SetupUI extends BaseUI<SetupUIModel> {
@@ -69,5 +70,13 @@ class SetupUI extends BaseUI<SetupUIModel> {
   PreferredSizeWidget? buildAppbar(BuildContext context, SetupUIModel model) {
     return makeAppbar(context, getUITitle(context, model),
         showBack: model.isFirstLaunch ? false : true);
+  }
+
+  static pushAndRemove(BuildContext context) {
+    return Navigator.pushAndRemoveUntil(context,
+        FadeTransitionRoute(builder: (BuildContext context) {
+      return BaseUIContainer(
+          uiCreate: () => SetupUI(), modelCreate: () => SetupUIModel());
+    }), (_) => false);
   }
 }
