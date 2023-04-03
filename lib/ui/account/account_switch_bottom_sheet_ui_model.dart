@@ -26,8 +26,10 @@ class AccountSwitchBottomSheetUIModel extends BaseUIModel {
       for (var value in accounts!) {
         try {
           final c = await CloudreveSiteApi.getConfData(value.workingUrl);
-          if (c.user != null) {
+          if (c.user != null && c.user?.userName == value.userName) {
             checkAccount[value.id] = true;
+          } else {
+            checkAccount[value.id] = false;
           }
         } catch (e) {
           checkAccount[value.id] = false;
