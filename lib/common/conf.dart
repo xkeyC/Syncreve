@@ -1,4 +1,8 @@
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
+import 'account_manager.dart';
+import 'grpc/grpc_manager.dart';
+import 'io/path_config.dart';
 
 class AppConf {
   static String _appWorkingDir = "";
@@ -18,5 +22,10 @@ class AppConf {
   static Future init() async {
     _appWorkingDir = (await getApplicationDocumentsDirectory()).absolute.path;
     _appTempDir = (await getTemporaryDirectory()).absolute.path;
+
+    await Hive.initFlutter("Syncrever/db");
+    await AppPathConfig.init();
+    await AppAccountManager.init();
+    await AppGRPCManager.init();
   }
 }

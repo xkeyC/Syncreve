@@ -105,6 +105,9 @@ class HomeFileUI extends BaseUI<HomeFileUIModel> {
                       onTap: () {
                         model.onTapFile(file);
                       },
+                      onLongPress: () {
+                        model.onLongPressFile(file);
+                      },
                       child: Column(
                         children: [
                           SizedBox(height: isPic ? 0 : 6),

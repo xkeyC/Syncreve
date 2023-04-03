@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:syncreve/base/ui_model.dart';
 import 'package:syncreve/common/account_manager.dart';
 import 'package:syncreve/common/conf.dart';
@@ -16,11 +15,7 @@ import 'common/grpc/grpc_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  await Hive.initFlutter("Syncrever/db");
   await AppConf.init();
-  await AppAccountManager.init();
-  await AppGRPCManager.init();
 
   runApp(ProviderScope(
     child: BaseUIContainer(

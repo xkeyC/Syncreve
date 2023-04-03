@@ -1,11 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:open_file_plus/open_file_plus.dart';
 import 'package:syncreve/api/cloudreve_file_api.dart';
 import 'package:syncreve/base/ui_model.dart';
 import 'package:syncreve/common/account_manager.dart';
-import 'package:syncreve/common/conf.dart';
 import 'package:syncreve/common/io/downloader.dart';
 import 'package:syncreve/data/app/grpc_file_download_info_data.dart';
 import 'package:syncreve/data/file/cloudreve_file_data.dart';
@@ -28,13 +26,9 @@ class FileOpenTempDialogUIModel extends BaseUIModel {
 
   @override
   Future loadData() async {
-    final savePath =
-        "${AppConf.appTempDir}/temp_file/${fileObjectsData.id ?? "no_id"}/";
-    final fileName = fileObjectsData.name ?? fileObjectsData.id ?? "no_name";
-
-    final filePath = Downloader.getFilePath(savePath, fileName);
-    if (await File(filePath).exists()) {
-      doOpenFile(filePath);
+    final p = Downloader.getTempFilePath(fileObjectsData);
+    if (await File(p.fileSavedFullPath!).exists()) {
+      doOpenFile(p.fileSavedFullPath!);
       return;
     }
 
@@ -45,13 +39,13 @@ class FileOpenTempDialogUIModel extends BaseUIModel {
     try {
       downloadID = await Downloader.addDownloadTask(
           url: url,
-          savePath: savePath,
-          fileName: fileName,
+          savePath: p.savePath!,
+          fileName: p.fileName!,
           cookie: await AppAccountManager.getUrlCookie(url),
           type: DownloadInfoRequestType.Temp);
     } catch (e) {
       if (e == "file exists") {
-        doOpenFile(Downloader.getFilePath(savePath, fileName));
+        doOpenFile(p.fileSavedFullPath!);
         return;
       }
       showToast("$e");
@@ -109,8 +103,15 @@ class FileOpenTempDialogUIModel extends BaseUIModel {
     });
   }
 
-  void doOpenFile(String filePath) {
-    OpenFile.open(filePath);
+  void doOpenFile(String filePath) async {
+    // if (!await AppPathConfig.checkPathPermissions(filePath)) {
+    //   showToast("Permission Required");
+    // }
+    // final r = await OpenFile.open(filePath);
+    // if (r.type != ResultType.done) {
+    //   showToast(r.message);
+    // }
+    // dPrint("doOpenFile  r.type == ${r.type}  r.message == ${r.message}");
     onCancel(doCancel: false);
   }
 

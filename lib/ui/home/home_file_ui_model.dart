@@ -7,6 +7,8 @@ import 'package:syncreve/data/app/account.dart';
 import 'package:syncreve/data/file/cloudreve_file_data.dart';
 import 'package:syncreve/ui/account/account_switch_bottom_sheet_ui.dart';
 import 'package:syncreve/ui/account/account_switch_bottom_sheet_ui_model.dart';
+import 'package:syncreve/ui/file/file_menu_bottom_sheet_ui.dart';
+import 'package:syncreve/ui/file/file_menu_bottom_sheet_ui_model.dart';
 import 'package:syncreve/ui/file/file_open_temp_dialog_ui.dart';
 import 'package:syncreve/ui/file/file_open_temp_dialog_ui_model.dart';
 import 'package:syncreve/ui/home_ui_model.dart';
@@ -101,5 +103,12 @@ class HomeFileUIModel extends BaseUIModel {
       return false;
     }
     return true;
+  }
+
+  void onLongPressFile(CloudreveFileObjectsData file) {
+    BaseUIContainer(
+            uiCreate: () => FileMenuBottomSheetUI(),
+            modelCreate: () => FileMenuBottomSheetUIModel(file))
+        .pushShowModalBottomSheet(context!);
   }
 }

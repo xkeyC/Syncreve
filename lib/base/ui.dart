@@ -24,6 +24,16 @@ class BaseUIContainer extends ConsumerStatefulWidget {
     return Navigator.push(context, makeRoute(context, this));
   }
 
+  Future pushShowModalBottomSheet(BuildContext context) {
+    return showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return this;
+      },
+    );
+  }
+
   /// 获取路由
   MaterialPageRoute makeRoute(
       BuildContext context, BaseUIContainer baseUIContainer) {

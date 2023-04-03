@@ -2,8 +2,13 @@ package com.xkeyc.apps.syncreve.syncreve
 
 import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
+import android.os.Environment
+import android.provider.Settings
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import com.xkeyc.apps.syncreve.syncreve.service.SyncreveService
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -20,7 +25,7 @@ class MainActivity : FlutterFragmentActivity() {
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
-    ) { _: Boolean ->
+    ) {
         launchServiceResult?.success("ok")
         launchServiceResult = null
         startService(launchServicePath)
@@ -34,8 +39,7 @@ class MainActivity : FlutterFragmentActivity() {
 
     private fun setupFlutterChannel(flutterEngine: FlutterEngine) {
         MethodChannel(
-            flutterEngine.dartExecutor.binaryMessenger,
-            CHANNEL_NAME
+            flutterEngine.dartExecutor.binaryMessenger, CHANNEL_NAME
         ).setMethodCallHandler { call, result ->
             when (call.method) {
                 "startService" -> {
@@ -63,6 +67,13 @@ class MainActivity : FlutterFragmentActivity() {
                         result.error("500", "startServiceError:$e", null)
                     }
                 }
+                "getDownloadDir" -> {
+                    result.success(getDownloadDir())
+                }
+                "checkPathPermissions" -> {
+                    val path = call.argument<String>("path")
+                    checkPathPermissions(path!!, result)
+                }
             }
         }
     }
@@ -81,5 +92,41 @@ class MainActivity : FlutterFragmentActivity() {
     private fun stopService() {
         val intent = Intent(this, SyncreveService::class.java)
         stopService(intent)
+    }
+
+    private fun getDownloadDir(): String {
+        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath
+    }
+
+    private fun checkPathPermissions(path: String, result: MethodChannel.Result) {
+        // TODO check path
+        result.success(checkPermissions())
+    }
+
+    private fun checkPermissions(): Boolean {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (!Environment.isExternalStorageManager()) {
+                val uri = Uri.parse("package:${BuildConfig.APPLICATION_ID}")
+                startActivity(
+                    Intent(
+                        Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri
+                    )
+                )
+                return false
+            }
+        }
+//        else if (ActivityCompat.checkSelfPermission(
+//                this, Manifest.permission.WRITE_EXTERNAL_STORAGE
+//            ) != PackageManager.PERMISSION_GRANTED
+//        ) {
+//            requestPermissions(
+//                arrayOf(
+//                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+//                    Manifest.permission.READ_EXTERNAL_STORAGE
+//                ), 1
+//            )
+//            return false
+//        }
+        return true
     }
 }

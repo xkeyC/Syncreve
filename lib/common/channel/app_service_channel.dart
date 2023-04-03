@@ -11,4 +11,12 @@ class AppServiceChannel {
   static Future<void> stopService() async {
     return await _channel.invokeMethod("stopService");
   }
+
+  static Future<String> getDownloadDir() async {
+    return await _channel.invokeMethod("getDownloadDir");
+  }
+
+  static Future<bool> checkPathPermissions(String path) async {
+    return await _channel.invokeMethod("checkPathPermissions", {"path": path});
+  }
 }

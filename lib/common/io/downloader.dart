@@ -5,7 +5,10 @@ import 'dart:io';
 import 'package:syncreve/base/base_utils.dart';
 import 'package:syncreve/common/account_manager.dart';
 import 'package:syncreve/common/grpc/grpc_manager.dart';
+import 'package:syncreve/common/io/path_config.dart';
+import 'package:syncreve/data/app/app_file_save_path_data.dart';
 import 'package:syncreve/data/app/grpc_file_download_info_data.dart';
+import 'package:syncreve/data/file/cloudreve_file_data.dart';
 import 'package:syncreve/generated/grpc/libsyncreve/protos/file_sync.pbgrpc.dart';
 
 class Downloader {
@@ -59,6 +62,16 @@ class Downloader {
 
   static Future<String> cancelDownloadTask(String id) {
     return AppGRPCManager.cancelDownloadTask(id);
+  }
+
+  static AppFileSavePathData getTempFilePath(
+      CloudreveFileObjectsData fileData) {
+    final savePath =
+        "${AppPathConfig.tempDownloadPath}/${fileData.id ?? "no_id"}/";
+    final fileName = fileData.name ?? fileData.id ?? "no_name";
+    final filePath = getFilePath(savePath, fileName);
+    return AppFileSavePathData(
+        fileSavedFullPath: filePath, savePath: savePath, fileName: fileName);
   }
 
   static String getFilePath(String savePath, String fileName) {
