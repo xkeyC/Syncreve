@@ -1,5 +1,6 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:syncreve/base/base_utils.dart';
 import 'package:syncreve/common/account_manager.dart';
 
 class CacheImage extends StatefulWidget {
@@ -88,6 +89,8 @@ class _CacheImageState extends State<CacheImage> with TickerProviderStateMixin {
                   fit: widget.fit,
                 ));
           case LoadState.failed:
+            dPrint(
+                "[CacheImage] loading Error url == ${widget.url}  error == ${state.lastException}");
             controller?.reset();
             return SizedBox(
               width: widget.width,

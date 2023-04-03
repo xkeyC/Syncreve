@@ -10,10 +10,8 @@ import 'package:syncreve/base/base_utils.dart';
 class AppHttp {
   static int httpRequestingCount = 0;
 
-  static final Dio _dio = Dio(BaseOptions(
-    sendTimeout: const Duration(seconds: 120),
-    receiveTimeout: const Duration(seconds: 30),
-  ));
+  static final Dio _dio =
+      Dio(BaseOptions(connectTimeout: const Duration(seconds: 10)));
 
   static Dio get dio => _dio;
 
@@ -97,7 +95,10 @@ class AppHttp {
       return resultData;
     } catch (e) {
       dPrint("[http.onError]($method $path),error==$e");
-      if (firstError) {
+      if (firstError &&
+          AppAccountManager.workingAccount?.workingUrl !=
+              AppAccountManager.workingAccount?.instanceUrl) {
+        dPrint("[http] workingAccount.checkNewWorkingUrl");
         await AppAccountManager.workingAccount?.checkNewWorkingUrl();
         return _doRequest(method, path,
             showLoading: showLoading,

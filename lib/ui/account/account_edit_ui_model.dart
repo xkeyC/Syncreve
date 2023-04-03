@@ -86,7 +86,6 @@ class AccountEditUIModel extends BaseUIModel {
         accountData.aliasHost = newLines;
         AppAccountManager.updateAccountData(accountData);
         if (AppAccountManager.workingAccount?.id == accountData.id) {
-          accountData.workingUrl = "";
           loadData();
         }
         showToast("Success");
@@ -94,6 +93,10 @@ class AccountEditUIModel extends BaseUIModel {
         showToast(e.toString());
         return;
       }
+    } else {
+      accountData.aliasHost = null;
+      AppAccountManager.updateAccountData(accountData);
+      loadData();
     }
   }
 

@@ -1,5 +1,6 @@
-import 'package:syncreve/api/cloudreve_site_api.dart';
+import 'package:dio/dio.dart';
 import 'package:syncreve/base/base_utils.dart';
+import 'package:syncreve/common/account_manager.dart';
 import 'package:syncreve/common/utils/string.dart';
 import 'package:syncreve/data/site/cloudreve_site_conf_data.dart';
 
@@ -44,26 +45,35 @@ class AppAccountData {
     if (aliasHost == null) {
       return;
     }
-    bool getAlia = false;
+    final dio = Dio(BaseOptions(connectTimeout: const Duration(seconds: 3)));
     for (var url in aliasHost!) {
       try {
-        final u = await CloudreveSiteApi.getConfData(url);
-        if (u.user?.userName == userName) {
+        final cookie = await AppAccountManager.getUrlCookie(url);
+        dPrint(
+            "[AppAccountData] checkNewWorkingUrl start:$url cookie==$cookie");
+        final r = await dio.get("$url/api/v3/site/config",
+            options: Options(
+              headers: {"cookie": cookie},
+            ));
+        dPrint(
+            "[AppAccountData] checkNewWorkingUrl start:$url data==${r.data}");
+        final d = CloudreveSiteConfData.fromJson(r.data["data"]);
+        if (d.user?.userName == userName) {
           workingUrl = url;
-          getAlia = true;
-          dPrint("[AppAccountData] checkNewWorkingUrl pass ($url)");
+          dPrint("[AppAccountData] checkNewWorkingUrl work:$workingUrl");
           return;
         }
         dPrint(
-            "[AppAccountData] checkNewWorkingUrl ($url) ${u.user?.userName} <> $userName");
+            "[AppAccountData] checkNewWorkingUrl failed: account error ${d.user?.userName} <> $userName");
       } catch (e) {
         dPrint("[AppAccountData] checkNewWorkingUrl Error:$e");
-
-        continue;
       }
     }
-    if (!getAlia) {
-      workingUrl = instanceUrl;
-    }
+    workingUrl = instanceUrl;
+    dPrint(
+        "[AppAccountData] checkNewWorkingUrl failed,use instanceUrl :$instanceUrl");
   }
+
+  String get avatarUrl =>
+      "${workingUrl == "" ? instanceUrl : workingUrl}/api/v3/user/avatar/$userID/l";
 }

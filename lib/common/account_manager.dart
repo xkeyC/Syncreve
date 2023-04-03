@@ -35,9 +35,7 @@ class AppAccountManager {
     final a = await getAccount(id);
     if (a == null) return;
     _workingAccount = a;
-    if (_workingAccount?.aliasHost != null) {
-      _workingAccount?.workingUrl = "";
-    }
+    _workingAccount?.checkNewWorkingUrl();
     accountBox.put("working_account_id", _workingAccount?.id);
     globalUIModel.notifyListeners();
   }
