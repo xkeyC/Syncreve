@@ -20,7 +20,7 @@ func StartService(confPath string) error {
 		return err
 	}
 	fmt.Println("[libsyncreve] StartService yamlData ==", conf)
-	go service.StartGRPCService(conf.Port)
+	go service.StartGRPCService(conf.WorkingDir)
 	return nil
 }
 

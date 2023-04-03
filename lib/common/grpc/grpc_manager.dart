@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:grpc/grpc.dart';
 import 'package:syncreve/base/base_utils.dart';
 import 'package:syncreve/common/channel/app_service_channel.dart';
@@ -9,14 +11,11 @@ import 'grpc_conf_tools.dart';
 
 class AppGRPCManager {
   static final _channel = ClientChannel(
-    'localhost',
-    port: 39399,
-    options: ChannelOptions(
-      credentials: const ChannelCredentials.insecure(),
-      codecRegistry:
-          CodecRegistry(codecs: const [GzipCodec(), IdentityCodec()]),
-    ),
-  );
+      InternetAddress(AppConf.grpcUnixPath, type: InternetAddressType.unix),
+      options: ChannelOptions(
+          credentials: const ChannelCredentials.insecure(),
+          codecRegistry:
+              CodecRegistry(codecs: const [GzipCodec(), IdentityCodec()])));
 
   static final _pingClient = PingServiceClient(_channel);
 

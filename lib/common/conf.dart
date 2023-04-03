@@ -8,6 +8,8 @@ class AppConf {
 
   static String get appWorkingDir => _appWorkingDir;
 
+  static String get grpcUnixPath => "$appWorkingDir/syncreve_grpc.sock";
+
   static String get appTempDir => _appTempDir;
 
   static String get grpcConfigFilePath =>

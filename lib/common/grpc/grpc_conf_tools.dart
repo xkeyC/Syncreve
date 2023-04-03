@@ -7,7 +7,6 @@ import 'package:syncreve/data/app/grpc_service_config_data.dart';
 class AppGRPCConfTools {
   static Future updateConf() async {
     final conf = AppGrpcServiceConfigData(
-      port: 39399,
       tempDir: AppConf.appTempDir,
       workingDir: AppConf.appWorkingDir,
     );
