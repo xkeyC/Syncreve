@@ -145,7 +145,6 @@ class FileMenuBottomSheetUI extends BaseUI<FileMenuBottomSheetUIModel> {
       color: Theme.of(context).textTheme.bodySmall?.color,
       size: size,
     );
-    return Container();
   }
 
   @override
