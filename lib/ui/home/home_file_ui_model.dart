@@ -125,6 +125,7 @@ class HomeFileUIModel extends BaseUIModel {
   Future<bool> willPop() async {
     if (isInSelectMode) {
       selectedFiles.clear();
+      notifyListeners();
       return false;
     }
     if (homeUIModel.curPageIndex == 0 && path.isNotEmpty) {
