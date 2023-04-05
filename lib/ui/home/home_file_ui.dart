@@ -134,6 +134,9 @@ class HomeFileUI extends BaseUI<HomeFileUIModel> {
           },
           onLongPress: () {
             if (model.isInSelectMode) {
+              if (!isSelected) {
+                model.onSelected(file);
+              }
               model.onTapFileMenu("more");
               return;
             }
