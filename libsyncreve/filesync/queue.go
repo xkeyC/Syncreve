@@ -215,7 +215,9 @@ func updateDownloadInfo(k uuid.UUID, taskInfo FileDownloadQueueTaskData, info *r
 			downloadInfo.DownloadedSize = info.DownloadedSize
 			downloadInfo.ContentLength = info.Response.ContentLength
 		}
-		downloadInfo.Status = status
+		if downloadInfo.Status != FileDownloadQueueStatusDone && downloadInfo.Status != FileDownloadQueueStatusError {
+			downloadInfo.Status = status
+		}
 		downloadInfo.ErrorInfo = errorInfo
 	}
 	fileDownloadingInfo.QueueLen = GetTaskLen()

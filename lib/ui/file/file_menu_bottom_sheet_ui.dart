@@ -154,7 +154,7 @@ class FileMenuBottomSheetUI extends BaseUI<FileMenuBottomSheetUIModel> {
       final fileInfo = filesInfo[0];
       if (fileInfo.pic != "") {
         return CacheImage(
-          "${AppAccountManager.workingAccount?.instanceUrl}/api/v3/file/thumb/${fileInfo.id}",
+          "${AppAccountManager.workingAccount?.workingUrl}/api/v3/file/thumb/${fileInfo.id}",
           loaderSize: size,
           fit: BoxFit.cover,
           height: size,
