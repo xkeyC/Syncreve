@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:syncreve/base/ui.dart';
 import 'package:syncreve/common/account_manager.dart';
 import 'package:syncreve/common/utils/string.dart';
+import 'package:syncreve/data/app/menu_button_data.dart';
 import 'package:syncreve/data/file/cloudreve_file_data.dart';
 import 'package:syncreve/ui/home/home_file_ui_model.dart';
 import 'package:syncreve/widgets/src/blur_oval_widget.dart';
@@ -132,6 +133,10 @@ class HomeFileUI extends BaseUI<HomeFileUIModel> {
             model.onTapFile(file);
           },
           onLongPress: () {
+            if (model.isInSelectMode) {
+              model.onTapFileMenu("more");
+              return;
+            }
             model.onSelected(file);
           },
           child: Stack(
@@ -207,6 +212,10 @@ class HomeFileUI extends BaseUI<HomeFileUIModel> {
               model.onTapFile(file);
             },
             onLongPress: () {
+              if (model.isInSelectMode) {
+                model.onTapFileMenu("more");
+                return;
+              }
               model.onSelected(file);
             },
             child: Row(
@@ -364,50 +373,74 @@ class HomeFileUI extends BaseUI<HomeFileUIModel> {
 
   Widget makeFileBottomMenus(BuildContext context, HomeFileUIModel model) {
     final menus = [
-      _FileBottomMenu("more", "More", Icons.more_horiz),
-      _FileBottomMenu("sync", "Sync", Icons.sync),
-      _FileBottomMenu("delete", "Delete", Icons.delete),
-      _FileBottomMenu("share", "Share", Icons.share),
-      _FileBottomMenu("download", "Download", Icons.download_outlined),
+      MenuButtonData("more", "More", Icons.more_horiz),
+      MenuButtonData("delete", "Delete", Icons.delete),
+      MenuButtonData("share", "Share", Icons.share),
+      MenuButtonData("download", "Download", Icons.download_outlined),
     ];
 
-    return SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: 54,
-        child: Container(
-          color: Colors.transparent,
-          margin: const EdgeInsets.only(left: 6, right: 6, bottom: 4),
-          child: BlurOvalWidget(
-              borderRadius: BorderRadius.circular(7),
-              blurColor: Colors.white54,
-              child: Material(
-                color: Colors.transparent,
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      makeMenuButton(Icons.close_rounded, "Close", () {
-                        model.selectedFiles.clear();
-                        model.notifyListeners();
-                      }),
-                      Container(
-                        width: .3,
-                        height: 24,
-                        color: Theme.of(context).unselectedWidgetColor,
-                      ),
-                      for (final m in menus)
-                        makeMenuButton(m.icon, m.name, () {}),
-                    ],
+    var width = MediaQuery.of(context).size.width / 6.2;
+    if (width < 48) {
+      width = 48;
+    }
+
+    return GestureDetector(
+      child: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: 54,
+          child: Container(
+            color: Colors.transparent,
+            margin: const EdgeInsets.only(left: 6, right: 6, bottom: 4),
+            child: BlurOvalWidget(
+                borderRadius: BorderRadius.circular(7),
+                blurColor:
+                    Theme.of(context).cardColor.withAlpha((255 * .54).toInt()),
+                child: Material(
+                  color: Colors.transparent,
+                  child: Center(
+                    child: Row(
+                      children: [
+                        makeMenuButton(width, Icons.close_rounded, "Close", () {
+                          model.selectedFilesId.clear();
+                          model.notifyListeners();
+                        }),
+                        makeMenuButton(width, Icons.select_all, "Select All",
+                            model.onSelectAll),
+                        Container(
+                          width: .3,
+                          height: 24,
+                          color: Theme.of(context).unselectedWidgetColor,
+                        ),
+                        Expanded(
+                            child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              for (final m in menus)
+                                makeMenuButton(width, m.icon, m.name, () {
+                                  model.onTapFileMenu(m.actionKey);
+                                }),
+                            ],
+                          ),
+                        ))
+                      ],
+                    ),
                   ),
-                ),
-              )),
-        ));
+                )),
+          )),
+      onPanUpdate: (DragUpdateDetails d) {
+        if (d.delta.dy <= -4) {
+          model.onTapFileMenu("more");
+        }
+      },
+    );
   }
 }
 
-Widget makeMenuButton(IconData icon, String name, GestureTapCallback? onTap) {
+Widget makeMenuButton(
+    double width, IconData icon, String name, GestureTapCallback? onTap) {
   return SizedBox(
-    width: 64,
+    width: width,
     child: InkResponse(
       onTap: onTap,
       child: Column(
@@ -425,12 +458,4 @@ Widget makeMenuButton(IconData icon, String name, GestureTapCallback? onTap) {
       ),
     ),
   );
-}
-
-class _FileBottomMenu {
-  String actionKey;
-  String name;
-  IconData icon;
-
-  _FileBottomMenu(this.actionKey, this.name, this.icon);
 }

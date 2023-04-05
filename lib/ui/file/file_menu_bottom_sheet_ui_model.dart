@@ -5,32 +5,34 @@ import 'package:syncreve/common/io/downloader.dart';
 import 'package:syncreve/data/file/cloudreve_file_data.dart';
 
 class FileMenuBottomSheetUIModel extends BaseUIModel {
-  final CloudreveFileObjectsData file;
+  final List<CloudreveFileObjectsData> files;
 
-  FileMenuBottomSheetUIModel(this.file);
+  FileMenuBottomSheetUIModel(this.files);
 
   bool? isFileCached;
 
-  @override
-  void initModel() {
-    super.initModel();
-    dPrint("FileMenuBottomSheetUI Show ,fileInfo == ${file.toJson()}");
-  }
+  int filesSize = 0;
 
   @override
   Future loadData() async {
-    final path = Downloader.getTempFilePath(file);
-    if (await File(path.fileSavedFullPath!).exists()) {
-      isFileCached = true;
+    if (files.length == 1) {
+      final path = Downloader.getTempFilePath(files[0]);
+      if (await File(path.fileSavedFullPath!).exists()) {
+        isFileCached = true;
+      } else {
+        isFileCached = false;
+      }
     } else {
-      isFileCached = false;
+      for (var value in files) {
+        filesSize += int.tryParse(value.size?.toString() ?? "") ?? 0;
+      }
+      notifyListeners();
     }
+
     notifyListeners();
   }
 
   void onClosing() {}
 
-  void onTapMenu(String key) {
-
-  }
+  void onTapMenu(String key) {}
 }

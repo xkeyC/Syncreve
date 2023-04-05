@@ -8,6 +8,7 @@ import 'package:syncreve/data/app/account.dart';
 import 'package:syncreve/data/file/cloudreve_file_data.dart';
 import 'package:syncreve/ui/account/account_switch_bottom_sheet_ui.dart';
 import 'package:syncreve/ui/account/account_switch_bottom_sheet_ui_model.dart';
+import 'package:syncreve/ui/file/file_menu_bottom_sheet_ui.dart';
 import 'package:syncreve/ui/file/file_open_temp_dialog_ui.dart';
 import 'package:syncreve/ui/file/file_open_temp_dialog_ui_model.dart';
 import 'package:syncreve/ui/home_ui_model.dart';
@@ -19,13 +20,13 @@ class HomeFileUIModel extends BaseUIModel {
 
   List<String> path = [];
 
-  Map<String, bool> selectedFiles = {};
+  Map<String, bool> selectedFilesId = {};
 
   bool _isCardFileList = true;
 
   bool get isCardFileList => _isCardFileList;
 
-  bool get isInSelectMode => selectedFiles.isNotEmpty;
+  bool get isInSelectMode => selectedFilesId.isNotEmpty;
 
   CloudreveFileData? files;
 
@@ -54,7 +55,7 @@ class HomeFileUIModel extends BaseUIModel {
 
   @override
   Future reloadData({bool? skipClean}) {
-    selectedFiles.clear();
+    selectedFilesId.clear();
     notifyListeners();
     if (skipClean != true) {
       files = null;
@@ -124,7 +125,7 @@ class HomeFileUIModel extends BaseUIModel {
 
   Future<bool> willPop() async {
     if (isInSelectMode) {
-      selectedFiles.clear();
+      selectedFilesId.clear();
       notifyListeners();
       return false;
     }
@@ -137,15 +138,36 @@ class HomeFileUIModel extends BaseUIModel {
   }
 
   Future<void> onSelected(CloudreveFileObjectsData file) async {
-    if (selectedFiles[file.id] == true) {
-      selectedFiles.remove(file.id);
+    if (selectedFilesId[file.id] == true) {
+      selectedFilesId.remove(file.id);
     } else {
-      selectedFiles[file.id!] = true;
+      selectedFilesId[file.id!] = true;
     }
     notifyListeners();
   }
 
   bool isFileSelected(CloudreveFileObjectsData file) {
-    return selectedFiles[file.id] == true;
+    return selectedFilesId[file.id] == true;
+  }
+
+  void onTapFileMenu(String actionKey) {
+    final List<CloudreveFileObjectsData> files = [];
+    for (var kv in selectedFilesId.entries) {
+      final f =
+          this.files!.objects!.where((element) => element.id == kv.key).first;
+      files.add(f);
+    }
+    switch (actionKey) {
+      case "more":
+        FileMenuBottomSheetUI.show(context!, files);
+        return;
+    }
+  }
+
+  void onSelectAll() {
+    for (final f in files!.objects!) {
+      selectedFilesId[f.id!] = true;
+    }
+    notifyListeners();
   }
 }
