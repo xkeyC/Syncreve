@@ -81,7 +81,7 @@ class FileMenuBottomSheetUI extends BaseUI<FileMenuBottomSheetUIModel> {
                   const SizedBox(width: 12),
                   Expanded(
                       child: Text(
-                    "${fileInfo == null ? "${filesInfo[0].name} , ${filesInfo[1].name} ... ${showLen == 0 ? "" : "And$showLen Files"} " : fileInfo.name}",
+                    "${fileInfo == null ? "${filesInfo[0].name} , ${filesInfo[1].name} ... ${showLen == 0 ? "" : "And $showLen Files"} " : fileInfo.name}",
                     maxLines: 3,
                   )),
                 ],
