@@ -15,7 +15,6 @@ class QrScannerUI extends BaseUI<QrScannerUIModel> {
               controller: MobileScannerController(
                 detectionSpeed: DetectionSpeed.normal,
                 facing: CameraFacing.back,
-                torchEnabled: true,
               ),
               onDetect: model.onDetect,
             )
