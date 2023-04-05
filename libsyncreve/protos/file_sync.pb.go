@@ -442,7 +442,7 @@ var file_file_sync_proto_rawDesc = []byte{
 	0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
 	0x54, 0x79, 0x70, 0x65, 0x12, 0x07, 0x0a, 0x03, 0x41, 0x6c, 0x6c, 0x10, 0x00, 0x12, 0x09, 0x0a,
 	0x05, 0x51, 0x75, 0x65, 0x75, 0x65, 0x10, 0x01, 0x12, 0x08, 0x0a, 0x04, 0x54, 0x65, 0x6d, 0x70,
-	0x10, 0x02, 0x32, 0xe8, 0x01, 0x0a, 0x0f, 0x46, 0x69, 0x6c, 0x65, 0x53, 0x79, 0x6e, 0x63, 0x53,
+	0x10, 0x02, 0x32, 0xa8, 0x02, 0x0a, 0x0f, 0x46, 0x69, 0x6c, 0x65, 0x53, 0x79, 0x6e, 0x63, 0x53,
 	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x3e, 0x0a, 0x0f, 0x41, 0x64, 0x64, 0x44, 0x6f, 0x77,
 	0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x54, 0x61, 0x73, 0x6b, 0x12, 0x14, 0x2e, 0x44, 0x6f, 0x77, 0x6e,
 	0x6c, 0x6f, 0x61, 0x64, 0x54, 0x61, 0x73, 0x6b, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
@@ -451,7 +451,11 @@ var file_file_sync_proto_rawDesc = []byte{
 	0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x49, 0x6e, 0x66, 0x6f, 0x53, 0x74, 0x72, 0x65, 0x61, 0x6d, 0x12,
 	0x14, 0x2e, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65,
 	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x13, 0x2e, 0x44, 0x6f, 0x77, 0x6e, 0x4c, 0x6f, 0x61, 0x64,
-	0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x22, 0x00, 0x30, 0x01, 0x12, 0x4d,
+	0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x22, 0x00, 0x30, 0x01, 0x12, 0x3e,
+	0x0a, 0x0f, 0x47, 0x65, 0x74, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x49, 0x6e, 0x66,
+	0x6f, 0x12, 0x14, 0x2e, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x49, 0x6e, 0x66, 0x6f,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x13, 0x2e, 0x44, 0x6f, 0x77, 0x6e, 0x4c, 0x6f,
+	0x61, 0x64, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x22, 0x00, 0x12, 0x4d,
 	0x0a, 0x12, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64,
 	0x54, 0x61, 0x73, 0x6b, 0x12, 0x1a, 0x2e, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x54,
 	0x61, 0x73, 0x6b, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
@@ -490,12 +494,14 @@ var file_file_sync_proto_depIdxs = []int32{
 	0, // 2: DownLoadInfoResult.type:type_name -> DownloadInfoRequestType
 	1, // 3: FileSyncService.AddDownloadTask:input_type -> DownloadTaskRequest
 	5, // 4: FileSyncService.GetDownloadInfoStream:input_type -> DownloadInfoRequest
-	3, // 5: FileSyncService.CancelDownloadTask:input_type -> DownloadTaskCancelRequest
-	2, // 6: FileSyncService.AddDownloadTask:output_type -> DownloadTaskResult
-	6, // 7: FileSyncService.GetDownloadInfoStream:output_type -> DownLoadInfoResult
-	4, // 8: FileSyncService.CancelDownloadTask:output_type -> DownloadTaskCancelResult
-	6, // [6:9] is the sub-list for method output_type
-	3, // [3:6] is the sub-list for method input_type
+	5, // 5: FileSyncService.GetDownloadInfo:input_type -> DownloadInfoRequest
+	3, // 6: FileSyncService.CancelDownloadTask:input_type -> DownloadTaskCancelRequest
+	2, // 7: FileSyncService.AddDownloadTask:output_type -> DownloadTaskResult
+	6, // 8: FileSyncService.GetDownloadInfoStream:output_type -> DownLoadInfoResult
+	6, // 9: FileSyncService.GetDownloadInfo:output_type -> DownLoadInfoResult
+	4, // 10: FileSyncService.CancelDownloadTask:output_type -> DownloadTaskCancelResult
+	7, // [7:11] is the sub-list for method output_type
+	3, // [3:7] is the sub-list for method input_type
 	3, // [3:3] is the sub-list for extension type_name
 	3, // [3:3] is the sub-list for extension extendee
 	0, // [0:3] is the sub-list for field type_name
@@ -616,6 +622,7 @@ const _ = grpc.SupportPackageIsVersion6
 type FileSyncServiceClient interface {
 	AddDownloadTask(ctx context.Context, in *DownloadTaskRequest, opts ...grpc.CallOption) (*DownloadTaskResult, error)
 	GetDownloadInfoStream(ctx context.Context, in *DownloadInfoRequest, opts ...grpc.CallOption) (FileSyncService_GetDownloadInfoStreamClient, error)
+	GetDownloadInfo(ctx context.Context, in *DownloadInfoRequest, opts ...grpc.CallOption) (*DownLoadInfoResult, error)
 	CancelDownloadTask(ctx context.Context, in *DownloadTaskCancelRequest, opts ...grpc.CallOption) (*DownloadTaskCancelResult, error)
 }
 
@@ -668,6 +675,15 @@ func (x *fileSyncServiceGetDownloadInfoStreamClient) Recv() (*DownLoadInfoResult
 	return m, nil
 }
 
+func (c *fileSyncServiceClient) GetDownloadInfo(ctx context.Context, in *DownloadInfoRequest, opts ...grpc.CallOption) (*DownLoadInfoResult, error) {
+	out := new(DownLoadInfoResult)
+	err := c.cc.Invoke(ctx, "/FileSyncService/GetDownloadInfo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *fileSyncServiceClient) CancelDownloadTask(ctx context.Context, in *DownloadTaskCancelRequest, opts ...grpc.CallOption) (*DownloadTaskCancelResult, error) {
 	out := new(DownloadTaskCancelResult)
 	err := c.cc.Invoke(ctx, "/FileSyncService/CancelDownloadTask", in, out, opts...)
@@ -681,6 +697,7 @@ func (c *fileSyncServiceClient) CancelDownloadTask(ctx context.Context, in *Down
 type FileSyncServiceServer interface {
 	AddDownloadTask(context.Context, *DownloadTaskRequest) (*DownloadTaskResult, error)
 	GetDownloadInfoStream(*DownloadInfoRequest, FileSyncService_GetDownloadInfoStreamServer) error
+	GetDownloadInfo(context.Context, *DownloadInfoRequest) (*DownLoadInfoResult, error)
 	CancelDownloadTask(context.Context, *DownloadTaskCancelRequest) (*DownloadTaskCancelResult, error)
 }
 
@@ -693,6 +710,9 @@ func (*UnimplementedFileSyncServiceServer) AddDownloadTask(context.Context, *Dow
 }
 func (*UnimplementedFileSyncServiceServer) GetDownloadInfoStream(*DownloadInfoRequest, FileSyncService_GetDownloadInfoStreamServer) error {
 	return status.Errorf(codes.Unimplemented, "method GetDownloadInfoStream not implemented")
+}
+func (*UnimplementedFileSyncServiceServer) GetDownloadInfo(context.Context, *DownloadInfoRequest) (*DownLoadInfoResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetDownloadInfo not implemented")
 }
 func (*UnimplementedFileSyncServiceServer) CancelDownloadTask(context.Context, *DownloadTaskCancelRequest) (*DownloadTaskCancelResult, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CancelDownloadTask not implemented")
@@ -741,6 +761,24 @@ func (x *fileSyncServiceGetDownloadInfoStreamServer) Send(m *DownLoadInfoResult)
 	return x.ServerStream.SendMsg(m)
 }
 
+func _FileSyncService_GetDownloadInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DownloadInfoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FileSyncServiceServer).GetDownloadInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/FileSyncService/GetDownloadInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FileSyncServiceServer).GetDownloadInfo(ctx, req.(*DownloadInfoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _FileSyncService_CancelDownloadTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DownloadTaskCancelRequest)
 	if err := dec(in); err != nil {
@@ -766,6 +804,10 @@ var _FileSyncService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AddDownloadTask",
 			Handler:    _FileSyncService_AddDownloadTask_Handler,
+		},
+		{
+			MethodName: "GetDownloadInfo",
+			Handler:    _FileSyncService_GetDownloadInfo_Handler,
 		},
 		{
 			MethodName: "CancelDownloadTask",

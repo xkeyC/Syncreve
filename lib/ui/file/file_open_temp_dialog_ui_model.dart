@@ -56,6 +56,7 @@ class FileOpenTempDialogUIModel extends BaseUIModel {
     notifyListeners();
     downloadSub = Downloader.getDownloadInfoStream(DownloadInfoRequestType.Temp,
         id: downloadID!, onData: _onDownloadInfoUpdate);
+    _downloadSpeeder();
   }
 
   void onCancel({doCancel = true}) async {
@@ -76,13 +77,6 @@ class FileOpenTempDialogUIModel extends BaseUIModel {
     info.infoMap?.forEach((key, value) {
       if (key == downloadID) {
         final itemData = GrpcFileDownloadInfoItemData.fromJson(value);
-        if (fileDownloadInfoItemData != null) {
-          downloadSpeed = (itemData.downloadedSize ?? 0) -
-              (fileDownloadInfoItemData!.downloadedSize ?? 0);
-          notifyListeners();
-        } else {
-          downloadSpeed = itemData.downloadedSize ?? 0;
-        }
         fileDownloadInfoItemData = itemData;
         notifyListeners();
         final filePath = Downloader.getFilePath(
@@ -112,6 +106,7 @@ class FileOpenTempDialogUIModel extends BaseUIModel {
   @override
   void dispose() {
     downloadSub?.cancel();
+    downloadSub = null;
     super.dispose();
   }
 
@@ -130,5 +125,18 @@ class FileOpenTempDialogUIModel extends BaseUIModel {
       return (fileObjectsData.size?.toInt()) ?? 0;
     }
     return fileDownloadInfoItemData!.contentLength!.toInt();
+  }
+
+  void _downloadSpeeder() async {
+    while (downloadSub != null) {
+      final dSize = fileDownloadInfoItemData?.downloadedSize ?? 0;
+      if (downloadSpeed == 0) {
+        downloadSpeed = dSize * 2;
+      } else {
+        downloadSpeed = (dSize - downloadSpeed) * 2;
+      }
+      notifyListeners();
+      await Future.delayed(const Duration(milliseconds: 500));
+    }
   }
 }

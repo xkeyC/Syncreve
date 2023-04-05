@@ -14,20 +14,20 @@ type fileSyncServerImpl struct {
 	protos.UnimplementedFileSyncServiceServer
 }
 
-func (*fileSyncServerImpl) AddDownloadTask(_ context.Context, req *protos.DownloadTaskRequest) (*protos.DownloadTaskResult, error) {
+func (*fileSyncServerImpl) AddDownloadTask(_ context.Context, r *protos.DownloadTaskRequest) (*protos.DownloadTaskResult, error) {
 	fmt.Println("[libsyncreve] service.AddDownloadTask")
-	if req.DownLoadType == protos.DownloadInfoRequestType_All {
+	if r.DownLoadType == protos.DownloadInfoRequestType_All {
 		return nil, errors.New("DownloadInfoRequestType_All Not Allow")
 	}
-	id, err := filesync.AddDownloadTask(req.Url, req.SavePath, req.FileName, req.Cookie, req.DownLoadType)
+	id, err := filesync.AddDownloadTask(r.Url, r.SavePath, r.FileName, r.Cookie, r.DownLoadType)
 	fmt.Println("[libsyncreve] service.AddDownloadTask id==", id, "err=", err)
 	return &protos.DownloadTaskResult{
 		Id: id.String(),
 	}, err
 }
 
-func (*fileSyncServerImpl) CancelDownloadTask(_ context.Context, req *protos.DownloadTaskCancelRequest) (*protos.DownloadTaskCancelResult, error) {
-	id, err := uuid.Parse(req.Id)
+func (*fileSyncServerImpl) CancelDownloadTask(_ context.Context, r *protos.DownloadTaskCancelRequest) (*protos.DownloadTaskCancelResult, error) {
+	id, err := uuid.Parse(r.Id)
 	if err != nil {
 		return nil, err
 	}
@@ -39,12 +39,21 @@ func (*fileSyncServerImpl) CancelDownloadTask(_ context.Context, req *protos.Dow
 		Status: "ok",
 	}, nil
 }
-func (*fileSyncServerImpl) GetDownloadInfoStream(req *protos.DownloadInfoRequest, stream protos.FileSyncService_GetDownloadInfoStreamServer) error {
+
+func (*fileSyncServerImpl) GetDownloadInfo(_ context.Context, r *protos.DownloadInfoRequest) (*protos.DownLoadInfoResult, error) {
+	info, err := filesync.GetDownloadInfoJson(nil, r.Type)
+	if err != nil {
+		return nil, err
+	}
+	return &protos.DownLoadInfoResult{Type: r.Type, Data: info}, nil
+}
+
+func (*fileSyncServerImpl) GetDownloadInfoStream(r *protos.DownloadInfoRequest, stream protos.FileSyncService_GetDownloadInfoStreamServer) error {
 	fmt.Println("[libsyncreve] service.GetDownloadInfoStream")
 	var id *uuid.UUID
 
-	if req.Id != nil {
-		d, err := uuid.Parse(*req.Id)
+	if r.Id != nil {
+		d, err := uuid.Parse(*r.Id)
 		if err != nil {
 			fmt.Println("[libsyncreve] service.GetDownloadInfoStream uuid error ==", err)
 			return err
@@ -53,9 +62,9 @@ func (*fileSyncServerImpl) GetDownloadInfoStream(req *protos.DownloadInfoRequest
 	}
 
 	for {
-		info, err := filesync.GetDownloadInfoJson(id, req.Type)
+		info, err := filesync.GetDownloadInfoJson(id, r.Type)
 		if info == nil {
-			time.Sleep(1 * time.Second)
+			time.Sleep(200 * time.Millisecond)
 			continue
 		}
 		if err != nil {
@@ -63,14 +72,13 @@ func (*fileSyncServerImpl) GetDownloadInfoStream(req *protos.DownloadInfoRequest
 			return err
 		}
 		err = stream.Send(&protos.DownLoadInfoResult{
-			Type: req.Type,
+			Type: r.Type,
 			Data: info,
 		})
 		if err != nil {
 			fmt.Println("[libsyncreve] service.GetDownloadInfoStream stream.Send error ==", err)
 			return err
 		}
-		time.Sleep(1 * time.Second)
+		time.Sleep(200 * time.Millisecond)
 	}
-
 }

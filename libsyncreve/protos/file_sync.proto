@@ -4,6 +4,7 @@ option go_package = "../protos";
 service FileSyncService {
   rpc AddDownloadTask(DownloadTaskRequest) returns (DownloadTaskResult) {}
   rpc GetDownloadInfoStream(DownloadInfoRequest) returns (stream DownLoadInfoResult) {}
+  rpc GetDownloadInfo(DownloadInfoRequest) returns (DownLoadInfoResult) {}
   rpc CancelDownloadTask(DownloadTaskCancelRequest) returns (DownloadTaskCancelResult) {}
 }
 

@@ -57,6 +57,12 @@ class AppGRPCManager {
     return _fileSyncClient.getDownloadInfoStream(request);
   }
 
+  static Future<List<int>> getDownloadInfo(DownloadInfoRequestType type) async {
+    final r =
+        await _fileSyncClient.getDownloadInfo(DownloadInfoRequest(type: type));
+    return r.data;
+  }
+
   static Future<String> cancelDownloadTask(String id) async {
     final r = await _fileSyncClient
         .cancelDownloadTask(DownloadTaskCancelRequest(id: id));
