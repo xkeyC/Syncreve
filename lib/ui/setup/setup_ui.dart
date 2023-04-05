@@ -1,3 +1,4 @@
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:syncreve/base/ui.dart';
 import 'package:syncreve/ui/setup/setup_webview_ui.dart';
 import 'package:syncreve/ui/setup/setup_webview_ui_model.dart';
@@ -43,12 +44,33 @@ class SetupUI extends BaseUI<SetupUIModel> {
             if (confData == null) const SizedBox(height: 12),
             if (confData == null)
               Center(
-                child: FloatingActionButton(
-                  onPressed:
-                      model.isEnterButtonLoading ? null : model.onEnterUrl,
-                  child: model.isEnterButtonLoading
-                      ? makeLoading(context)
-                      : const Icon(Icons.chevron_right),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    FloatingActionButton(
+                      heroTag: UniqueKey(),
+                      onPressed:
+                          model.isEnterButtonLoading ? null : model.onEnterUrl,
+                      child: model.isEnterButtonLoading
+                          ? makeLoading(context)
+                          : const Icon(Icons.chevron_right),
+                    ),
+                    const SizedBox(width: 16),
+                    const Text("or"),
+                    const SizedBox(width: 16),
+                    FloatingActionButton(
+                      heroTag: UniqueKey(),
+                      onPressed: model.doScan,
+                      child: SvgPicture.asset(
+                        "assets/qrcode_scan.svg",
+                        width: 24,
+                        height: 24,
+                        colorFilter: makeSvgColor(
+                            Theme.of(context).textTheme.bodyLarge?.color ??
+                                Colors.black),
+                      ),
+                    )
+                  ],
                 ),
               ),
             if (confData != null)

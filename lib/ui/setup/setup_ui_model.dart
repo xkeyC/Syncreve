@@ -1,9 +1,14 @@
+import 'package:dio/dio.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:syncreve/api/cloudreve_site_api.dart';
 import 'package:syncreve/base/ui_model.dart';
 import 'package:syncreve/data/site/cloudreve_site_conf_data.dart';
 import 'package:syncreve/ui/setup/setup_account_ui.dart';
 import 'package:syncreve/ui/setup/setup_account_ui_model.dart';
 import 'package:syncreve/ui/setup/setup_webview_ui_model.dart';
+import 'package:syncreve/ui/tools/qr_scanner_ui.dart';
+import 'package:syncreve/ui/tools/qr_scanner_ui_model.dart';
 
 class SetupUIModel extends BaseUIModel {
   final bool isFirstLaunch;
@@ -28,9 +33,6 @@ class SetupUIModel extends BaseUIModel {
   initModel() {
     super.initModel();
     urlTextCtrl.text = initUrl;
-    if (initUrl.isNotEmpty) {
-      onEnterUrl();
-    }
   }
 
   _setLoading(bool b) {
@@ -71,6 +73,7 @@ class SetupUIModel extends BaseUIModel {
   }
 
   onWebviewLogin(String cookies) {
+    dPrint("onWebviewLogin: url == $workingUrl   cookies == $cookies");
     if (_isJumped) return;
     _isJumped = true;
     BaseUIContainer(
@@ -79,5 +82,61 @@ class SetupUIModel extends BaseUIModel {
             workingUrl: workingUrl,
             cookies: cookies,
             isFirstLaunch: isFirstLaunch)).pushAndRemoveUntil(context!);
+  }
+
+  void doScan() async {
+    String? url;
+    await BaseUIContainer(
+        uiCreate: () => QrScannerUI(),
+        modelCreate: () =>
+            QrScannerUIModel(onQrDetect: (BarcodeCapture barcodeCapture) async {
+              for (var element in barcodeCapture.barcodes) {
+                if (element.rawValue != null &&
+                    (element.rawValue!.startsWith("http://") ||
+                        element.rawValue!.startsWith("https://")) &&
+                    element.rawValue!.contains("/api/v3/user/session/copy/")) {
+                  url = element.rawValue;
+                  return true;
+                }
+              }
+              return false;
+            })).push(context!);
+    if (url != null) {
+      _doQrLogin(url!);
+    }
+  }
+
+  void _doQrLogin(String url) async {
+    dPrint("QR URL == $url");
+    final dio = Dio(BaseOptions(connectTimeout: const Duration(seconds: 10)));
+    final w = url.substring(0, url.indexOf("/api/v3/user/session/copy/"));
+    workingUrl = w;
+    urlTextCtrl.text = w;
+    try {
+      EasyLoading.show();
+      final r = await dio.get("$w/api/v3/site/config",
+          options: Options(
+            headers: {"X-Cr-ios": "Syncreve"},
+          ));
+      if (r.headers["set-cookie"] != null) {
+        var cookie = r.headers["set-cookie"].toString();
+        if (cookie.contains("; Path=/;")) {
+          cookie = cookie.substring(1, cookie.indexOf("; Path=/;"));
+        }
+        final cr = await dio.get(url,
+            options: Options(
+              headers: {"X-Cr-ios": "Syncreve", "cookie": cookie},
+            ));
+        if (cr.statusCode == 200 && cr.data["code"] == 0) {
+          onWebviewLogin(cookie);
+        } else {
+          showToast("QR Expired");
+        }
+      }
+    } catch (e) {
+      dPrint(e);
+      showToast(e.toString());
+    }
+    EasyLoading.dismiss();
   }
 }

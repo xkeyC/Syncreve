@@ -19,18 +19,22 @@ AppBar makeAppbar(BuildContext context, String title,
     bool showBack = true,
     bool centerTitle = false,
     Color? textColor,
-    Widget? leadingWidget}) {
+    Widget? leadingWidget,
+    double? elevation}) {
   return AppBar(
     title: titleWidget ??
         GestureDetector(
-          child: Text(title),
+          child: Text(
+            title,
+            style: TextStyle(color: textColor),
+          ),
           onTap: () {
             FocusManager.instance.primaryFocus?.unfocus();
           },
         ),
     centerTitle: centerTitle,
     automaticallyImplyLeading: false,
-    elevation: .1,
+    elevation: elevation ?? .1,
     bottom: bottom,
     backgroundColor: backgroundColor,
     systemOverlayStyle: SystemUiOverlayStyle(
@@ -90,7 +94,7 @@ class MyEasyLoadingAnimation extends EasyLoadingAnimation {
         height: 128,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          color: Colors.black.withAlpha(220),
+          color: Colors.black.withAlpha(200),
         ),
         child: const Center(
           // child: Lottie.asset("images/lottie/loading.zip"),

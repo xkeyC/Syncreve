@@ -59,7 +59,8 @@ class SplashUI extends BaseUI<AppGlobalUIModel> {
       ),
       builder: EasyLoading.init(builder: (context, widget) {
         ScreenUtil.init(context);
-        EasyLoading.instance.maskType = EasyLoadingMaskType.clear;
+        EasyLoading.instance.customAnimation = MyEasyLoadingAnimation();
+        EasyLoading.instance.animationStyle = EasyLoadingAnimationStyle.custom;
         return widget!;
       }),
       home: Scaffold(
@@ -95,7 +96,6 @@ class SplashUI extends BaseUI<AppGlobalUIModel> {
   }
 
   _initApp() async {
-    EasyLoading.instance.customAnimation = MyEasyLoadingAnimation();
     await Future.delayed(const Duration(seconds: 1));
     await AppGRPCManager.pingServer();
     if (!AppGRPCManager.isConnected) {

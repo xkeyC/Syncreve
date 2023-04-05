@@ -31,7 +31,8 @@ dependencies:
   grpc: ^3.1.0
   open_file_plus: ^3.4.0
   filesize: ^2.0.1
-
+  flutter_svg: ^2.0.4
+  mobile_scanner: ^3.2.0
   cupertino_icons: ^1.0.2
 
 dev_dependencies:
@@ -40,4 +41,6 @@ dev_dependencies:
   flutter_lints: ^2.0.0
 
 flutter:
+  assets:
+    - assets/
   uses-material-design: true

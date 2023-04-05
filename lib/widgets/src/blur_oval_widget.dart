@@ -7,23 +7,26 @@ class BlurOvalWidget extends StatelessWidget {
   final double padding;
   final Color blurColor;
   final BorderRadius borderRadius;
+  final ImageFilter? imageFilter;
 
   const BlurOvalWidget(
       {super.key,
       required this.child,
       this.padding = 0,
       this.blurColor = Colors.white10,
-      this.borderRadius = BorderRadius.zero});
+      this.borderRadius = BorderRadius.zero,
+      this.imageFilter});
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: borderRadius,
       child: BackdropFilter(
-        filter: ImageFilter.blur(
-          sigmaX: 10,
-          sigmaY: 10,
-        ),
+        filter: imageFilter ??
+            ImageFilter.blur(
+              sigmaX: 10,
+              sigmaY: 10,
+            ),
         child: Container(
           color: blurColor,
           child: child,
