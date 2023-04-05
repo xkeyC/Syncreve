@@ -5,6 +5,7 @@ import 'package:syncreve/api/cloudreve_file_api.dart';
 import 'package:syncreve/base/ui_model.dart';
 import 'package:syncreve/common/account_manager.dart';
 import 'package:syncreve/common/io/downloader.dart';
+import 'package:syncreve/common/io/path_tools.dart';
 import 'package:syncreve/data/app/grpc_file_download_info_data.dart';
 import 'package:syncreve/data/file/cloudreve_file_data.dart';
 import 'package:syncreve/generated/grpc/libsyncreve/protos/file_sync.pbenum.dart';
@@ -104,14 +105,7 @@ class FileOpenTempDialogUIModel extends BaseUIModel {
   }
 
   void doOpenFile(String filePath) async {
-    // if (!await AppPathConfig.checkPathPermissions(filePath)) {
-    //   showToast("Permission Required");
-    // }
-    // final r = await OpenFile.open(filePath);
-    // if (r.type != ResultType.done) {
-    //   showToast(r.message);
-    // }
-    // dPrint("doOpenFile  r.type == ${r.type}  r.message == ${r.message}");
+    AppPathTools.openFile(filePath);
     onCancel(doCancel: false);
   }
 

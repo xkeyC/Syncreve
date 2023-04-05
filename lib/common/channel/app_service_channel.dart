@@ -19,4 +19,8 @@ class AppServiceChannel {
   static Future<bool> checkPathPermissions(String path) async {
     return await _channel.invokeMethod("checkPathPermissions", {"path": path});
   }
+
+  static Future openFile(String path) async {
+    return await _channel.invokeMethod("openFile", {"path": path});
+  }
 }

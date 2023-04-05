@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:syncreve/base/base_utils.dart';
 import 'package:syncreve/common/account_manager.dart';
 import 'package:syncreve/common/grpc/grpc_manager.dart';
-import 'package:syncreve/common/io/path_config.dart';
+import 'package:syncreve/common/io/path_tools.dart';
 import 'package:syncreve/data/app/app_file_save_path_data.dart';
 import 'package:syncreve/data/app/grpc_file_download_info_data.dart';
 import 'package:syncreve/data/file/cloudreve_file_data.dart';
@@ -67,7 +67,7 @@ class Downloader {
   static AppFileSavePathData getTempFilePath(
       CloudreveFileObjectsData fileData) {
     final savePath =
-        "${AppPathConfig.tempDownloadPath}/${fileData.id ?? "no_id"}/";
+        "${AppPathTools.tempDownloadPath}/${fileData.id ?? "no_id"}/";
     final fileName = fileData.name ?? fileData.id ?? "no_name";
     final filePath = getFilePath(savePath, fileName);
     return AppFileSavePathData(

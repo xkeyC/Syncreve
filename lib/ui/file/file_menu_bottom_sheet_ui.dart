@@ -37,9 +37,11 @@ class FileMenuBottomSheetUI extends BaseUI<FileMenuBottomSheetUIModel> {
         MenuButtonData("open", "Open", Icons.open_in_new),
         MenuButtonData("rename", "Rename", Icons.drive_file_rename_outline),
       ],
+      if (model.isFileCached == true)
+        MenuButtonData("clear_cache", "Clean cache", Icons.clear_all),
       MenuButtonData("copy", "Copy to", Icons.copy),
       MenuButtonData("move", "Move to", Icons.copy_all_sharp),
-      MenuButtonData("compress", "Compress Zip", Icons.compress),
+      MenuButtonData("compress", "Compress zip", Icons.compress),
       MenuButtonData("sync", "Sync rule", Icons.sync),
     ];
 

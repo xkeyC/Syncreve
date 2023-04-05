@@ -150,7 +150,7 @@ class HomeFileUIModel extends BaseUIModel {
     return selectedFilesId[file.id] == true;
   }
 
-  void onTapFileMenu(String actionKey) {
+  void onTapFileMenu(String actionKey) async {
     final List<CloudreveFileObjectsData> files = [];
     for (var kv in selectedFilesId.entries) {
       final f =
@@ -159,7 +159,7 @@ class HomeFileUIModel extends BaseUIModel {
     }
     switch (actionKey) {
       case "more":
-        FileMenuBottomSheetUI.show(context!, files);
+        handelMenu(await FileMenuBottomSheetUI.show(context!, files), files);
         return;
     }
   }
@@ -169,5 +169,14 @@ class HomeFileUIModel extends BaseUIModel {
       selectedFilesId[f.id!] = true;
     }
     notifyListeners();
+  }
+
+  void handelMenu(action, List<CloudreveFileObjectsData> files) {
+    if (action == null) return;
+    switch (action) {
+      case "open":
+        onTapFile(files[0]);
+        return;
+    }
   }
 }
