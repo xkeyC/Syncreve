@@ -86,6 +86,11 @@ func AddDownloadTask(url string, savePath string, fileName string, cookie string
 	return id, err
 }
 
+func AddDownloadTasksByIds(ctx context.Context, ids []string, workingUrl string, cookies string) error {
+	// TODO
+	return nil
+}
+
 func CancelDownloadTask(id uuid.UUID) error {
 	fileDownloadQueues.mutex.Lock()
 	defer fileDownloadQueues.mutex.Unlock()

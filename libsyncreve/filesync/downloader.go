@@ -1,9 +1,11 @@
 package filesync
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"github.com/imroc/req/v3"
+	"github.com/xkeyC/Syncreve/libsyncreve/data"
 	"github.com/xkeyC/Syncreve/libsyncreve/utils"
 	"os"
 )
@@ -35,4 +37,18 @@ func DoDownload(taskInfo *FileDownloadQueueTaskData, callback req.DownloadCallba
 		return err
 	}
 	return nil
+}
+
+func GetFileDownloadUrlByID(ctx context.Context, id string, workingUrl string, cookies string) (string, error) {
+	var httpClient = req.C()
+	if httpClient.Headers == nil {
+		httpClient.Headers = make(map[string][]string)
+	}
+	httpClient.Headers.Set("cookie", cookies)
+	var d data.CloudreveResultData
+	r := httpClient.Put(workingUrl + "/api/v3/file/download/" + id).SetSuccessResult(&d).Do(ctx)
+	if r.IsSuccessState() {
+		return d.Data.(string), nil
+	}
+	return "", errors.New("req error")
 }
