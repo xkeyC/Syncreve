@@ -56,7 +56,7 @@ func RecursionPathFiles(ctx context.Context, c *cloudreve.Client, path string, f
 		fileTreeMap[directoryResult.Path] = directoryResult
 		if fileObject.Type == "dir" {
 			newPathName := ""
-			if strings.Index(path, "/") == len(path)-1 {
+			if strings.HasSuffix(path, "/") {
 				newPathName = path + fileObject.Name
 			} else {
 				newPathName = path + "/" + fileObject.Name

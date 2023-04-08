@@ -9,6 +9,7 @@ import (
 	"github.com/imroc/req/v3"
 	"github.com/xkeyC/Syncreve/libsyncreve/cloudreve"
 	"github.com/xkeyC/Syncreve/libsyncreve/protos"
+	"github.com/xkeyC/Syncreve/libsyncreve/utils"
 )
 
 func AddDownloadTask(workingUrl string, fileID string, savePath string, fileName string, cookie string, downLoadType protos.DownloadInfoRequestType) (uuid.UUID, error) {
@@ -30,14 +31,38 @@ func AddDownloadTask(workingUrl string, fileID string, savePath string, fileName
 	return id, err
 }
 
-func AddDownloadTasksByDirPath(ctx context.Context, dirPath string, workingUrl string, cookie string) error {
+func AddDownloadTasksByDirPath(ctx context.Context, dirPath string, workingUrl string, cookie string, savePath string, downLoadType protos.DownloadInfoRequestType) ([]string, error) {
+	if downLoadType == protos.DownloadInfoRequestType_Temp {
+		return nil, errors.New("can't ues temp type to download dir")
+	}
 	c := cloudreve.NewClient(workingUrl, cookie)
 	fileTreeMap := make(map[string]*cloudreve.DirectoryResult)
 	err := RecursionPathFiles(ctx, c, dirPath, fileTreeMap)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+
+	var taskIDs []string
+	for path, directoryResult := range fileTreeMap {
+		rPath, err := utils.GetFileSaveRelativePath(path, dirPath)
+		if err != nil {
+			return nil, err
+		}
+		fileSavePath := savePath + rPath
+
+		for _, fileObject := range directoryResult.Data.Objects {
+			if fileObject.Type == "file" {
+				taskID, err := AddDownloadTask(workingUrl, fileObject.Id, fileSavePath, fileObject.Name, cookie, downLoadType)
+				if err != nil {
+					fmt.Println("[libsyncreve] AddDownloadTasksByDirPath Task Error ==", err)
+					continue
+				}
+				fmt.Println("[libsyncreve] AddDownloadTasksByDirPath Task ID ==", taskID)
+				taskIDs = append(taskIDs, taskID.String())
+			}
+		}
+	}
+	return taskIDs, nil
 }
 
 func CancelDownloadTask(id uuid.UUID) error {

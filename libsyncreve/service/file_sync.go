@@ -26,6 +26,17 @@ func (*fileSyncServerImpl) AddDownloadTask(_ context.Context, r *protos.Download
 	}, err
 }
 
+func (*fileSyncServerImpl) AddDownloadTasksByDirPath(ctx context.Context, r *protos.DownloadDirTaskRequest) (*protos.DownloadDirTaskResult, error) {
+	fmt.Println("[libsyncreve] service.AddDownloadTasksByDirPath")
+	taskIDs, err := filesync.AddDownloadTasksByDirPath(ctx, r.DirPath, r.WorkingUrl, r.Cookie, r.SavePath, r.DownLoadType)
+	if err != nil {
+		return nil, err
+	}
+	return &protos.DownloadDirTaskResult{
+		Ids: taskIDs,
+	}, nil
+}
+
 func (*fileSyncServerImpl) CancelDownloadTask(_ context.Context, r *protos.DownloadTaskCancelRequest) (*protos.DownloadTaskCancelResult, error) {
 	id, err := uuid.Parse(r.Id)
 	if err != nil {

@@ -3,6 +3,7 @@ option go_package = "../protos";
 
 service FileSyncService {
   rpc AddDownloadTask(DownloadTaskRequest) returns (DownloadTaskResult) {}
+  rpc AddDownloadTasksByDirPath(DownloadDirTaskRequest) returns (DownloadDirTaskResult) {}
   rpc GetDownloadInfoStream(DownloadInfoRequest) returns (stream DownLoadInfoResult) {}
   rpc GetDownloadInfo(DownloadInfoRequest) returns (DownLoadInfoResult) {}
   rpc CancelDownloadTask(DownloadTaskCancelRequest) returns (DownloadTaskCancelResult) {}
@@ -17,8 +18,20 @@ message DownloadTaskRequest {
   DownloadInfoRequestType downLoadType = 6;
 }
 
+message DownloadDirTaskRequest {
+  string  workingUrl = 1;
+  string  dirPath = 2;
+  string  savePath = 3;
+  string  cookie = 5;
+  DownloadInfoRequestType downLoadType = 6;
+}
+
 message DownloadTaskResult {
   string id = 1;
+}
+
+message DownloadDirTaskResult {
+  repeated string ids = 1;
 }
 
 message DownloadTaskCancelRequest {
