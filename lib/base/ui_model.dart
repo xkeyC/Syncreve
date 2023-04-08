@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:syncreve/data/http_result.dart';
 
 import 'ui.dart';
-import 'package:dio/dio.dart';
 
 export 'base_utils.dart';
 export 'ui.dart';
@@ -60,19 +59,18 @@ class BaseUIModel extends ChangeNotifier {
     try {
       return await requestFunc();
     } catch (e) {
-      dPrint("UIModel.handleError Error:$e");
+      dPrint("$runtimeType.handleError Error:$e");
       String errorMsg = "Unknown Error";
       if (e is AppHttpResultData && stringIsNotEmpty(e.msg)) {
         errorMsg = e.msg!;
-        if (showFullScreenError) {
-          uiErrorMsg = errorMsg;
-          notifyListeners();
-          return null;
-        }
-        showToast(errorMsg);
         return null;
-      } else if (e is DioError) {
-        errorMsg = "Network Error";
+      } else {
+        errorMsg = e.toString();
+      }
+      if (showFullScreenError) {
+        uiErrorMsg = errorMsg;
+        notifyListeners();
+        return null;
       }
       showToast(errorMsg);
     }

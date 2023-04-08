@@ -17,31 +17,50 @@ class Downloader {
   static const fileDownloadQueueStatusError = -1;
 
   static Future<List<String>> addDownloadTask(
-      {required String workingUrl,
-      required List<String> fileIDs,
+      {required List<DownloadTaskRequestFileInfo> fileInfo,
+      required String workingUrl,
       required String savePath,
-      required String fileName,
       required String cookie,
       required DownloadInfoRequestType type,
       required String instanceUrl}) async {
     final r = DownloadTaskRequest(
+        fileInfos: fileInfo,
         workingUrl: workingUrl,
         instanceUrl: instanceUrl,
-        fileID: fileIDs,
         savePath: savePath,
-        fileName: fileName,
         cookie: cookie,
         downLoadType: type);
 
-    if (await File("$savePath/$fileName").exists()) {
-      dPrint("[Downloader] addDownloadTask file exists");
-      throw "file exists";
+    if (fileInfo.length == 1) {
+      if (await File("$savePath/${fileInfo[0].fileName}").exists()) {
+        dPrint("[Downloader] addDownloadTask file exists");
+        throw "file exists";
+      }
     }
-
     dPrint("[Downloader] addDownloadTask r==$r");
 
     final ids = await AppGRPCManager.addDownloadTask(r);
     dPrint("[Downloader] addDownloadTask result.ids==$ids");
+    return ids;
+  }
+
+  static Future<List<String>> addDownloadTasksByDirPath(
+      {required String path,
+      required String workingUrl,
+      required String savePath,
+      required String cookie,
+      required DownloadInfoRequestType type,
+      required String instanceUrl}) async {
+    final ids = await AppGRPCManager.addDownloadTasksByDirPath(
+        DownloadDirTaskRequest(
+            workingUrl: workingUrl,
+            instanceUrl: instanceUrl,
+            dirPath: path,
+            savePath: savePath,
+            cookie: cookie,
+            downLoadType: type));
+
+    dPrint("[Downloader] addDownloadTasksByDirPath result.ids==$ids");
     return ids;
   }
 

@@ -2,6 +2,7 @@ package utils
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"strings"
 )
@@ -15,24 +16,29 @@ func FileExist(path string) bool {
 
 // GetFileSaveRelativePath
 // filePath = /aaa/bbb/ccc
-// remotePath = /aaa/bbb
+// sourcePath = /aaa/bbb
 // GetFileSaveRelativePath return  /cc
 // and
 // filePath = /aaa/bbb/ccc
-// remotePath = /aaa/bb
+// sourcePath = /aaa/bb
 // GetFileSaveRelativePath return  error (path error)
-func GetFileSaveRelativePath(filePath string, remotePath string) (string, error) {
-	if strings.HasSuffix(filePath, "/") {
+func GetFileSaveRelativePath(filePath string, sourcePath string) (string, error) {
+
+	fmt.Println("[libsyncreve] GetFileSaveRelativePath filePath:", filePath, "sourcePath:", sourcePath)
+
+	if !strings.HasSuffix(filePath, "/") {
 		filePath = filePath + "/"
 	}
-	if strings.HasSuffix(remotePath, "/") {
-		remotePath += remotePath + "/"
+	if !strings.HasSuffix(sourcePath, "/") {
+		sourcePath = sourcePath + "/"
 	}
 
-	if strings.Contains(remotePath, filePath) {
-		relativePath := strings.Replace(filePath, filePath, remotePath, 1)
+	fmt.Println("[libsyncreve] GetFileSaveRelativePath Suffix filePath:", filePath, "sourcePath:", sourcePath)
+
+	if strings.Contains(filePath, sourcePath) {
+		relativePath := strings.Replace(filePath, sourcePath, "/", 1)
 		relativePath, _ = strings.CutSuffix(relativePath, "/")
 		return relativePath, nil
 	}
-	return "", errors.New("filePath error")
+	return "", errors.New("GetFileSaveRelativePath filePath error")
 }

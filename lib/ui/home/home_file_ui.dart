@@ -406,9 +406,9 @@ class HomeFileUI extends BaseUI<HomeFileUIModel> {
                         makeMenuButton(width, Icons.close_rounded, "Close", () {
                           model.selectedFilesId.clear();
                           model.notifyListeners();
-                        }),
+                        }, null),
                         makeMenuButton(width, Icons.select_all, "Select All",
-                            model.onSelectAll),
+                            model.onSelectAll, null),
                         Container(
                           width: .3,
                           height: 24,
@@ -422,6 +422,9 @@ class HomeFileUI extends BaseUI<HomeFileUIModel> {
                               for (final m in menus)
                                 makeMenuButton(width, m.icon, m.name, () {
                                   model.onTapFileMenu(m.actionKey);
+                                }, () {
+                                  model.onTapFileMenu(m.actionKey,
+                                      isLongPress: true);
                                 }),
                             ],
                           ),
@@ -440,12 +443,13 @@ class HomeFileUI extends BaseUI<HomeFileUIModel> {
   }
 }
 
-Widget makeMenuButton(
-    double width, IconData icon, String name, GestureTapCallback? onTap) {
+Widget makeMenuButton(double width, IconData icon, String name,
+    GestureTapCallback? onTap, GestureTapCallback? onLongPress) {
   return SizedBox(
     width: width,
     child: InkResponse(
       onTap: onTap,
+      onLongPress: onLongPress,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

@@ -27,16 +27,26 @@ const DownloadTaskRequest$json = const {
   '2': const [
     const {'1': 'workingUrl', '3': 1, '4': 1, '5': 9, '10': 'workingUrl'},
     const {'1': 'instanceUrl', '3': 2, '4': 1, '5': 9, '10': 'instanceUrl'},
-    const {'1': 'fileID', '3': 3, '4': 3, '5': 9, '10': 'fileID'},
+    const {'1': 'fileInfos', '3': 3, '4': 3, '5': 11, '6': '.DownloadTaskRequestFileInfo', '10': 'fileInfos'},
     const {'1': 'savePath', '3': 4, '4': 1, '5': 9, '10': 'savePath'},
-    const {'1': 'fileName', '3': 5, '4': 1, '5': 9, '10': 'fileName'},
-    const {'1': 'cookie', '3': 6, '4': 1, '5': 9, '10': 'cookie'},
-    const {'1': 'downLoadType', '3': 7, '4': 1, '5': 14, '6': '.DownloadInfoRequestType', '10': 'downLoadType'},
+    const {'1': 'cookie', '3': 5, '4': 1, '5': 9, '10': 'cookie'},
+    const {'1': 'downLoadType', '3': 6, '4': 1, '5': 14, '6': '.DownloadInfoRequestType', '10': 'downLoadType'},
   ],
 };
 
 /// Descriptor for `DownloadTaskRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List downloadTaskRequestDescriptor = $convert.base64Decode('ChNEb3dubG9hZFRhc2tSZXF1ZXN0Eh4KCndvcmtpbmdVcmwYASABKAlSCndvcmtpbmdVcmwSIAoLaW5zdGFuY2VVcmwYAiABKAlSC2luc3RhbmNlVXJsEhYKBmZpbGVJRBgDIAMoCVIGZmlsZUlEEhoKCHNhdmVQYXRoGAQgASgJUghzYXZlUGF0aBIaCghmaWxlTmFtZRgFIAEoCVIIZmlsZU5hbWUSFgoGY29va2llGAYgASgJUgZjb29raWUSPAoMZG93bkxvYWRUeXBlGAcgASgOMhguRG93bmxvYWRJbmZvUmVxdWVzdFR5cGVSDGRvd25Mb2FkVHlwZQ==');
+final $typed_data.Uint8List downloadTaskRequestDescriptor = $convert.base64Decode('ChNEb3dubG9hZFRhc2tSZXF1ZXN0Eh4KCndvcmtpbmdVcmwYASABKAlSCndvcmtpbmdVcmwSIAoLaW5zdGFuY2VVcmwYAiABKAlSC2luc3RhbmNlVXJsEjoKCWZpbGVJbmZvcxgDIAMoCzIcLkRvd25sb2FkVGFza1JlcXVlc3RGaWxlSW5mb1IJZmlsZUluZm9zEhoKCHNhdmVQYXRoGAQgASgJUghzYXZlUGF0aBIWCgZjb29raWUYBSABKAlSBmNvb2tpZRI8Cgxkb3duTG9hZFR5cGUYBiABKA4yGC5Eb3dubG9hZEluZm9SZXF1ZXN0VHlwZVIMZG93bkxvYWRUeXBl');
+@$core.Deprecated('Use downloadTaskRequestFileInfoDescriptor instead')
+const DownloadTaskRequestFileInfo$json = const {
+  '1': 'DownloadTaskRequestFileInfo',
+  '2': const [
+    const {'1': 'fileID', '3': 1, '4': 1, '5': 9, '10': 'fileID'},
+    const {'1': 'fileName', '3': 2, '4': 1, '5': 9, '10': 'fileName'},
+  ],
+};
+
+/// Descriptor for `DownloadTaskRequestFileInfo`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List downloadTaskRequestFileInfoDescriptor = $convert.base64Decode('ChtEb3dubG9hZFRhc2tSZXF1ZXN0RmlsZUluZm8SFgoGZmlsZUlEGAEgASgJUgZmaWxlSUQSGgoIZmlsZU5hbWUYAiABKAlSCGZpbGVOYW1l');
 @$core.Deprecated('Use downloadDirTaskRequestDescriptor instead')
 const DownloadDirTaskRequest$json = const {
   '1': 'DownloadDirTaskRequest',

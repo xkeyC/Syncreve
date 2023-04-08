@@ -18,11 +18,10 @@ class DownloadTaskRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DownloadTaskRequest', createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'workingUrl', protoName: 'workingUrl')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'instanceUrl', protoName: 'instanceUrl')
-    ..pPS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'fileID', protoName: 'fileID')
+    ..pc<DownloadTaskRequestFileInfo>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'fileInfos', $pb.PbFieldType.PM, protoName: 'fileInfos', subBuilder: DownloadTaskRequestFileInfo.create)
     ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'savePath', protoName: 'savePath')
-    ..aOS(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'fileName', protoName: 'fileName')
-    ..aOS(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'cookie')
-    ..e<DownloadInfoRequestType>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'downLoadType', $pb.PbFieldType.OE, protoName: 'downLoadType', defaultOrMaker: DownloadInfoRequestType.All, valueOf: DownloadInfoRequestType.valueOf, enumValues: DownloadInfoRequestType.values)
+    ..aOS(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'cookie')
+    ..e<DownloadInfoRequestType>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'downLoadType', $pb.PbFieldType.OE, protoName: 'downLoadType', defaultOrMaker: DownloadInfoRequestType.All, valueOf: DownloadInfoRequestType.valueOf, enumValues: DownloadInfoRequestType.values)
     ..hasRequiredFields = false
   ;
 
@@ -30,9 +29,8 @@ class DownloadTaskRequest extends $pb.GeneratedMessage {
   factory DownloadTaskRequest({
     $core.String? workingUrl,
     $core.String? instanceUrl,
-    $core.Iterable<$core.String>? fileID,
+    $core.Iterable<DownloadTaskRequestFileInfo>? fileInfos,
     $core.String? savePath,
-    $core.String? fileName,
     $core.String? cookie,
     DownloadInfoRequestType? downLoadType,
   }) {
@@ -43,14 +41,11 @@ class DownloadTaskRequest extends $pb.GeneratedMessage {
     if (instanceUrl != null) {
       _result.instanceUrl = instanceUrl;
     }
-    if (fileID != null) {
-      _result.fileID.addAll(fileID);
+    if (fileInfos != null) {
+      _result.fileInfos.addAll(fileInfos);
     }
     if (savePath != null) {
       _result.savePath = savePath;
-    }
-    if (fileName != null) {
-      _result.fileName = fileName;
     }
     if (cookie != null) {
       _result.cookie = cookie;
@@ -100,7 +95,7 @@ class DownloadTaskRequest extends $pb.GeneratedMessage {
   void clearInstanceUrl() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.List<$core.String> get fileID => $_getList(2);
+  $core.List<DownloadTaskRequestFileInfo> get fileInfos => $_getList(2);
 
   @$pb.TagNumber(4)
   $core.String get savePath => $_getSZ(3);
@@ -112,31 +107,83 @@ class DownloadTaskRequest extends $pb.GeneratedMessage {
   void clearSavePath() => clearField(4);
 
   @$pb.TagNumber(5)
-  $core.String get fileName => $_getSZ(4);
+  $core.String get cookie => $_getSZ(4);
   @$pb.TagNumber(5)
-  set fileName($core.String v) { $_setString(4, v); }
+  set cookie($core.String v) { $_setString(4, v); }
   @$pb.TagNumber(5)
-  $core.bool hasFileName() => $_has(4);
+  $core.bool hasCookie() => $_has(4);
   @$pb.TagNumber(5)
-  void clearFileName() => clearField(5);
+  void clearCookie() => clearField(5);
 
   @$pb.TagNumber(6)
-  $core.String get cookie => $_getSZ(5);
+  DownloadInfoRequestType get downLoadType => $_getN(5);
   @$pb.TagNumber(6)
-  set cookie($core.String v) { $_setString(5, v); }
+  set downLoadType(DownloadInfoRequestType v) { setField(6, v); }
   @$pb.TagNumber(6)
-  $core.bool hasCookie() => $_has(5);
+  $core.bool hasDownLoadType() => $_has(5);
   @$pb.TagNumber(6)
-  void clearCookie() => clearField(6);
+  void clearDownLoadType() => clearField(6);
+}
 
-  @$pb.TagNumber(7)
-  DownloadInfoRequestType get downLoadType => $_getN(6);
-  @$pb.TagNumber(7)
-  set downLoadType(DownloadInfoRequestType v) { setField(7, v); }
-  @$pb.TagNumber(7)
-  $core.bool hasDownLoadType() => $_has(6);
-  @$pb.TagNumber(7)
-  void clearDownLoadType() => clearField(7);
+class DownloadTaskRequestFileInfo extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DownloadTaskRequestFileInfo', createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'fileID', protoName: 'fileID')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'fileName', protoName: 'fileName')
+    ..hasRequiredFields = false
+  ;
+
+  DownloadTaskRequestFileInfo._() : super();
+  factory DownloadTaskRequestFileInfo({
+    $core.String? fileID,
+    $core.String? fileName,
+  }) {
+    final _result = create();
+    if (fileID != null) {
+      _result.fileID = fileID;
+    }
+    if (fileName != null) {
+      _result.fileName = fileName;
+    }
+    return _result;
+  }
+  factory DownloadTaskRequestFileInfo.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DownloadTaskRequestFileInfo.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  DownloadTaskRequestFileInfo clone() => DownloadTaskRequestFileInfo()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  DownloadTaskRequestFileInfo copyWith(void Function(DownloadTaskRequestFileInfo) updates) => super.copyWith((message) => updates(message as DownloadTaskRequestFileInfo)) as DownloadTaskRequestFileInfo; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static DownloadTaskRequestFileInfo create() => DownloadTaskRequestFileInfo._();
+  DownloadTaskRequestFileInfo createEmptyInstance() => create();
+  static $pb.PbList<DownloadTaskRequestFileInfo> createRepeated() => $pb.PbList<DownloadTaskRequestFileInfo>();
+  @$core.pragma('dart2js:noInline')
+  static DownloadTaskRequestFileInfo getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DownloadTaskRequestFileInfo>(create);
+  static DownloadTaskRequestFileInfo? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get fileID => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set fileID($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasFileID() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearFileID() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get fileName => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set fileName($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasFileName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearFileName() => clearField(2);
 }
 
 class DownloadDirTaskRequest extends $pb.GeneratedMessage {

@@ -53,6 +53,12 @@ class AppGRPCManager {
     return r.ids;
   }
 
+  static Future<List<String>> addDownloadTasksByDirPath(
+      DownloadDirTaskRequest request) async {
+    final r = await _fileSyncClient.addDownloadTasksByDirPath(request);
+    return r.ids;
+  }
+
   static ResponseStream<DownLoadInfoResult> getDownloadInfoStream(
       DownloadInfoRequest request) {
     return _fileSyncClient.getDownloadInfoStream(request);

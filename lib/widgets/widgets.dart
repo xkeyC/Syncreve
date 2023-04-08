@@ -45,18 +45,21 @@ AppBar makeAppbar(BuildContext context, String title,
     shadowColor: Colors.grey,
     leading: leadingWidget ??
         (showBack
-            ? InkResponse(
-                onTap: onBack ??
-                    () {
-                      Navigator.of(context).pop();
-                    },
-                child: backIcon ??
-                    Icon(
-                      Icons.arrow_back_ios,
-                      color: textColor ??
-                          Theme.of(context).appBarTheme.titleTextStyle?.color,
-                      size: 20,
-                    ),
+            ? Tooltip(
+                message: "Back",
+                child: InkResponse(
+                  onTap: onBack ??
+                      () {
+                        Navigator.of(context).pop();
+                      },
+                  child: backIcon ??
+                      Icon(
+                        Icons.arrow_back_ios,
+                        color: textColor ??
+                            Theme.of(context).appBarTheme.titleTextStyle?.color,
+                        size: 20,
+                      ),
+                ),
               )
             : null),
   );
@@ -89,16 +92,13 @@ class MyEasyLoadingAnimation extends EasyLoadingAnimation {
       AlignmentGeometry alignment) {
     return Opacity(
       opacity: controller.value,
-      child: Container(
-        width: 128,
-        height: 128,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          color: Colors.black.withAlpha(200),
-        ),
-        child: const Center(
-          // child: Lottie.asset("images/lottie/loading.zip"),
-          child: CircularProgressIndicator(),
+      child: AlertDialog(
+        title: const Text("Working ..."),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: const [
+            LinearProgressIndicator(),
+          ],
         ),
       ),
     );

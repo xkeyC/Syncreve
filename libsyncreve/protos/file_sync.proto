@@ -12,11 +12,15 @@ service FileSyncService {
 message DownloadTaskRequest {
   string  workingUrl = 1;
   string  instanceUrl = 2;
-  repeated string  fileID = 3;
+  repeated DownloadTaskRequestFileInfo  fileInfos = 3;
   string  savePath = 4;
-  string  fileName = 5;
-  string  cookie = 6;
-  DownloadInfoRequestType downLoadType = 7;
+  string  cookie = 5;
+  DownloadInfoRequestType downLoadType = 6;
+}
+
+message DownloadTaskRequestFileInfo {
+  string fileID = 1;
+  string fileName = 2;
 }
 
 message DownloadDirTaskRequest {

@@ -11,12 +11,12 @@ import (
 	"github.com/xkeyC/Syncreve/libsyncreve/protos"
 	"github.com/xkeyC/Syncreve/libsyncreve/utils"
 	"os"
+	"strings"
 )
 
-func AddDownloadTask(workingUrl string, instanceUrl string, fileID []string, savePath string, fileName string, cookie string, downLoadType protos.DownloadInfoRequestType) ([]string, error) {
-
+func AddDownloadTask(infos []*protos.DownloadTaskRequestFileInfo, workingUrl string, instanceUrl string, savePath string, cookie string, downLoadType protos.DownloadInfoRequestType) ([]string, error) {
 	var ids []string
-	for _, fid := range fileID {
+	for _, i := range infos {
 		taskID := uuid.New()
 		c, cancel := context.WithCancel(context.Background())
 		queueData := &FileDownloadQueueTaskData{
@@ -26,8 +26,8 @@ func AddDownloadTask(workingUrl string, instanceUrl string, fileID []string, sav
 			Context:      c,
 			CancelFunc:   cancel,
 			SavePath:     savePath,
-			FileName:     fileName,
-			FileID:       fid,
+			FileName:     i.FileName,
+			FileID:       i.FileID,
 			Cookie:       cookie,
 			DownLoadType: downLoadType,
 			Status:       FileDownloadQueueStatusWaiting,
@@ -53,19 +53,26 @@ func AddDownloadTasksByDirPath(ctx context.Context, dirPath string, workingUrl s
 	}
 
 	var taskIDs []string
+	dirPathSplit := strings.Split(dirPath, "/")
+	dirPathName := dirPathSplit[len(dirPathSplit)-1]
 	for path, directoryResult := range fileTreeMap {
 		rPath, err := utils.GetFileSaveRelativePath(path, dirPath)
 		if err != nil {
 			return nil, err
 		}
-		fileSavePath := savePath + rPath
+		fileSavePath := savePath + "/" + dirPathName + "/" + rPath
 		err = os.MkdirAll(fileSavePath, os.ModePerm)
 		if err != nil {
 			return nil, err
 		}
 		for _, fileObject := range directoryResult.Data.Objects {
 			if fileObject.Type == "file" {
-				taskID, err := AddDownloadTask(workingUrl, instanceUrl, []string{fileObject.Id}, fileSavePath, fileObject.Name, cookie, downLoadType)
+				var fileInfo []*protos.DownloadTaskRequestFileInfo
+				fileInfo = append(fileInfo, &protos.DownloadTaskRequestFileInfo{
+					FileID:   fileObject.Id,
+					FileName: fileObject.Name,
+				})
+				taskID, err := AddDownloadTask(fileInfo, workingUrl, instanceUrl, fileSavePath, cookie, downLoadType)
 				if err != nil {
 					fmt.Println("[libsyncreve] AddDownloadTasksByDirPath Task Error ==", err)
 					continue

@@ -59,8 +59,6 @@ class SplashUI extends BaseUI<AppGlobalUIModel> {
       ),
       builder: EasyLoading.init(builder: (context, widget) {
         ScreenUtil.init(context);
-        EasyLoading.instance.customAnimation = MyEasyLoadingAnimation();
-        EasyLoading.instance.animationStyle = EasyLoadingAnimationStyle.custom;
         return widget!;
       }),
       home: Scaffold(
@@ -92,6 +90,9 @@ class SplashUI extends BaseUI<AppGlobalUIModel> {
   @override
   initState() {
     super.initState();
+    EasyLoading.instance.customAnimation = MyEasyLoadingAnimation();
+    EasyLoading.instance.maskType = EasyLoadingMaskType.black;
+    EasyLoading.instance.animationStyle = EasyLoadingAnimationStyle.custom;
     _initApp();
   }
 

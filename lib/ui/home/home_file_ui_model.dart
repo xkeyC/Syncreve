@@ -1,16 +1,21 @@
 import 'dart:async';
 
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hive/hive.dart';
 import 'package:syncreve/api/cloudreve_file_api.dart';
 import 'package:syncreve/base/ui_model.dart';
 import 'package:syncreve/common/account_manager.dart';
+import 'package:syncreve/common/io/downloader.dart';
+import 'package:syncreve/common/io/path_tools.dart';
 import 'package:syncreve/data/app/account.dart';
 import 'package:syncreve/data/file/cloudreve_file_data.dart';
+import 'package:syncreve/generated/grpc/libsyncreve/protos/file_sync.pb.dart';
 import 'package:syncreve/ui/account/account_switch_bottom_sheet_ui.dart';
 import 'package:syncreve/ui/account/account_switch_bottom_sheet_ui_model.dart';
 import 'package:syncreve/ui/file/file_menu_bottom_sheet_ui.dart';
 import 'package:syncreve/ui/file/file_open_temp_dialog_ui.dart';
 import 'package:syncreve/ui/file/file_open_temp_dialog_ui_model.dart';
+import 'package:syncreve/ui/file/file_local_ui.dart';
 import 'package:syncreve/ui/home_ui_model.dart';
 
 class HomeFileUIModel extends BaseUIModel {
@@ -150,7 +155,7 @@ class HomeFileUIModel extends BaseUIModel {
     return selectedFilesId[file.id] == true;
   }
 
-  void onTapFileMenu(String actionKey) async {
+  void onTapFileMenu(String actionKey, {bool isLongPress = false}) async {
     final List<CloudreveFileObjectsData> files = [];
     for (var kv in selectedFilesId.entries) {
       final f =
@@ -159,10 +164,13 @@ class HomeFileUIModel extends BaseUIModel {
     }
     switch (actionKey) {
       case "download":
-
+        await _onDownload(isForceShowSelect: isLongPress);
+        selectedFilesId.clear();
+        notifyListeners();
         return;
       case "more":
-        handeBottomSheetMenu(await FileMenuBottomSheetUI.show(context!, files), files);
+        handeBottomSheetMenu(
+            await FileMenuBottomSheetUI.show(context!, files), files);
         return;
     }
   }
@@ -181,5 +189,66 @@ class HomeFileUIModel extends BaseUIModel {
         onTapFile(files[0]);
         return;
     }
+  }
+
+  Future _onDownload({required bool isForceShowSelect}) async {
+    if (await AppPathTools.checkPathPermissions(
+            AppPathTools.userDownloadPath) !=
+        true) {
+      showToast("Permission Required");
+      return;
+    }
+    final savePath = await FileLocalUI.push(context!);
+    if (savePath is String) {
+      await _doDownload(savePath);
+    }
+  }
+
+  Future<void> _doDownload(String savePath) async {
+    EasyLoading.show();
+    try {
+      List<DownloadTaskRequestFileInfo> dFilesInfo = [];
+      List<String> dFilesPaths = [];
+      for (var element in files!.objects!) {
+        if (selectedFilesId[element.id] == true) {
+          if (element.type == "file") {
+            dFilesInfo.add(DownloadTaskRequestFileInfo(
+                fileID: element.id, fileName: element.name));
+          } else {
+            dFilesPaths.add("${path.join("/")}/${element.name}");
+          }
+        }
+      }
+
+      List<String> resultIds = [];
+      if (dFilesInfo.isNotEmpty) {
+        final ids = await Downloader.addDownloadTask(
+            workingUrl: AppAccountManager.workingAccount!.workingUrl,
+            savePath: savePath,
+            fileInfo: dFilesInfo,
+            cookie: AppAccountManager.workingAccount!.cloudreveSession,
+            type: DownloadInfoRequestType.Queue,
+            instanceUrl: AppAccountManager.workingAccount!.instanceUrl);
+        resultIds.addAll(ids);
+      }
+      if (dFilesPaths.isNotEmpty) {
+        for (var path in dFilesPaths) {
+          dPrint("addDownloadTasksByDirPath path == $path");
+          final ids = await Downloader.addDownloadTasksByDirPath(
+              path: path,
+              workingUrl: AppAccountManager.workingAccount!.workingUrl,
+              savePath: savePath,
+              cookie: AppAccountManager.workingAccount!.cloudreveSession,
+              type: DownloadInfoRequestType.Queue,
+              instanceUrl: AppAccountManager.workingAccount!.instanceUrl);
+          resultIds.addAll(ids);
+        }
+      }
+      showToast("Downloading ${resultIds.length} Files");
+    } catch (e) {
+      dPrint("<$runtimeType> _doDownload Error: $e");
+      showToast(e.toString());
+    }
+    EasyLoading.dismiss();
   }
 }
