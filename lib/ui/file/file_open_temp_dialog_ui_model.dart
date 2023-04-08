@@ -8,7 +8,6 @@ import 'package:syncreve/common/io/path_tools.dart';
 import 'package:syncreve/data/app/grpc_file_download_info_data.dart';
 import 'package:syncreve/data/file/cloudreve_file_data.dart';
 import 'package:syncreve/generated/grpc/libsyncreve/protos/file_sync.pb.dart';
-import 'package:syncreve/generated/grpc/libsyncreve/protos/file_sync.pbenum.dart';
 
 class FileOpenTempDialogUIModel extends BaseUIModel {
   final CloudreveFileObjectsData fileObjectsData;

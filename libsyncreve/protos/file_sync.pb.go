@@ -564,6 +564,107 @@ func (x *DownLoadInfoResult) GetData() []byte {
 	return nil
 }
 
+type DownloadCountRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *DownloadCountRequest) Reset() {
+	*x = DownloadCountRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_file_sync_proto_msgTypes[8]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DownloadCountRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DownloadCountRequest) ProtoMessage() {}
+
+func (x *DownloadCountRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_file_sync_proto_msgTypes[8]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DownloadCountRequest.ProtoReflect.Descriptor instead.
+func (*DownloadCountRequest) Descriptor() ([]byte, []int) {
+	return file_file_sync_proto_rawDescGZIP(), []int{8}
+}
+
+type DownloadCountResult struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Type         DownloadInfoRequestType `protobuf:"varint,1,opt,name=type,proto3,enum=DownloadInfoRequestType" json:"type,omitempty"`
+	WorkingCount int64                   `protobuf:"varint,2,opt,name=workingCount,proto3" json:"workingCount,omitempty"`
+	Count        int64                   `protobuf:"varint,3,opt,name=Count,proto3" json:"Count,omitempty"`
+}
+
+func (x *DownloadCountResult) Reset() {
+	*x = DownloadCountResult{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_file_sync_proto_msgTypes[9]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DownloadCountResult) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DownloadCountResult) ProtoMessage() {}
+
+func (x *DownloadCountResult) ProtoReflect() protoreflect.Message {
+	mi := &file_file_sync_proto_msgTypes[9]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DownloadCountResult.ProtoReflect.Descriptor instead.
+func (*DownloadCountResult) Descriptor() ([]byte, []int) {
+	return file_file_sync_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *DownloadCountResult) GetType() DownloadInfoRequestType {
+	if x != nil {
+		return x.Type
+	}
+	return DownloadInfoRequestType_All
+}
+
+func (x *DownloadCountResult) GetWorkingCount() int64 {
+	if x != nil {
+		return x.WorkingCount
+	}
+	return 0
+}
+
+func (x *DownloadCountResult) GetCount() int64 {
+	if x != nil {
+		return x.Count
+	}
+	return 0
+}
+
 var File_file_sync_proto protoreflect.FileDescriptor
 
 var file_file_sync_proto_rawDesc = []byte{
@@ -627,36 +728,55 @@ var file_file_sync_proto_rawDesc = []byte{
 	0x70, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x18, 0x2e, 0x44, 0x6f, 0x77, 0x6e, 0x6c,
 	0x6f, 0x61, 0x64, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x54, 0x79,
 	0x70, 0x65, 0x52, 0x04, 0x74, 0x79, 0x70, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61,
-	0x18, 0x02, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x2a, 0x41, 0x0a, 0x17,
-	0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x54, 0x79, 0x70, 0x65, 0x12, 0x07, 0x0a, 0x03, 0x41, 0x6c, 0x6c, 0x10, 0x00,
-	0x12, 0x09, 0x0a, 0x05, 0x51, 0x75, 0x65, 0x75, 0x65, 0x10, 0x01, 0x12, 0x08, 0x0a, 0x04, 0x54,
-	0x65, 0x6d, 0x70, 0x10, 0x02, 0x12, 0x08, 0x0a, 0x04, 0x53, 0x79, 0x6e, 0x63, 0x10, 0x03, 0x32,
-	0xf5, 0x02, 0x0a, 0x0f, 0x46, 0x69, 0x6c, 0x65, 0x53, 0x79, 0x6e, 0x63, 0x53, 0x65, 0x72, 0x76,
-	0x69, 0x63, 0x65, 0x12, 0x3e, 0x0a, 0x0f, 0x41, 0x64, 0x64, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f,
-	0x61, 0x64, 0x54, 0x61, 0x73, 0x6b, 0x12, 0x14, 0x2e, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61,
-	0x64, 0x54, 0x61, 0x73, 0x6b, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x13, 0x2e, 0x44,
-	0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x54, 0x61, 0x73, 0x6b, 0x52, 0x65, 0x73, 0x75, 0x6c,
-	0x74, 0x22, 0x00, 0x12, 0x4b, 0x0a, 0x19, 0x41, 0x64, 0x64, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f,
-	0x61, 0x64, 0x54, 0x61, 0x73, 0x6b, 0x73, 0x42, 0x79, 0x44, 0x69, 0x72, 0x50, 0x61, 0x74, 0x68,
-	0x12, 0x17, 0x2e, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x44, 0x69, 0x72, 0x54, 0x61,
-	0x73, 0x6b, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x13, 0x2e, 0x44, 0x6f, 0x77, 0x6e,
-	0x6c, 0x6f, 0x61, 0x64, 0x54, 0x61, 0x73, 0x6b, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x22, 0x00,
-	0x12, 0x46, 0x0a, 0x15, 0x47, 0x65, 0x74, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x49,
-	0x6e, 0x66, 0x6f, 0x53, 0x74, 0x72, 0x65, 0x61, 0x6d, 0x12, 0x14, 0x2e, 0x44, 0x6f, 0x77, 0x6e,
-	0x6c, 0x6f, 0x61, 0x64, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
-	0x13, 0x2e, 0x44, 0x6f, 0x77, 0x6e, 0x4c, 0x6f, 0x61, 0x64, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65,
-	0x73, 0x75, 0x6c, 0x74, 0x22, 0x00, 0x30, 0x01, 0x12, 0x3e, 0x0a, 0x0f, 0x47, 0x65, 0x74, 0x44,
-	0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x14, 0x2e, 0x44, 0x6f,
-	0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x1a, 0x13, 0x2e, 0x44, 0x6f, 0x77, 0x6e, 0x4c, 0x6f, 0x61, 0x64, 0x49, 0x6e, 0x66, 0x6f,
-	0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x22, 0x00, 0x12, 0x4d, 0x0a, 0x12, 0x43, 0x61, 0x6e, 0x63,
-	0x65, 0x6c, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x54, 0x61, 0x73, 0x6b, 0x12, 0x1a,
-	0x2e, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x54, 0x61, 0x73, 0x6b, 0x43, 0x61, 0x6e,
-	0x63, 0x65, 0x6c, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x19, 0x2e, 0x44, 0x6f, 0x77,
-	0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x54, 0x61, 0x73, 0x6b, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x52,
-	0x65, 0x73, 0x75, 0x6c, 0x74, 0x22, 0x00, 0x42, 0x0b, 0x5a, 0x09, 0x2e, 0x2e, 0x2f, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x22, 0x16, 0x0a, 0x14,
+	0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x22, 0x7d, 0x0a, 0x13, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64,
+	0x43, 0x6f, 0x75, 0x6e, 0x74, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x12, 0x2c, 0x0a, 0x04, 0x74,
+	0x79, 0x70, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x18, 0x2e, 0x44, 0x6f, 0x77, 0x6e,
+	0x6c, 0x6f, 0x61, 0x64, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x54,
+	0x79, 0x70, 0x65, 0x52, 0x04, 0x74, 0x79, 0x70, 0x65, 0x12, 0x22, 0x0a, 0x0c, 0x77, 0x6f, 0x72,
+	0x6b, 0x69, 0x6e, 0x67, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52,
+	0x0c, 0x77, 0x6f, 0x72, 0x6b, 0x69, 0x6e, 0x67, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x14, 0x0a,
+	0x05, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x03, 0x52, 0x05, 0x43, 0x6f,
+	0x75, 0x6e, 0x74, 0x2a, 0x41, 0x0a, 0x17, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x49,
+	0x6e, 0x66, 0x6f, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x54, 0x79, 0x70, 0x65, 0x12, 0x07,
+	0x0a, 0x03, 0x41, 0x6c, 0x6c, 0x10, 0x00, 0x12, 0x09, 0x0a, 0x05, 0x51, 0x75, 0x65, 0x75, 0x65,
+	0x10, 0x01, 0x12, 0x08, 0x0a, 0x04, 0x54, 0x65, 0x6d, 0x70, 0x10, 0x02, 0x12, 0x08, 0x0a, 0x04,
+	0x53, 0x79, 0x6e, 0x63, 0x10, 0x03, 0x32, 0x87, 0x04, 0x0a, 0x0f, 0x46, 0x69, 0x6c, 0x65, 0x53,
+	0x79, 0x6e, 0x63, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x3e, 0x0a, 0x0f, 0x41, 0x64,
+	0x64, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x54, 0x61, 0x73, 0x6b, 0x12, 0x14, 0x2e,
+	0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x54, 0x61, 0x73, 0x6b, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x13, 0x2e, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x54, 0x61,
+	0x73, 0x6b, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x22, 0x00, 0x12, 0x4b, 0x0a, 0x19, 0x41, 0x64,
+	0x64, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x54, 0x61, 0x73, 0x6b, 0x73, 0x42, 0x79,
+	0x44, 0x69, 0x72, 0x50, 0x61, 0x74, 0x68, 0x12, 0x17, 0x2e, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f,
+	0x61, 0x64, 0x44, 0x69, 0x72, 0x54, 0x61, 0x73, 0x6b, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x1a, 0x13, 0x2e, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x54, 0x61, 0x73, 0x6b, 0x52,
+	0x65, 0x73, 0x75, 0x6c, 0x74, 0x22, 0x00, 0x12, 0x4d, 0x0a, 0x12, 0x43, 0x61, 0x6e, 0x63, 0x65,
+	0x6c, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x54, 0x61, 0x73, 0x6b, 0x12, 0x1a, 0x2e,
+	0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x54, 0x61, 0x73, 0x6b, 0x43, 0x61, 0x6e, 0x63,
+	0x65, 0x6c, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x19, 0x2e, 0x44, 0x6f, 0x77, 0x6e,
+	0x6c, 0x6f, 0x61, 0x64, 0x54, 0x61, 0x73, 0x6b, 0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x52, 0x65,
+	0x73, 0x75, 0x6c, 0x74, 0x22, 0x00, 0x12, 0x46, 0x0a, 0x15, 0x47, 0x65, 0x74, 0x44, 0x6f, 0x77,
+	0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x49, 0x6e, 0x66, 0x6f, 0x53, 0x74, 0x72, 0x65, 0x61, 0x6d, 0x12,
+	0x14, 0x2e, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x13, 0x2e, 0x44, 0x6f, 0x77, 0x6e, 0x4c, 0x6f, 0x61, 0x64,
+	0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x22, 0x00, 0x30, 0x01, 0x12, 0x3e,
+	0x0a, 0x0f, 0x47, 0x65, 0x74, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x49, 0x6e, 0x66,
+	0x6f, 0x12, 0x14, 0x2e, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x49, 0x6e, 0x66, 0x6f,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x13, 0x2e, 0x44, 0x6f, 0x77, 0x6e, 0x4c, 0x6f,
+	0x61, 0x64, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x22, 0x00, 0x12, 0x45,
+	0x0a, 0x14, 0x47, 0x65, 0x74, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x43, 0x6f, 0x75,
+	0x6e, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x15, 0x2e, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61,
+	0x64, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x14, 0x2e,
+	0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x52, 0x65, 0x73,
+	0x75, 0x6c, 0x74, 0x22, 0x00, 0x12, 0x49, 0x0a, 0x16, 0x47, 0x65, 0x74, 0x44, 0x6f, 0x77, 0x6e,
+	0x6c, 0x6f, 0x61, 0x64, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x53, 0x74, 0x72, 0x65, 0x61, 0x6d, 0x12,
+	0x15, 0x2e, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61, 0x64, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x14, 0x2e, 0x44, 0x6f, 0x77, 0x6e, 0x6c, 0x6f, 0x61,
+	0x64, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x22, 0x00, 0x30, 0x01,
+	0x42, 0x0b, 0x5a, 0x09, 0x2e, 0x2e, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x62, 0x06, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -672,7 +792,7 @@ func file_file_sync_proto_rawDescGZIP() []byte {
 }
 
 var file_file_sync_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_file_sync_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_file_sync_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_file_sync_proto_goTypes = []interface{}{
 	(DownloadInfoRequestType)(0),        // 0: DownloadInfoRequestType
 	(*DownloadTaskRequest)(nil),         // 1: DownloadTaskRequest
@@ -683,6 +803,8 @@ var file_file_sync_proto_goTypes = []interface{}{
 	(*DownloadTaskCancelResult)(nil),    // 6: DownloadTaskCancelResult
 	(*DownloadInfoRequest)(nil),         // 7: DownloadInfoRequest
 	(*DownLoadInfoResult)(nil),          // 8: DownLoadInfoResult
+	(*DownloadCountRequest)(nil),        // 9: DownloadCountRequest
+	(*DownloadCountResult)(nil),         // 10: DownloadCountResult
 }
 var file_file_sync_proto_depIdxs = []int32{
 	2,  // 0: DownloadTaskRequest.fileInfos:type_name -> DownloadTaskRequestFileInfo
@@ -690,21 +812,26 @@ var file_file_sync_proto_depIdxs = []int32{
 	0,  // 2: DownloadDirTaskRequest.downLoadType:type_name -> DownloadInfoRequestType
 	0,  // 3: DownloadInfoRequest.type:type_name -> DownloadInfoRequestType
 	0,  // 4: DownLoadInfoResult.type:type_name -> DownloadInfoRequestType
-	1,  // 5: FileSyncService.AddDownloadTask:input_type -> DownloadTaskRequest
-	3,  // 6: FileSyncService.AddDownloadTasksByDirPath:input_type -> DownloadDirTaskRequest
-	7,  // 7: FileSyncService.GetDownloadInfoStream:input_type -> DownloadInfoRequest
-	7,  // 8: FileSyncService.GetDownloadInfo:input_type -> DownloadInfoRequest
-	5,  // 9: FileSyncService.CancelDownloadTask:input_type -> DownloadTaskCancelRequest
-	4,  // 10: FileSyncService.AddDownloadTask:output_type -> DownloadTaskResult
-	4,  // 11: FileSyncService.AddDownloadTasksByDirPath:output_type -> DownloadTaskResult
-	8,  // 12: FileSyncService.GetDownloadInfoStream:output_type -> DownLoadInfoResult
-	8,  // 13: FileSyncService.GetDownloadInfo:output_type -> DownLoadInfoResult
-	6,  // 14: FileSyncService.CancelDownloadTask:output_type -> DownloadTaskCancelResult
-	10, // [10:15] is the sub-list for method output_type
-	5,  // [5:10] is the sub-list for method input_type
-	5,  // [5:5] is the sub-list for extension type_name
-	5,  // [5:5] is the sub-list for extension extendee
-	0,  // [0:5] is the sub-list for field type_name
+	0,  // 5: DownloadCountResult.type:type_name -> DownloadInfoRequestType
+	1,  // 6: FileSyncService.AddDownloadTask:input_type -> DownloadTaskRequest
+	3,  // 7: FileSyncService.AddDownloadTasksByDirPath:input_type -> DownloadDirTaskRequest
+	5,  // 8: FileSyncService.CancelDownloadTask:input_type -> DownloadTaskCancelRequest
+	7,  // 9: FileSyncService.GetDownloadInfoStream:input_type -> DownloadInfoRequest
+	7,  // 10: FileSyncService.GetDownloadInfo:input_type -> DownloadInfoRequest
+	9,  // 11: FileSyncService.GetDownloadCountInfo:input_type -> DownloadCountRequest
+	9,  // 12: FileSyncService.GetDownloadCountStream:input_type -> DownloadCountRequest
+	4,  // 13: FileSyncService.AddDownloadTask:output_type -> DownloadTaskResult
+	4,  // 14: FileSyncService.AddDownloadTasksByDirPath:output_type -> DownloadTaskResult
+	6,  // 15: FileSyncService.CancelDownloadTask:output_type -> DownloadTaskCancelResult
+	8,  // 16: FileSyncService.GetDownloadInfoStream:output_type -> DownLoadInfoResult
+	8,  // 17: FileSyncService.GetDownloadInfo:output_type -> DownLoadInfoResult
+	10, // 18: FileSyncService.GetDownloadCountInfo:output_type -> DownloadCountResult
+	10, // 19: FileSyncService.GetDownloadCountStream:output_type -> DownloadCountResult
+	13, // [13:20] is the sub-list for method output_type
+	6,  // [6:13] is the sub-list for method input_type
+	6,  // [6:6] is the sub-list for extension type_name
+	6,  // [6:6] is the sub-list for extension extendee
+	0,  // [0:6] is the sub-list for field type_name
 }
 
 func init() { file_file_sync_proto_init() }
@@ -809,6 +936,30 @@ func file_file_sync_proto_init() {
 				return nil
 			}
 		}
+		file_file_sync_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DownloadCountRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_file_sync_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DownloadCountResult); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	file_file_sync_proto_msgTypes[6].OneofWrappers = []interface{}{}
 	type x struct{}
@@ -817,7 +968,7 @@ func file_file_sync_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_file_sync_proto_rawDesc,
 			NumEnums:      1,
-			NumMessages:   8,
+			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
@@ -846,9 +997,11 @@ const _ = grpc.SupportPackageIsVersion6
 type FileSyncServiceClient interface {
 	AddDownloadTask(ctx context.Context, in *DownloadTaskRequest, opts ...grpc.CallOption) (*DownloadTaskResult, error)
 	AddDownloadTasksByDirPath(ctx context.Context, in *DownloadDirTaskRequest, opts ...grpc.CallOption) (*DownloadTaskResult, error)
+	CancelDownloadTask(ctx context.Context, in *DownloadTaskCancelRequest, opts ...grpc.CallOption) (*DownloadTaskCancelResult, error)
 	GetDownloadInfoStream(ctx context.Context, in *DownloadInfoRequest, opts ...grpc.CallOption) (FileSyncService_GetDownloadInfoStreamClient, error)
 	GetDownloadInfo(ctx context.Context, in *DownloadInfoRequest, opts ...grpc.CallOption) (*DownLoadInfoResult, error)
-	CancelDownloadTask(ctx context.Context, in *DownloadTaskCancelRequest, opts ...grpc.CallOption) (*DownloadTaskCancelResult, error)
+	GetDownloadCountInfo(ctx context.Context, in *DownloadCountRequest, opts ...grpc.CallOption) (*DownloadCountResult, error)
+	GetDownloadCountStream(ctx context.Context, in *DownloadCountRequest, opts ...grpc.CallOption) (FileSyncService_GetDownloadCountStreamClient, error)
 }
 
 type fileSyncServiceClient struct {
@@ -871,6 +1024,15 @@ func (c *fileSyncServiceClient) AddDownloadTask(ctx context.Context, in *Downloa
 func (c *fileSyncServiceClient) AddDownloadTasksByDirPath(ctx context.Context, in *DownloadDirTaskRequest, opts ...grpc.CallOption) (*DownloadTaskResult, error) {
 	out := new(DownloadTaskResult)
 	err := c.cc.Invoke(ctx, "/FileSyncService/AddDownloadTasksByDirPath", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fileSyncServiceClient) CancelDownloadTask(ctx context.Context, in *DownloadTaskCancelRequest, opts ...grpc.CallOption) (*DownloadTaskCancelResult, error) {
+	out := new(DownloadTaskCancelResult)
+	err := c.cc.Invoke(ctx, "/FileSyncService/CancelDownloadTask", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -918,22 +1080,56 @@ func (c *fileSyncServiceClient) GetDownloadInfo(ctx context.Context, in *Downloa
 	return out, nil
 }
 
-func (c *fileSyncServiceClient) CancelDownloadTask(ctx context.Context, in *DownloadTaskCancelRequest, opts ...grpc.CallOption) (*DownloadTaskCancelResult, error) {
-	out := new(DownloadTaskCancelResult)
-	err := c.cc.Invoke(ctx, "/FileSyncService/CancelDownloadTask", in, out, opts...)
+func (c *fileSyncServiceClient) GetDownloadCountInfo(ctx context.Context, in *DownloadCountRequest, opts ...grpc.CallOption) (*DownloadCountResult, error) {
+	out := new(DownloadCountResult)
+	err := c.cc.Invoke(ctx, "/FileSyncService/GetDownloadCountInfo", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
+func (c *fileSyncServiceClient) GetDownloadCountStream(ctx context.Context, in *DownloadCountRequest, opts ...grpc.CallOption) (FileSyncService_GetDownloadCountStreamClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_FileSyncService_serviceDesc.Streams[1], "/FileSyncService/GetDownloadCountStream", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &fileSyncServiceGetDownloadCountStreamClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type FileSyncService_GetDownloadCountStreamClient interface {
+	Recv() (*DownloadCountResult, error)
+	grpc.ClientStream
+}
+
+type fileSyncServiceGetDownloadCountStreamClient struct {
+	grpc.ClientStream
+}
+
+func (x *fileSyncServiceGetDownloadCountStreamClient) Recv() (*DownloadCountResult, error) {
+	m := new(DownloadCountResult)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // FileSyncServiceServer is the server API for FileSyncService service.
 type FileSyncServiceServer interface {
 	AddDownloadTask(context.Context, *DownloadTaskRequest) (*DownloadTaskResult, error)
 	AddDownloadTasksByDirPath(context.Context, *DownloadDirTaskRequest) (*DownloadTaskResult, error)
+	CancelDownloadTask(context.Context, *DownloadTaskCancelRequest) (*DownloadTaskCancelResult, error)
 	GetDownloadInfoStream(*DownloadInfoRequest, FileSyncService_GetDownloadInfoStreamServer) error
 	GetDownloadInfo(context.Context, *DownloadInfoRequest) (*DownLoadInfoResult, error)
-	CancelDownloadTask(context.Context, *DownloadTaskCancelRequest) (*DownloadTaskCancelResult, error)
+	GetDownloadCountInfo(context.Context, *DownloadCountRequest) (*DownloadCountResult, error)
+	GetDownloadCountStream(*DownloadCountRequest, FileSyncService_GetDownloadCountStreamServer) error
 }
 
 // UnimplementedFileSyncServiceServer can be embedded to have forward compatible implementations.
@@ -946,14 +1142,20 @@ func (*UnimplementedFileSyncServiceServer) AddDownloadTask(context.Context, *Dow
 func (*UnimplementedFileSyncServiceServer) AddDownloadTasksByDirPath(context.Context, *DownloadDirTaskRequest) (*DownloadTaskResult, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddDownloadTasksByDirPath not implemented")
 }
+func (*UnimplementedFileSyncServiceServer) CancelDownloadTask(context.Context, *DownloadTaskCancelRequest) (*DownloadTaskCancelResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CancelDownloadTask not implemented")
+}
 func (*UnimplementedFileSyncServiceServer) GetDownloadInfoStream(*DownloadInfoRequest, FileSyncService_GetDownloadInfoStreamServer) error {
 	return status.Errorf(codes.Unimplemented, "method GetDownloadInfoStream not implemented")
 }
 func (*UnimplementedFileSyncServiceServer) GetDownloadInfo(context.Context, *DownloadInfoRequest) (*DownLoadInfoResult, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetDownloadInfo not implemented")
 }
-func (*UnimplementedFileSyncServiceServer) CancelDownloadTask(context.Context, *DownloadTaskCancelRequest) (*DownloadTaskCancelResult, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CancelDownloadTask not implemented")
+func (*UnimplementedFileSyncServiceServer) GetDownloadCountInfo(context.Context, *DownloadCountRequest) (*DownloadCountResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetDownloadCountInfo not implemented")
+}
+func (*UnimplementedFileSyncServiceServer) GetDownloadCountStream(*DownloadCountRequest, FileSyncService_GetDownloadCountStreamServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetDownloadCountStream not implemented")
 }
 
 func RegisterFileSyncServiceServer(s *grpc.Server, srv FileSyncServiceServer) {
@@ -992,6 +1194,24 @@ func _FileSyncService_AddDownloadTasksByDirPath_Handler(srv interface{}, ctx con
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FileSyncServiceServer).AddDownloadTasksByDirPath(ctx, req.(*DownloadDirTaskRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FileSyncService_CancelDownloadTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DownloadTaskCancelRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FileSyncServiceServer).CancelDownloadTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/FileSyncService/CancelDownloadTask",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FileSyncServiceServer).CancelDownloadTask(ctx, req.(*DownloadTaskCancelRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1035,22 +1255,43 @@ func _FileSyncService_GetDownloadInfo_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
-func _FileSyncService_CancelDownloadTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DownloadTaskCancelRequest)
+func _FileSyncService_GetDownloadCountInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DownloadCountRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FileSyncServiceServer).CancelDownloadTask(ctx, in)
+		return srv.(FileSyncServiceServer).GetDownloadCountInfo(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/FileSyncService/CancelDownloadTask",
+		FullMethod: "/FileSyncService/GetDownloadCountInfo",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FileSyncServiceServer).CancelDownloadTask(ctx, req.(*DownloadTaskCancelRequest))
+		return srv.(FileSyncServiceServer).GetDownloadCountInfo(ctx, req.(*DownloadCountRequest))
 	}
 	return interceptor(ctx, in, info, handler)
+}
+
+func _FileSyncService_GetDownloadCountStream_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(DownloadCountRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(FileSyncServiceServer).GetDownloadCountStream(m, &fileSyncServiceGetDownloadCountStreamServer{stream})
+}
+
+type FileSyncService_GetDownloadCountStreamServer interface {
+	Send(*DownloadCountResult) error
+	grpc.ServerStream
+}
+
+type fileSyncServiceGetDownloadCountStreamServer struct {
+	grpc.ServerStream
+}
+
+func (x *fileSyncServiceGetDownloadCountStreamServer) Send(m *DownloadCountResult) error {
+	return x.ServerStream.SendMsg(m)
 }
 
 var _FileSyncService_serviceDesc = grpc.ServiceDesc{
@@ -1066,18 +1307,27 @@ var _FileSyncService_serviceDesc = grpc.ServiceDesc{
 			Handler:    _FileSyncService_AddDownloadTasksByDirPath_Handler,
 		},
 		{
+			MethodName: "CancelDownloadTask",
+			Handler:    _FileSyncService_CancelDownloadTask_Handler,
+		},
+		{
 			MethodName: "GetDownloadInfo",
 			Handler:    _FileSyncService_GetDownloadInfo_Handler,
 		},
 		{
-			MethodName: "CancelDownloadTask",
-			Handler:    _FileSyncService_CancelDownloadTask_Handler,
+			MethodName: "GetDownloadCountInfo",
+			Handler:    _FileSyncService_GetDownloadCountInfo_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "GetDownloadInfoStream",
 			Handler:       _FileSyncService_GetDownloadInfoStream_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "GetDownloadCountStream",
+			Handler:       _FileSyncService_GetDownloadCountStream_Handler,
 			ServerStreams: true,
 		},
 	},

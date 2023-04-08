@@ -34,6 +34,7 @@ dependencies:
   flutter_svg: ^2.0.4
   mobile_scanner: ^3.2.0
   cupertino_icons: ^1.0.2
+  fixnum: ^1.1.0
 
 dev_dependencies:
   flutter_test:

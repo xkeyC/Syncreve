@@ -26,6 +26,12 @@ class FileSyncServiceClient extends $grpc.Client {
           ($0.DownloadDirTaskRequest value) => value.writeToBuffer(),
           ($core.List<$core.int> value) =>
               $0.DownloadTaskResult.fromBuffer(value));
+  static final _$cancelDownloadTask = $grpc.ClientMethod<
+          $0.DownloadTaskCancelRequest, $0.DownloadTaskCancelResult>(
+      '/FileSyncService/CancelDownloadTask',
+      ($0.DownloadTaskCancelRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) =>
+          $0.DownloadTaskCancelResult.fromBuffer(value));
   static final _$getDownloadInfoStream =
       $grpc.ClientMethod<$0.DownloadInfoRequest, $0.DownLoadInfoResult>(
           '/FileSyncService/GetDownloadInfoStream',
@@ -38,12 +44,18 @@ class FileSyncServiceClient extends $grpc.Client {
           ($0.DownloadInfoRequest value) => value.writeToBuffer(),
           ($core.List<$core.int> value) =>
               $0.DownLoadInfoResult.fromBuffer(value));
-  static final _$cancelDownloadTask = $grpc.ClientMethod<
-          $0.DownloadTaskCancelRequest, $0.DownloadTaskCancelResult>(
-      '/FileSyncService/CancelDownloadTask',
-      ($0.DownloadTaskCancelRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) =>
-          $0.DownloadTaskCancelResult.fromBuffer(value));
+  static final _$getDownloadCountInfo =
+      $grpc.ClientMethod<$0.DownloadCountRequest, $0.DownloadCountResult>(
+          '/FileSyncService/GetDownloadCountInfo',
+          ($0.DownloadCountRequest value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) =>
+              $0.DownloadCountResult.fromBuffer(value));
+  static final _$getDownloadCountStream =
+      $grpc.ClientMethod<$0.DownloadCountRequest, $0.DownloadCountResult>(
+          '/FileSyncService/GetDownloadCountStream',
+          ($0.DownloadCountRequest value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) =>
+              $0.DownloadCountResult.fromBuffer(value));
 
   FileSyncServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -63,6 +75,12 @@ class FileSyncServiceClient extends $grpc.Client {
         options: options);
   }
 
+  $grpc.ResponseFuture<$0.DownloadTaskCancelResult> cancelDownloadTask(
+      $0.DownloadTaskCancelRequest request,
+      {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$cancelDownloadTask, request, options: options);
+  }
+
   $grpc.ResponseStream<$0.DownLoadInfoResult> getDownloadInfoStream(
       $0.DownloadInfoRequest request,
       {$grpc.CallOptions? options}) {
@@ -77,10 +95,18 @@ class FileSyncServiceClient extends $grpc.Client {
     return $createUnaryCall(_$getDownloadInfo, request, options: options);
   }
 
-  $grpc.ResponseFuture<$0.DownloadTaskCancelResult> cancelDownloadTask(
-      $0.DownloadTaskCancelRequest request,
+  $grpc.ResponseFuture<$0.DownloadCountResult> getDownloadCountInfo(
+      $0.DownloadCountRequest request,
       {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$cancelDownloadTask, request, options: options);
+    return $createUnaryCall(_$getDownloadCountInfo, request, options: options);
+  }
+
+  $grpc.ResponseStream<$0.DownloadCountResult> getDownloadCountStream(
+      $0.DownloadCountRequest request,
+      {$grpc.CallOptions? options}) {
+    return $createStreamingCall(
+        _$getDownloadCountStream, $async.Stream.fromIterable([request]),
+        options: options);
   }
 }
 
@@ -106,6 +132,15 @@ abstract class FileSyncServiceBase extends $grpc.Service {
             ($core.List<$core.int> value) =>
                 $0.DownloadDirTaskRequest.fromBuffer(value),
             ($0.DownloadTaskResult value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.DownloadTaskCancelRequest,
+            $0.DownloadTaskCancelResult>(
+        'CancelDownloadTask',
+        cancelDownloadTask_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.DownloadTaskCancelRequest.fromBuffer(value),
+        ($0.DownloadTaskCancelResult value) => value.writeToBuffer()));
     $addMethod(
         $grpc.ServiceMethod<$0.DownloadInfoRequest, $0.DownLoadInfoResult>(
             'GetDownloadInfoStream',
@@ -124,15 +159,24 @@ abstract class FileSyncServiceBase extends $grpc.Service {
             ($core.List<$core.int> value) =>
                 $0.DownloadInfoRequest.fromBuffer(value),
             ($0.DownLoadInfoResult value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.DownloadTaskCancelRequest,
-            $0.DownloadTaskCancelResult>(
-        'CancelDownloadTask',
-        cancelDownloadTask_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) =>
-            $0.DownloadTaskCancelRequest.fromBuffer(value),
-        ($0.DownloadTaskCancelResult value) => value.writeToBuffer()));
+    $addMethod(
+        $grpc.ServiceMethod<$0.DownloadCountRequest, $0.DownloadCountResult>(
+            'GetDownloadCountInfo',
+            getDownloadCountInfo_Pre,
+            false,
+            false,
+            ($core.List<$core.int> value) =>
+                $0.DownloadCountRequest.fromBuffer(value),
+            ($0.DownloadCountResult value) => value.writeToBuffer()));
+    $addMethod(
+        $grpc.ServiceMethod<$0.DownloadCountRequest, $0.DownloadCountResult>(
+            'GetDownloadCountStream',
+            getDownloadCountStream_Pre,
+            false,
+            true,
+            ($core.List<$core.int> value) =>
+                $0.DownloadCountRequest.fromBuffer(value),
+            ($0.DownloadCountResult value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.DownloadTaskResult> addDownloadTask_Pre(
@@ -147,6 +191,12 @@ abstract class FileSyncServiceBase extends $grpc.Service {
     return addDownloadTasksByDirPath(call, await request);
   }
 
+  $async.Future<$0.DownloadTaskCancelResult> cancelDownloadTask_Pre(
+      $grpc.ServiceCall call,
+      $async.Future<$0.DownloadTaskCancelRequest> request) async {
+    return cancelDownloadTask(call, await request);
+  }
+
   $async.Stream<$0.DownLoadInfoResult> getDownloadInfoStream_Pre(
       $grpc.ServiceCall call,
       $async.Future<$0.DownloadInfoRequest> request) async* {
@@ -159,20 +209,30 @@ abstract class FileSyncServiceBase extends $grpc.Service {
     return getDownloadInfo(call, await request);
   }
 
-  $async.Future<$0.DownloadTaskCancelResult> cancelDownloadTask_Pre(
+  $async.Future<$0.DownloadCountResult> getDownloadCountInfo_Pre(
       $grpc.ServiceCall call,
-      $async.Future<$0.DownloadTaskCancelRequest> request) async {
-    return cancelDownloadTask(call, await request);
+      $async.Future<$0.DownloadCountRequest> request) async {
+    return getDownloadCountInfo(call, await request);
+  }
+
+  $async.Stream<$0.DownloadCountResult> getDownloadCountStream_Pre(
+      $grpc.ServiceCall call,
+      $async.Future<$0.DownloadCountRequest> request) async* {
+    yield* getDownloadCountStream(call, await request);
   }
 
   $async.Future<$0.DownloadTaskResult> addDownloadTask(
       $grpc.ServiceCall call, $0.DownloadTaskRequest request);
   $async.Future<$0.DownloadTaskResult> addDownloadTasksByDirPath(
       $grpc.ServiceCall call, $0.DownloadDirTaskRequest request);
+  $async.Future<$0.DownloadTaskCancelResult> cancelDownloadTask(
+      $grpc.ServiceCall call, $0.DownloadTaskCancelRequest request);
   $async.Stream<$0.DownLoadInfoResult> getDownloadInfoStream(
       $grpc.ServiceCall call, $0.DownloadInfoRequest request);
   $async.Future<$0.DownLoadInfoResult> getDownloadInfo(
       $grpc.ServiceCall call, $0.DownloadInfoRequest request);
-  $async.Future<$0.DownloadTaskCancelResult> cancelDownloadTask(
-      $grpc.ServiceCall call, $0.DownloadTaskCancelRequest request);
+  $async.Future<$0.DownloadCountResult> getDownloadCountInfo(
+      $grpc.ServiceCall call, $0.DownloadCountRequest request);
+  $async.Stream<$0.DownloadCountResult> getDownloadCountStream(
+      $grpc.ServiceCall call, $0.DownloadCountRequest request);
 }

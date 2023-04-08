@@ -4,9 +4,11 @@ option go_package = "../protos";
 service FileSyncService {
   rpc AddDownloadTask(DownloadTaskRequest) returns (DownloadTaskResult) {}
   rpc AddDownloadTasksByDirPath(DownloadDirTaskRequest) returns (DownloadTaskResult) {}
+  rpc CancelDownloadTask(DownloadTaskCancelRequest) returns (DownloadTaskCancelResult) {}
   rpc GetDownloadInfoStream(DownloadInfoRequest) returns (stream DownLoadInfoResult) {}
   rpc GetDownloadInfo(DownloadInfoRequest) returns (DownLoadInfoResult) {}
-  rpc CancelDownloadTask(DownloadTaskCancelRequest) returns (DownloadTaskCancelResult) {}
+  rpc GetDownloadCountInfo(DownloadCountRequest) returns (DownloadCountResult){}
+  rpc GetDownloadCountStream(DownloadCountRequest) returns (stream DownloadCountResult){}
 }
 
 message DownloadTaskRequest {
@@ -61,4 +63,14 @@ message DownloadInfoRequest {
 message DownLoadInfoResult {
   DownloadInfoRequestType type = 1;
   bytes data = 2;
+}
+
+message  DownloadCountRequest {
+
+}
+
+message DownloadCountResult {
+  DownloadInfoRequestType type = 1;
+  int64 workingCount = 2;
+  int64 Count = 3;
 }

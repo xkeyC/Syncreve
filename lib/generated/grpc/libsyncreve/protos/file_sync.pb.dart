@@ -574,3 +574,107 @@ class DownLoadInfoResult extends $pb.GeneratedMessage {
   void clearData() => clearField(2);
 }
 
+class DownloadCountRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DownloadCountRequest', createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  DownloadCountRequest._() : super();
+  factory DownloadCountRequest() => create();
+  factory DownloadCountRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DownloadCountRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  DownloadCountRequest clone() => DownloadCountRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  DownloadCountRequest copyWith(void Function(DownloadCountRequest) updates) => super.copyWith((message) => updates(message as DownloadCountRequest)) as DownloadCountRequest; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static DownloadCountRequest create() => DownloadCountRequest._();
+  DownloadCountRequest createEmptyInstance() => create();
+  static $pb.PbList<DownloadCountRequest> createRepeated() => $pb.PbList<DownloadCountRequest>();
+  @$core.pragma('dart2js:noInline')
+  static DownloadCountRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DownloadCountRequest>(create);
+  static DownloadCountRequest? _defaultInstance;
+}
+
+class DownloadCountResult extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DownloadCountResult', createEmptyInstance: create)
+    ..e<DownloadInfoRequestType>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: DownloadInfoRequestType.All, valueOf: DownloadInfoRequestType.valueOf, enumValues: DownloadInfoRequestType.values)
+    ..aInt64(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'workingCount', protoName: 'workingCount')
+    ..aInt64(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'Count', protoName: 'Count')
+    ..hasRequiredFields = false
+  ;
+
+  DownloadCountResult._() : super();
+  factory DownloadCountResult({
+    DownloadInfoRequestType? type,
+    $fixnum.Int64? workingCount,
+    $fixnum.Int64? count,
+  }) {
+    final _result = create();
+    if (type != null) {
+      _result.type = type;
+    }
+    if (workingCount != null) {
+      _result.workingCount = workingCount;
+    }
+    if (count != null) {
+      _result.count = count;
+    }
+    return _result;
+  }
+  factory DownloadCountResult.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DownloadCountResult.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  DownloadCountResult clone() => DownloadCountResult()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  DownloadCountResult copyWith(void Function(DownloadCountResult) updates) => super.copyWith((message) => updates(message as DownloadCountResult)) as DownloadCountResult; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static DownloadCountResult create() => DownloadCountResult._();
+  DownloadCountResult createEmptyInstance() => create();
+  static $pb.PbList<DownloadCountResult> createRepeated() => $pb.PbList<DownloadCountResult>();
+  @$core.pragma('dart2js:noInline')
+  static DownloadCountResult getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DownloadCountResult>(create);
+  static DownloadCountResult? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  DownloadInfoRequestType get type => $_getN(0);
+  @$pb.TagNumber(1)
+  set type(DownloadInfoRequestType v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasType() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearType() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $fixnum.Int64 get workingCount => $_getI64(1);
+  @$pb.TagNumber(2)
+  set workingCount($fixnum.Int64 v) { $_setInt64(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasWorkingCount() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearWorkingCount() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $fixnum.Int64 get count => $_getI64(2);
+  @$pb.TagNumber(3)
+  set count($fixnum.Int64 v) { $_setInt64(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasCount() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearCount() => clearField(3);
+}
+

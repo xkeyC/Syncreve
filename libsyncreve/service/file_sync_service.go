@@ -77,23 +77,56 @@ func (*fileSyncServerImpl) GetDownloadInfoStream(r *protos.DownloadInfoRequest, 
 	}
 
 	for {
-		info, err := filesync.GetDownloadInfoJson(id, r.Type)
-		if info == nil {
-			time.Sleep(updateTime)
-			continue
+		select {
+		case <-time.After(updateTime):
+			info, err := filesync.GetDownloadInfoJson(id, r.Type)
+			if info == nil {
+				time.Sleep(updateTime)
+				continue
+			}
+			if err != nil {
+				fmt.Println("[libsyncreve] service.GetDownloadInfoStream GetDownloadInfoJson error ==", err)
+				return err
+			}
+			err = stream.Send(&protos.DownLoadInfoResult{
+				Type: r.Type,
+				Data: info,
+			})
+			if err != nil {
+				fmt.Println("[libsyncreve] service.GetDownloadInfoStream stream.Send error ==", err)
+				return err
+			}
+		case <-stream.Context().Done():
+			return errors.New("canceled")
 		}
-		if err != nil {
-			fmt.Println("[libsyncreve] service.GetDownloadInfoStream GetDownloadInfoJson error ==", err)
-			return err
+	}
+}
+
+func (*fileSyncServerImpl) GetDownloadCountInfo(_ context.Context, _ *protos.DownloadCountRequest) (*protos.DownloadCountResult, error) {
+	wl := filesync.GetWorkingTaskLen()
+	l := filesync.GetTaskLen()
+	return &protos.DownloadCountResult{WorkingCount: wl, Count: l}, nil
+}
+
+func (*fileSyncServerImpl) GetDownloadCountStream(_ *protos.DownloadCountRequest, stream protos.FileSyncService_GetDownloadCountStreamServer) error {
+	var lastWl int64 = 0
+	var lastL int64 = 0
+	for {
+		select {
+		case <-time.After(1 * time.Second):
+			wl := filesync.GetWorkingTaskLen()
+			l := filesync.GetTaskLen()
+			if lastWl != wl || lastL != l {
+				err := stream.Send(&protos.DownloadCountResult{WorkingCount: wl, Count: l})
+				if err != nil {
+					return err
+				}
+			}
+			lastWl = wl
+			lastL = l
+			time.Sleep(1 * time.Second)
+		case <-stream.Context().Done():
+			return errors.New("canceled")
 		}
-		err = stream.Send(&protos.DownLoadInfoResult{
-			Type: r.Type,
-			Data: info,
-		})
-		if err != nil {
-			fmt.Println("[libsyncreve] service.GetDownloadInfoStream stream.Send error ==", err)
-			return err
-		}
-		time.Sleep(updateTime)
 	}
 }

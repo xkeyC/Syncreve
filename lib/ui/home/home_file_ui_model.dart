@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:syncreve/api/cloudreve_file_api.dart';
 import 'package:syncreve/base/ui_model.dart';
 import 'package:syncreve/common/account_manager.dart';
+import 'package:syncreve/common/grpc/grpc_manager.dart';
 import 'package:syncreve/common/io/downloader.dart';
 import 'package:syncreve/common/io/path_tools.dart';
 import 'package:syncreve/data/app/account.dart';
@@ -34,12 +35,16 @@ class HomeFileUIModel extends BaseUIModel {
   bool get isInSelectMode => selectedFilesId.isNotEmpty;
 
   CloudreveFileData? files;
+  StreamSubscription? _downloadCountListenSub;
+
+  DownloadCountResult? _downloadCountResult;
 
   final pathScrollCtrl = ScrollController();
 
   @override
   void initModel() {
     _initSettings();
+    _listenDownloadCount();
     super.initModel();
   }
 
@@ -47,6 +52,20 @@ class HomeFileUIModel extends BaseUIModel {
     final settingsBox = await Hive.openBox("settings");
     _isCardFileList = settingsBox.get("file_list_style", defaultValue: true);
     notifyListeners();
+  }
+
+  _listenDownloadCount() {
+    _downloadCountListenSub = AppGRPCManager.getDownloadCountStream().listen(
+        (value) {
+          dPrint(
+              "getDownloadCountStream: count == ${value.count} workingCount ${value.workingCount}");
+          _downloadCountResult = value;
+          notifyListeners();
+        },
+        cancelOnError: true,
+        onError: (e, t) {
+          dPrint("getDownloadCountStream: onError $e $t");
+        });
   }
 
   @override
@@ -207,6 +226,7 @@ class HomeFileUIModel extends BaseUIModel {
   Future<void> _doDownload(String savePath) async {
     EasyLoading.show();
     try {
+      await AppAccountManager.workingAccount?.checkNewWorkingUrl();
       List<DownloadTaskRequestFileInfo> dFilesInfo = [];
       List<String> dFilesPaths = [];
       for (var element in files!.objects!) {
@@ -250,5 +270,17 @@ class HomeFileUIModel extends BaseUIModel {
       showToast(e.toString());
     }
     EasyLoading.dismiss();
+  }
+
+  @override
+  void dispose() {
+    _downloadCountListenSub?.cancel();
+    _downloadCountListenSub = null;
+    super.dispose();
+  }
+
+  String getDownloadTaskCountString() {
+    final c = _downloadCountResult?.count.toInt() ?? 0;
+    return "${c > 999 ? "999+" : c}";
   }
 }

@@ -35,8 +35,8 @@ type FileDownloadQueueTaskData struct {
 type FileDownloadQueues struct {
 	mutex      sync.RWMutex
 	queuesMap  map[uuid.UUID]*FileDownloadQueueTaskData
-	queueLen   int
-	workingLen int
+	queueLen   int64
+	workingLen int64
 }
 
 type FileDownloadingInfoItemData struct {
@@ -59,8 +59,8 @@ var fileDownloadingInfo FileDownloadingInfo
 type FileDownloadingInfo struct {
 	Mutex      sync.RWMutex                               `json:"-"`
 	InfoMap    map[uuid.UUID]*FileDownloadingInfoItemData `json:"infoMap,omitempty"`
-	QueueLen   int                                        `json:"queueLen,omitempty"`
-	WorkingLen int                                        `json:"workingLen,omitempty"`
+	QueueLen   int64                                      `json:"queueLen,omitempty"`
+	WorkingLen int64                                      `json:"workingLen,omitempty"`
 }
 
 func init() {

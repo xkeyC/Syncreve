@@ -320,38 +320,67 @@ class HomeFileUI extends BaseUI<HomeFileUIModel> {
 
   @override
   PreferredSizeWidget? buildAppbar(
-          BuildContext context, HomeFileUIModel model) =>
-      makeAppbar(context, "",
-          titleWidget: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: makeSearchBar(context, model),
+      BuildContext context, HomeFileUIModel model) {
+    final taskCount = model.getDownloadTaskCountString();
+    return makeAppbar(context, "",
+        titleWidget: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            borderRadius: BorderRadius.circular(12),
           ),
-          actions: [
-            IconButton(
-                tooltip: "Change List Style",
-                onPressed: model.onChangeListStyle,
-                icon: Icon(
-                    model.isCardFileList ? Icons.apps : Icons.list_alt_sharp)),
-            IconButton(
-              tooltip: "Downloads",
-              onPressed: model.goDownload,
-              icon: const Icon(Icons.download),
-            )
-          ],
-          leadingWidget: IconButton(
-              tooltip: "Account",
-              onPressed: model.onTapAvatar,
-              icon: Hero(
-                tag: "app_logo",
-                child: makeUserAvatar(28),
-              )),
-          bottom: PreferredSize(
-              preferredSize: Size(MediaQuery.of(context).size.width, 24),
-              child: makePathRow(context, model)),
-          showBack: false);
+          child: makeSearchBar(context, model),
+        ),
+        actions: [
+          IconButton(
+              tooltip: "Change List Style",
+              onPressed: model.onChangeListStyle,
+              icon: Icon(
+                  model.isCardFileList ? Icons.apps : Icons.list_alt_sharp)),
+          Stack(
+            children: [
+              IconButton(
+                tooltip: "Downloads",
+                onPressed: model.goDownload,
+                icon: const Icon(Icons.download),
+              ),
+              if (taskCount != "0")
+                Positioned(
+                  top: 0,
+                  right: 5,
+                  child: Container(
+                    height: 16,
+                    decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(1000)),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 6, right: 6),
+                      child: Center(
+                        child: Text(
+                          taskCount,
+                          style: const TextStyle(
+                              fontSize: 10,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+            ],
+          ),
+        ],
+        leadingWidget: IconButton(
+            tooltip: "Account",
+            onPressed: model.onTapAvatar,
+            icon: Hero(
+              tag: "app_logo",
+              child: makeUserAvatar(28),
+            )),
+        bottom: PreferredSize(
+            preferredSize: Size(MediaQuery.of(context).size.width, 24),
+            child: makePathRow(context, model)),
+        showBack: false);
+  }
 
   Widget makeSearchBar(BuildContext context, HomeFileUIModel model) {
     return fastPadding(

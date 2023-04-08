@@ -104,13 +104,13 @@ func GetTaskData(id uuid.UUID) *FileDownloadQueueTaskData {
 	return fileDownloadQueues.queuesMap[id]
 }
 
-func GetTaskLen() int {
+func GetTaskLen() int64 {
 	fileDownloadQueues.mutex.RLock()
 	defer fileDownloadQueues.mutex.RUnlock()
 	return fileDownloadQueues.queueLen
 }
 
-func GetWorkingTaskLen() int {
+func GetWorkingTaskLen() int64 {
 	fileDownloadQueues.mutex.RLock()
 	defer fileDownloadQueues.mutex.RUnlock()
 	return fileDownloadQueues.workingLen

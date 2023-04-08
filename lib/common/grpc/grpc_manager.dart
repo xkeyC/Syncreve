@@ -70,6 +70,16 @@ class AppGRPCManager {
     return r.data;
   }
 
+  static Future<DownloadCountResult> getDownloadCount() async {
+    final r =
+        await _fileSyncClient.getDownloadCountInfo(DownloadCountRequest());
+    return r;
+  }
+
+  static ResponseStream<DownloadCountResult> getDownloadCountStream() {
+    return _fileSyncClient.getDownloadCountStream(DownloadCountRequest());
+  }
+
   static Future<String> cancelDownloadTask(String id) async {
     final r = await _fileSyncClient
         .cancelDownloadTask(DownloadTaskCancelRequest(id: id));

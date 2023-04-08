@@ -119,3 +119,22 @@ const DownLoadInfoResult$json = const {
 
 /// Descriptor for `DownLoadInfoResult`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List downLoadInfoResultDescriptor = $convert.base64Decode('ChJEb3duTG9hZEluZm9SZXN1bHQSLAoEdHlwZRgBIAEoDjIYLkRvd25sb2FkSW5mb1JlcXVlc3RUeXBlUgR0eXBlEhIKBGRhdGEYAiABKAxSBGRhdGE=');
+@$core.Deprecated('Use downloadCountRequestDescriptor instead')
+const DownloadCountRequest$json = const {
+  '1': 'DownloadCountRequest',
+};
+
+/// Descriptor for `DownloadCountRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List downloadCountRequestDescriptor = $convert.base64Decode('ChREb3dubG9hZENvdW50UmVxdWVzdA==');
+@$core.Deprecated('Use downloadCountResultDescriptor instead')
+const DownloadCountResult$json = const {
+  '1': 'DownloadCountResult',
+  '2': const [
+    const {'1': 'type', '3': 1, '4': 1, '5': 14, '6': '.DownloadInfoRequestType', '10': 'type'},
+    const {'1': 'workingCount', '3': 2, '4': 1, '5': 3, '10': 'workingCount'},
+    const {'1': 'Count', '3': 3, '4': 1, '5': 3, '10': 'Count'},
+  ],
+};
+
+/// Descriptor for `DownloadCountResult`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List downloadCountResultDescriptor = $convert.base64Decode('ChNEb3dubG9hZENvdW50UmVzdWx0EiwKBHR5cGUYASABKA4yGC5Eb3dubG9hZEluZm9SZXF1ZXN0VHlwZVIEdHlwZRIiCgx3b3JraW5nQ291bnQYAiABKANSDHdvcmtpbmdDb3VudBIUCgVDb3VudBgDIAEoA1IFQ291bnQ=');
