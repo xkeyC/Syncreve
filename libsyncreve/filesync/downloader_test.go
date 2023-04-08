@@ -8,12 +8,13 @@ import (
 )
 
 const (
-	workingUrl = ""
-	cookie     = ""
+	workingUrl  = ""
+	instanceUrl = ""
+	cookie      = ""
 )
 
 func TestRecursionPathFiles(t *testing.T) {
-	c := cloudreve.NewClient(workingUrl, cookie)
+	c := cloudreve.NewClient(workingUrl, instanceUrl, cookie)
 	fileTreeMap := make(map[string]*cloudreve.DirectoryResult)
 	err := RecursionPathFiles(context.Background(), c, "/", fileTreeMap)
 	if err != nil {
@@ -27,7 +28,7 @@ func TestRecursionPathFiles(t *testing.T) {
 }
 
 func TestDoDownloadUrl(t *testing.T) {
-	c := cloudreve.NewClient(workingUrl, cookie)
+	c := cloudreve.NewClient(workingUrl, instanceUrl, cookie)
 	downloadUrl, err := c.GetFileDownloadUrl(context.Background(), "m7Yu5")
 	if err != nil {
 		return

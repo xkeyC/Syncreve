@@ -12,11 +12,12 @@ import (
 	"github.com/xkeyC/Syncreve/libsyncreve/utils"
 )
 
-func AddDownloadTask(workingUrl string, fileID string, savePath string, fileName string, cookie string, downLoadType protos.DownloadInfoRequestType) (uuid.UUID, error) {
+func AddDownloadTask(workingUrl string, instanceUrl string, fileID string, savePath string, fileName string, cookie string, downLoadType protos.DownloadInfoRequestType) (uuid.UUID, error) {
 	id := uuid.New()
 	c, cancel := context.WithCancel(context.Background())
 	queueData := &FileDownloadQueueTaskData{
 		WorkingUrl:   workingUrl,
+		InstanceUrl:  instanceUrl,
 		ID:           id,
 		Context:      c,
 		CancelFunc:   cancel,
@@ -31,11 +32,11 @@ func AddDownloadTask(workingUrl string, fileID string, savePath string, fileName
 	return id, err
 }
 
-func AddDownloadTasksByDirPath(ctx context.Context, dirPath string, workingUrl string, cookie string, savePath string, downLoadType protos.DownloadInfoRequestType) ([]string, error) {
+func AddDownloadTasksByDirPath(ctx context.Context, dirPath string, workingUrl string, instanceUrl string, cookie string, savePath string, downLoadType protos.DownloadInfoRequestType) ([]string, error) {
 	if downLoadType == protos.DownloadInfoRequestType_Temp {
 		return nil, errors.New("can't ues temp type to download dir")
 	}
-	c := cloudreve.NewClient(workingUrl, cookie)
+	c := cloudreve.NewClient(workingUrl, instanceUrl, cookie)
 	fileTreeMap := make(map[string]*cloudreve.DirectoryResult)
 	err := RecursionPathFiles(ctx, c, dirPath, fileTreeMap)
 	if err != nil {
@@ -52,7 +53,7 @@ func AddDownloadTasksByDirPath(ctx context.Context, dirPath string, workingUrl s
 
 		for _, fileObject := range directoryResult.Data.Objects {
 			if fileObject.Type == "file" {
-				taskID, err := AddDownloadTask(workingUrl, fileObject.Id, fileSavePath, fileObject.Name, cookie, downLoadType)
+				taskID, err := AddDownloadTask(workingUrl, instanceUrl, fileObject.Id, fileSavePath, fileObject.Name, cookie, downLoadType)
 				if err != nil {
 					fmt.Println("[libsyncreve] AddDownloadTasksByDirPath Task Error ==", err)
 					continue

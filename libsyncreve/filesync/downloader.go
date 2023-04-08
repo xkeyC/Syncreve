@@ -14,7 +14,7 @@ import (
 func DoDownload(taskInfo *FileDownloadQueueTaskData, callback req.DownloadCallback) error {
 	httpClient := req.C()
 	httpClient.DisableAutoDecode()
-	cloudreveClient := cloudreve.NewClient(taskInfo.WorkingUrl, taskInfo.Cookie)
+	cloudreveClient := cloudreve.NewClient(taskInfo.WorkingUrl, taskInfo.InstanceUrl, taskInfo.Cookie)
 	filePath := taskInfo.SavePath + "/" + taskInfo.FileName
 	fmt.Println("[libsyncreve] filesync.DoDownload filePath ==", filePath)
 
@@ -26,6 +26,10 @@ func DoDownload(taskInfo *FileDownloadQueueTaskData, callback req.DownloadCallba
 	downloadUrl, err := cloudreveClient.GetFileDownloadUrl(taskInfo.Context, taskInfo.FileID)
 	if err != nil {
 		return err
+	}
+
+	if taskInfo.WorkingUrl != taskInfo.InstanceUrl && strings.HasPrefix(downloadUrl, taskInfo.InstanceUrl) {
+		downloadUrl = strings.Replace(downloadUrl, taskInfo.InstanceUrl, taskInfo.WorkingUrl, 1)
 	}
 
 	fmt.Println("[libsyncreve] filesync.DoDownload (start) url ==", downloadUrl)

@@ -22,9 +22,11 @@ class Downloader {
       required String savePath,
       required String fileName,
       required String cookie,
-      required DownloadInfoRequestType type}) async {
+      required DownloadInfoRequestType type,
+      required String instanceUrl}) async {
     final r = DownloadTaskRequest(
         workingUrl: workingUrl,
+        instanceUrl: instanceUrl,
         fileID: fileID,
         savePath: savePath,
         fileName: fileName,

@@ -24,6 +24,7 @@ type FileDownloadQueueTaskData struct {
 	SavePath     string                         `json:"savePath,omitempty"`
 	FileName     string                         `json:"fileName,omitempty"`
 	WorkingUrl   string                         `json:"workingUrl,omitempty"`
+	InstanceUrl  string                         `json:"instanceUrl,omitempty"`
 	FileID       string                         `json:"fileID,omitempty"`
 	Cookie       string                         `json:"cookie,omitempty"`
 	DownLoadType protos.DownloadInfoRequestType `json:"downLoadType,omitempty"`
@@ -44,6 +45,7 @@ type FileDownloadingInfoItemData struct {
 	FileName       string                         `json:"fileName,omitempty"`
 	FileID         string                         `json:"fileID,omitempty"`
 	WorkingUrl     string                         `json:"workingUrl,omitempty"`
+	InstanceUrl    string                         `json:"instanceUrl,omitempty"`
 	Cookie         string                         `json:"cookie,omitempty"`
 	DownLoadType   protos.DownloadInfoRequestType `json:"downLoadType,omitempty"`
 	Status         FileDownloadQueueStatusType    `json:"status,omitempty"`

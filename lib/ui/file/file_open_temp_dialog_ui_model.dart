@@ -36,6 +36,7 @@ class FileOpenTempDialogUIModel extends BaseUIModel {
     try {
       downloadID = await Downloader.addDownloadTask(
           workingUrl: AppAccountManager.workingAccount!.workingUrl,
+          instanceUrl: AppAccountManager.workingAccount!.instanceUrl,
           fileID: fileObjectsData.id!,
           savePath: p.savePath!,
           fileName: p.fileName!,
@@ -127,7 +128,6 @@ class FileOpenTempDialogUIModel extends BaseUIModel {
 
   void _downloadSpeeder() async {
     while (downloadSub != null) {
-      dPrint("_downloadSpeeder");
       if (downloadSpeed == 0) {
         downloadSpeed = fileDownloadInfoItemData?.downloadedSize ?? 0;
         _lastDownloadedSize = downloadSpeed;

@@ -26,30 +26,32 @@ const DownloadTaskRequest$json = const {
   '1': 'DownloadTaskRequest',
   '2': const [
     const {'1': 'workingUrl', '3': 1, '4': 1, '5': 9, '10': 'workingUrl'},
-    const {'1': 'fileID', '3': 2, '4': 1, '5': 9, '10': 'fileID'},
-    const {'1': 'savePath', '3': 3, '4': 1, '5': 9, '10': 'savePath'},
-    const {'1': 'fileName', '3': 4, '4': 1, '5': 9, '10': 'fileName'},
-    const {'1': 'cookie', '3': 5, '4': 1, '5': 9, '10': 'cookie'},
-    const {'1': 'downLoadType', '3': 6, '4': 1, '5': 14, '6': '.DownloadInfoRequestType', '10': 'downLoadType'},
+    const {'1': 'instanceUrl', '3': 2, '4': 1, '5': 9, '10': 'instanceUrl'},
+    const {'1': 'fileID', '3': 3, '4': 1, '5': 9, '10': 'fileID'},
+    const {'1': 'savePath', '3': 4, '4': 1, '5': 9, '10': 'savePath'},
+    const {'1': 'fileName', '3': 5, '4': 1, '5': 9, '10': 'fileName'},
+    const {'1': 'cookie', '3': 6, '4': 1, '5': 9, '10': 'cookie'},
+    const {'1': 'downLoadType', '3': 7, '4': 1, '5': 14, '6': '.DownloadInfoRequestType', '10': 'downLoadType'},
   ],
 };
 
 /// Descriptor for `DownloadTaskRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List downloadTaskRequestDescriptor = $convert.base64Decode('ChNEb3dubG9hZFRhc2tSZXF1ZXN0Eh4KCndvcmtpbmdVcmwYASABKAlSCndvcmtpbmdVcmwSFgoGZmlsZUlEGAIgASgJUgZmaWxlSUQSGgoIc2F2ZVBhdGgYAyABKAlSCHNhdmVQYXRoEhoKCGZpbGVOYW1lGAQgASgJUghmaWxlTmFtZRIWCgZjb29raWUYBSABKAlSBmNvb2tpZRI8Cgxkb3duTG9hZFR5cGUYBiABKA4yGC5Eb3dubG9hZEluZm9SZXF1ZXN0VHlwZVIMZG93bkxvYWRUeXBl');
+final $typed_data.Uint8List downloadTaskRequestDescriptor = $convert.base64Decode('ChNEb3dubG9hZFRhc2tSZXF1ZXN0Eh4KCndvcmtpbmdVcmwYASABKAlSCndvcmtpbmdVcmwSIAoLaW5zdGFuY2VVcmwYAiABKAlSC2luc3RhbmNlVXJsEhYKBmZpbGVJRBgDIAEoCVIGZmlsZUlEEhoKCHNhdmVQYXRoGAQgASgJUghzYXZlUGF0aBIaCghmaWxlTmFtZRgFIAEoCVIIZmlsZU5hbWUSFgoGY29va2llGAYgASgJUgZjb29raWUSPAoMZG93bkxvYWRUeXBlGAcgASgOMhguRG93bmxvYWRJbmZvUmVxdWVzdFR5cGVSDGRvd25Mb2FkVHlwZQ==');
 @$core.Deprecated('Use downloadDirTaskRequestDescriptor instead')
 const DownloadDirTaskRequest$json = const {
   '1': 'DownloadDirTaskRequest',
   '2': const [
     const {'1': 'workingUrl', '3': 1, '4': 1, '5': 9, '10': 'workingUrl'},
-    const {'1': 'dirPath', '3': 2, '4': 1, '5': 9, '10': 'dirPath'},
-    const {'1': 'savePath', '3': 3, '4': 1, '5': 9, '10': 'savePath'},
+    const {'1': 'instanceUrl', '3': 2, '4': 1, '5': 9, '10': 'instanceUrl'},
+    const {'1': 'dirPath', '3': 3, '4': 1, '5': 9, '10': 'dirPath'},
+    const {'1': 'savePath', '3': 4, '4': 1, '5': 9, '10': 'savePath'},
     const {'1': 'cookie', '3': 5, '4': 1, '5': 9, '10': 'cookie'},
     const {'1': 'downLoadType', '3': 6, '4': 1, '5': 14, '6': '.DownloadInfoRequestType', '10': 'downLoadType'},
   ],
 };
 
 /// Descriptor for `DownloadDirTaskRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List downloadDirTaskRequestDescriptor = $convert.base64Decode('ChZEb3dubG9hZERpclRhc2tSZXF1ZXN0Eh4KCndvcmtpbmdVcmwYASABKAlSCndvcmtpbmdVcmwSGAoHZGlyUGF0aBgCIAEoCVIHZGlyUGF0aBIaCghzYXZlUGF0aBgDIAEoCVIIc2F2ZVBhdGgSFgoGY29va2llGAUgASgJUgZjb29raWUSPAoMZG93bkxvYWRUeXBlGAYgASgOMhguRG93bmxvYWRJbmZvUmVxdWVzdFR5cGVSDGRvd25Mb2FkVHlwZQ==');
+final $typed_data.Uint8List downloadDirTaskRequestDescriptor = $convert.base64Decode('ChZEb3dubG9hZERpclRhc2tSZXF1ZXN0Eh4KCndvcmtpbmdVcmwYASABKAlSCndvcmtpbmdVcmwSIAoLaW5zdGFuY2VVcmwYAiABKAlSC2luc3RhbmNlVXJsEhgKB2RpclBhdGgYAyABKAlSB2RpclBhdGgSGgoIc2F2ZVBhdGgYBCABKAlSCHNhdmVQYXRoEhYKBmNvb2tpZRgFIAEoCVIGY29va2llEjwKDGRvd25Mb2FkVHlwZRgGIAEoDjIYLkRvd25sb2FkSW5mb1JlcXVlc3RUeXBlUgxkb3duTG9hZFR5cGU=');
 @$core.Deprecated('Use downloadTaskResultDescriptor instead')
 const DownloadTaskResult$json = const {
   '1': 'DownloadTaskResult',
