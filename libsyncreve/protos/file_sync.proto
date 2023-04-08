@@ -52,7 +52,8 @@ enum DownloadInfoRequestType {
 
 message DownloadInfoRequest {
   optional string  id = 1;
-  DownloadInfoRequestType type = 2;
+  optional int64 updateTime = 2;
+  DownloadInfoRequestType type = 3;
 }
 
 message DownLoadInfoResult {

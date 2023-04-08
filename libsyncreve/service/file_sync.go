@@ -62,6 +62,10 @@ func (*fileSyncServerImpl) GetDownloadInfo(_ context.Context, r *protos.Download
 func (*fileSyncServerImpl) GetDownloadInfoStream(r *protos.DownloadInfoRequest, stream protos.FileSyncService_GetDownloadInfoStreamServer) error {
 	fmt.Println("[libsyncreve] service.GetDownloadInfoStream")
 	var id *uuid.UUID
+	updateTime := 200 * time.Millisecond
+	if r.UpdateTime != nil {
+		updateTime = time.Duration(*r.UpdateTime)
+	}
 
 	if r.Id != nil {
 		d, err := uuid.Parse(*r.Id)
@@ -75,7 +79,7 @@ func (*fileSyncServerImpl) GetDownloadInfoStream(r *protos.DownloadInfoRequest, 
 	for {
 		info, err := filesync.GetDownloadInfoJson(id, r.Type)
 		if info == nil {
-			time.Sleep(200 * time.Millisecond)
+			time.Sleep(updateTime)
 			continue
 		}
 		if err != nil {
@@ -90,6 +94,6 @@ func (*fileSyncServerImpl) GetDownloadInfoStream(r *protos.DownloadInfoRequest, 
 			fmt.Println("[libsyncreve] service.GetDownloadInfoStream stream.Send error ==", err)
 			return err
 		}
-		time.Sleep(200 * time.Millisecond)
+		time.Sleep(updateTime)
 	}
 }
