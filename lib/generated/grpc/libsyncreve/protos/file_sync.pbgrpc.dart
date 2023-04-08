@@ -20,6 +20,12 @@ class FileSyncServiceClient extends $grpc.Client {
           ($0.DownloadTaskRequest value) => value.writeToBuffer(),
           ($core.List<$core.int> value) =>
               $0.DownloadTaskResult.fromBuffer(value));
+  static final _$addDownloadTasksByDirPath =
+      $grpc.ClientMethod<$0.DownloadDirTaskRequest, $0.DownloadDirTaskResult>(
+          '/FileSyncService/AddDownloadTasksByDirPath',
+          ($0.DownloadDirTaskRequest value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) =>
+              $0.DownloadDirTaskResult.fromBuffer(value));
   static final _$getDownloadInfoStream =
       $grpc.ClientMethod<$0.DownloadInfoRequest, $0.DownLoadInfoResult>(
           '/FileSyncService/GetDownloadInfoStream',
@@ -48,6 +54,13 @@ class FileSyncServiceClient extends $grpc.Client {
       $0.DownloadTaskRequest request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$addDownloadTask, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.DownloadDirTaskResult> addDownloadTasksByDirPath(
+      $0.DownloadDirTaskRequest request,
+      {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$addDownloadTasksByDirPath, request,
+        options: options);
   }
 
   $grpc.ResponseStream<$0.DownLoadInfoResult> getDownloadInfoStream(
@@ -84,6 +97,15 @@ abstract class FileSyncServiceBase extends $grpc.Service {
             ($core.List<$core.int> value) =>
                 $0.DownloadTaskRequest.fromBuffer(value),
             ($0.DownloadTaskResult value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.DownloadDirTaskRequest,
+            $0.DownloadDirTaskResult>(
+        'AddDownloadTasksByDirPath',
+        addDownloadTasksByDirPath_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.DownloadDirTaskRequest.fromBuffer(value),
+        ($0.DownloadDirTaskResult value) => value.writeToBuffer()));
     $addMethod(
         $grpc.ServiceMethod<$0.DownloadInfoRequest, $0.DownLoadInfoResult>(
             'GetDownloadInfoStream',
@@ -119,6 +141,12 @@ abstract class FileSyncServiceBase extends $grpc.Service {
     return addDownloadTask(call, await request);
   }
 
+  $async.Future<$0.DownloadDirTaskResult> addDownloadTasksByDirPath_Pre(
+      $grpc.ServiceCall call,
+      $async.Future<$0.DownloadDirTaskRequest> request) async {
+    return addDownloadTasksByDirPath(call, await request);
+  }
+
   $async.Stream<$0.DownLoadInfoResult> getDownloadInfoStream_Pre(
       $grpc.ServiceCall call,
       $async.Future<$0.DownloadInfoRequest> request) async* {
@@ -139,6 +167,8 @@ abstract class FileSyncServiceBase extends $grpc.Service {
 
   $async.Future<$0.DownloadTaskResult> addDownloadTask(
       $grpc.ServiceCall call, $0.DownloadTaskRequest request);
+  $async.Future<$0.DownloadDirTaskResult> addDownloadTasksByDirPath(
+      $grpc.ServiceCall call, $0.DownloadDirTaskRequest request);
   $async.Stream<$0.DownLoadInfoResult> getDownloadInfoStream(
       $grpc.ServiceCall call, $0.DownloadInfoRequest request);
   $async.Future<$0.DownLoadInfoResult> getDownloadInfo(

@@ -13,11 +13,13 @@ class DownloadInfoRequestType extends $pb.ProtobufEnum {
   static const DownloadInfoRequestType All = DownloadInfoRequestType._(0, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'All');
   static const DownloadInfoRequestType Queue = DownloadInfoRequestType._(1, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'Queue');
   static const DownloadInfoRequestType Temp = DownloadInfoRequestType._(2, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'Temp');
+  static const DownloadInfoRequestType Sync = DownloadInfoRequestType._(3, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'Sync');
 
   static const $core.List<DownloadInfoRequestType> values = <DownloadInfoRequestType> [
     All,
     Queue,
     Temp,
+    Sync,
   ];
 
   static final $core.Map<$core.int, DownloadInfoRequestType> _byValue = $pb.ProtobufEnum.initByValue(values);

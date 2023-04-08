@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:syncreve/base/base_utils.dart';
-import 'package:syncreve/common/account_manager.dart';
 import 'package:syncreve/common/grpc/grpc_manager.dart';
 import 'package:syncreve/common/io/path_tools.dart';
 import 'package:syncreve/data/app/app_file_save_path_data.dart';
@@ -18,19 +17,15 @@ class Downloader {
   static const fileDownloadQueueStatusError = -1;
 
   static Future<String> addDownloadTask(
-      {required String url,
+      {required String workingUrl,
+      required String fileID,
       required String savePath,
       required String fileName,
       required String cookie,
       required DownloadInfoRequestType type}) async {
-    if (AppAccountManager.workingAccount!.aliasHost != null) {
-      if (url.contains(AppAccountManager.workingAccount!.instanceUrl)) {
-        url = url.replaceAll(AppAccountManager.workingAccount!.instanceUrl,
-            AppAccountManager.workingAccount!.workingUrl);
-      }
-    }
     final r = DownloadTaskRequest(
-        url: url,
+        workingUrl: workingUrl,
+        fileID: fileID,
         savePath: savePath,
         fileName: fileName,
         cookie: cookie,

@@ -16,9 +16,6 @@ type fileSyncServerImpl struct {
 
 func (*fileSyncServerImpl) AddDownloadTask(_ context.Context, r *protos.DownloadTaskRequest) (*protos.DownloadTaskResult, error) {
 	fmt.Println("[libsyncreve] service.AddDownloadTask")
-	if r.DownLoadType == protos.DownloadInfoRequestType_All {
-		return nil, errors.New("DownloadInfoRequestType_All Not Allow")
-	}
 	id, err := filesync.AddDownloadTask(r.WorkingUrl, r.FileID, r.SavePath, r.FileName, r.Cookie, r.DownLoadType)
 	fmt.Println("[libsyncreve] service.AddDownloadTask id==", id, "err=", err)
 	return &protos.DownloadTaskResult{
@@ -28,6 +25,9 @@ func (*fileSyncServerImpl) AddDownloadTask(_ context.Context, r *protos.Download
 
 func (*fileSyncServerImpl) AddDownloadTasksByDirPath(ctx context.Context, r *protos.DownloadDirTaskRequest) (*protos.DownloadDirTaskResult, error) {
 	fmt.Println("[libsyncreve] service.AddDownloadTasksByDirPath")
+	if r.DownLoadType == protos.DownloadInfoRequestType_All {
+		return nil, errors.New("DownloadInfoRequestType_All Not Allow")
+	}
 	taskIDs, err := filesync.AddDownloadTasksByDirPath(ctx, r.DirPath, r.WorkingUrl, r.Cookie, r.SavePath, r.DownLoadType)
 	if err != nil {
 		return nil, err

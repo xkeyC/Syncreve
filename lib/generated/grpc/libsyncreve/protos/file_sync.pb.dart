@@ -7,6 +7,7 @@
 
 import 'dart:core' as $core;
 
+import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 import 'file_sync.pbenum.dart';
@@ -15,25 +16,30 @@ export 'file_sync.pbenum.dart';
 
 class DownloadTaskRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DownloadTaskRequest', createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'url')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'savePath', protoName: 'savePath')
-    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'fileName', protoName: 'fileName')
-    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'cookie')
-    ..e<DownloadInfoRequestType>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'downLoadType', $pb.PbFieldType.OE, protoName: 'downLoadType', defaultOrMaker: DownloadInfoRequestType.All, valueOf: DownloadInfoRequestType.valueOf, enumValues: DownloadInfoRequestType.values)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'workingUrl', protoName: 'workingUrl')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'fileID', protoName: 'fileID')
+    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'savePath', protoName: 'savePath')
+    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'fileName', protoName: 'fileName')
+    ..aOS(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'cookie')
+    ..e<DownloadInfoRequestType>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'downLoadType', $pb.PbFieldType.OE, protoName: 'downLoadType', defaultOrMaker: DownloadInfoRequestType.All, valueOf: DownloadInfoRequestType.valueOf, enumValues: DownloadInfoRequestType.values)
     ..hasRequiredFields = false
   ;
 
   DownloadTaskRequest._() : super();
   factory DownloadTaskRequest({
-    $core.String? url,
+    $core.String? workingUrl,
+    $core.String? fileID,
     $core.String? savePath,
     $core.String? fileName,
     $core.String? cookie,
     DownloadInfoRequestType? downLoadType,
   }) {
     final _result = create();
-    if (url != null) {
-      _result.url = url;
+    if (workingUrl != null) {
+      _result.workingUrl = workingUrl;
+    }
+    if (fileID != null) {
+      _result.fileID = fileID;
     }
     if (savePath != null) {
       _result.savePath = savePath;
@@ -71,49 +77,161 @@ class DownloadTaskRequest extends $pb.GeneratedMessage {
   static DownloadTaskRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get url => $_getSZ(0);
+  $core.String get workingUrl => $_getSZ(0);
   @$pb.TagNumber(1)
-  set url($core.String v) { $_setString(0, v); }
+  set workingUrl($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasUrl() => $_has(0);
+  $core.bool hasWorkingUrl() => $_has(0);
   @$pb.TagNumber(1)
-  void clearUrl() => clearField(1);
+  void clearWorkingUrl() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get savePath => $_getSZ(1);
+  $core.String get fileID => $_getSZ(1);
   @$pb.TagNumber(2)
-  set savePath($core.String v) { $_setString(1, v); }
+  set fileID($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasSavePath() => $_has(1);
+  $core.bool hasFileID() => $_has(1);
   @$pb.TagNumber(2)
-  void clearSavePath() => clearField(2);
+  void clearFileID() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get fileName => $_getSZ(2);
+  $core.String get savePath => $_getSZ(2);
   @$pb.TagNumber(3)
-  set fileName($core.String v) { $_setString(2, v); }
+  set savePath($core.String v) { $_setString(2, v); }
   @$pb.TagNumber(3)
-  $core.bool hasFileName() => $_has(2);
+  $core.bool hasSavePath() => $_has(2);
   @$pb.TagNumber(3)
-  void clearFileName() => clearField(3);
+  void clearSavePath() => clearField(3);
 
   @$pb.TagNumber(4)
+  $core.String get fileName => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set fileName($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasFileName() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearFileName() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get cookie => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set cookie($core.String v) { $_setString(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasCookie() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearCookie() => clearField(5);
+
+  @$pb.TagNumber(6)
+  DownloadInfoRequestType get downLoadType => $_getN(5);
+  @$pb.TagNumber(6)
+  set downLoadType(DownloadInfoRequestType v) { setField(6, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasDownLoadType() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearDownLoadType() => clearField(6);
+}
+
+class DownloadDirTaskRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DownloadDirTaskRequest', createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'workingUrl', protoName: 'workingUrl')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'dirPath', protoName: 'dirPath')
+    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'savePath', protoName: 'savePath')
+    ..aOS(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'cookie')
+    ..e<DownloadInfoRequestType>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'downLoadType', $pb.PbFieldType.OE, protoName: 'downLoadType', defaultOrMaker: DownloadInfoRequestType.All, valueOf: DownloadInfoRequestType.valueOf, enumValues: DownloadInfoRequestType.values)
+    ..hasRequiredFields = false
+  ;
+
+  DownloadDirTaskRequest._() : super();
+  factory DownloadDirTaskRequest({
+    $core.String? workingUrl,
+    $core.String? dirPath,
+    $core.String? savePath,
+    $core.String? cookie,
+    DownloadInfoRequestType? downLoadType,
+  }) {
+    final _result = create();
+    if (workingUrl != null) {
+      _result.workingUrl = workingUrl;
+    }
+    if (dirPath != null) {
+      _result.dirPath = dirPath;
+    }
+    if (savePath != null) {
+      _result.savePath = savePath;
+    }
+    if (cookie != null) {
+      _result.cookie = cookie;
+    }
+    if (downLoadType != null) {
+      _result.downLoadType = downLoadType;
+    }
+    return _result;
+  }
+  factory DownloadDirTaskRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DownloadDirTaskRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  DownloadDirTaskRequest clone() => DownloadDirTaskRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  DownloadDirTaskRequest copyWith(void Function(DownloadDirTaskRequest) updates) => super.copyWith((message) => updates(message as DownloadDirTaskRequest)) as DownloadDirTaskRequest; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static DownloadDirTaskRequest create() => DownloadDirTaskRequest._();
+  DownloadDirTaskRequest createEmptyInstance() => create();
+  static $pb.PbList<DownloadDirTaskRequest> createRepeated() => $pb.PbList<DownloadDirTaskRequest>();
+  @$core.pragma('dart2js:noInline')
+  static DownloadDirTaskRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DownloadDirTaskRequest>(create);
+  static DownloadDirTaskRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get workingUrl => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set workingUrl($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasWorkingUrl() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearWorkingUrl() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get dirPath => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set dirPath($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasDirPath() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearDirPath() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get savePath => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set savePath($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasSavePath() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearSavePath() => clearField(3);
+
+  @$pb.TagNumber(5)
   $core.String get cookie => $_getSZ(3);
-  @$pb.TagNumber(4)
+  @$pb.TagNumber(5)
   set cookie($core.String v) { $_setString(3, v); }
-  @$pb.TagNumber(4)
+  @$pb.TagNumber(5)
   $core.bool hasCookie() => $_has(3);
-  @$pb.TagNumber(4)
-  void clearCookie() => clearField(4);
+  @$pb.TagNumber(5)
+  void clearCookie() => clearField(5);
 
-  @$pb.TagNumber(5)
+  @$pb.TagNumber(6)
   DownloadInfoRequestType get downLoadType => $_getN(4);
-  @$pb.TagNumber(5)
-  set downLoadType(DownloadInfoRequestType v) { setField(5, v); }
-  @$pb.TagNumber(5)
+  @$pb.TagNumber(6)
+  set downLoadType(DownloadInfoRequestType v) { setField(6, v); }
+  @$pb.TagNumber(6)
   $core.bool hasDownLoadType() => $_has(4);
-  @$pb.TagNumber(5)
-  void clearDownLoadType() => clearField(5);
+  @$pb.TagNumber(6)
+  void clearDownLoadType() => clearField(6);
 }
 
 class DownloadTaskResult extends $pb.GeneratedMessage {
@@ -161,6 +279,47 @@ class DownloadTaskResult extends $pb.GeneratedMessage {
   $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)
   void clearId() => clearField(1);
+}
+
+class DownloadDirTaskResult extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DownloadDirTaskResult', createEmptyInstance: create)
+    ..pPS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'ids')
+    ..hasRequiredFields = false
+  ;
+
+  DownloadDirTaskResult._() : super();
+  factory DownloadDirTaskResult({
+    $core.Iterable<$core.String>? ids,
+  }) {
+    final _result = create();
+    if (ids != null) {
+      _result.ids.addAll(ids);
+    }
+    return _result;
+  }
+  factory DownloadDirTaskResult.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DownloadDirTaskResult.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  DownloadDirTaskResult clone() => DownloadDirTaskResult()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  DownloadDirTaskResult copyWith(void Function(DownloadDirTaskResult) updates) => super.copyWith((message) => updates(message as DownloadDirTaskResult)) as DownloadDirTaskResult; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static DownloadDirTaskResult create() => DownloadDirTaskResult._();
+  DownloadDirTaskResult createEmptyInstance() => create();
+  static $pb.PbList<DownloadDirTaskResult> createRepeated() => $pb.PbList<DownloadDirTaskResult>();
+  @$core.pragma('dart2js:noInline')
+  static DownloadDirTaskResult getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DownloadDirTaskResult>(create);
+  static DownloadDirTaskResult? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<$core.String> get ids => $_getList(0);
 }
 
 class DownloadTaskCancelRequest extends $pb.GeneratedMessage {
@@ -260,18 +419,23 @@ class DownloadTaskCancelResult extends $pb.GeneratedMessage {
 class DownloadInfoRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DownloadInfoRequest', createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
-    ..e<DownloadInfoRequestType>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: DownloadInfoRequestType.All, valueOf: DownloadInfoRequestType.valueOf, enumValues: DownloadInfoRequestType.values)
+    ..aInt64(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'updateTime', protoName: 'updateTime')
+    ..e<DownloadInfoRequestType>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: DownloadInfoRequestType.All, valueOf: DownloadInfoRequestType.valueOf, enumValues: DownloadInfoRequestType.values)
     ..hasRequiredFields = false
   ;
 
   DownloadInfoRequest._() : super();
   factory DownloadInfoRequest({
     $core.String? id,
+    $fixnum.Int64? updateTime,
     DownloadInfoRequestType? type,
   }) {
     final _result = create();
     if (id != null) {
       _result.id = id;
+    }
+    if (updateTime != null) {
+      _result.updateTime = updateTime;
     }
     if (type != null) {
       _result.type = type;
@@ -309,13 +473,22 @@ class DownloadInfoRequest extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
-  DownloadInfoRequestType get type => $_getN(1);
+  $fixnum.Int64 get updateTime => $_getI64(1);
   @$pb.TagNumber(2)
-  set type(DownloadInfoRequestType v) { setField(2, v); }
+  set updateTime($fixnum.Int64 v) { $_setInt64(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasType() => $_has(1);
+  $core.bool hasUpdateTime() => $_has(1);
   @$pb.TagNumber(2)
-  void clearType() => clearField(2);
+  void clearUpdateTime() => clearField(2);
+
+  @$pb.TagNumber(3)
+  DownloadInfoRequestType get type => $_getN(2);
+  @$pb.TagNumber(3)
+  set type(DownloadInfoRequestType v) { setField(3, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasType() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearType() => clearField(3);
 }
 
 class DownLoadInfoResult extends $pb.GeneratedMessage {

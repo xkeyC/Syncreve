@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:syncreve/api/cloudreve_file_api.dart';
 import 'package:syncreve/base/ui_model.dart';
 import 'package:syncreve/common/account_manager.dart';
 import 'package:syncreve/common/io/downloader.dart';
@@ -20,6 +19,7 @@ class FileOpenTempDialogUIModel extends BaseUIModel {
   GrpcFileDownloadInfoItemData? fileDownloadInfoItemData;
 
   num downloadSpeed = 0;
+  num _lastDownloadedSize = 0;
 
   Future<bool> willPop() async {
     return false;
@@ -33,22 +33,20 @@ class FileOpenTempDialogUIModel extends BaseUIModel {
       return;
     }
 
-    final url =
-        await handleError(() => CloudreveFileApi.download(fileObjectsData.id!));
-    if (url == null) return;
-
     try {
       downloadID = await Downloader.addDownloadTask(
-          url: url,
+          workingUrl: AppAccountManager.workingAccount!.workingUrl,
+          fileID: fileObjectsData.id!,
           savePath: p.savePath!,
           fileName: p.fileName!,
-          cookie: await AppAccountManager.getUrlCookie(url),
+          cookie: AppAccountManager.workingAccount!.cloudreveSession,
           type: DownloadInfoRequestType.Temp);
     } catch (e) {
       if (e == "file exists") {
         doOpenFile(p.fileSavedFullPath!);
         return;
       }
+      dPrint("Downloader.addDownloadTask Error:$e");
       showToast("$e");
       onCancel(doCancel: false);
     }
@@ -129,14 +127,19 @@ class FileOpenTempDialogUIModel extends BaseUIModel {
 
   void _downloadSpeeder() async {
     while (downloadSub != null) {
-      final dSize = fileDownloadInfoItemData?.downloadedSize ?? 0;
+      dPrint("_downloadSpeeder");
       if (downloadSpeed == 0) {
-        downloadSpeed = dSize * 2;
+        downloadSpeed = fileDownloadInfoItemData?.downloadedSize ?? 0;
+        _lastDownloadedSize = downloadSpeed;
       } else {
-        downloadSpeed = (dSize - downloadSpeed) * 2;
+        downloadSpeed = (fileDownloadInfoItemData?.downloadedSize ?? 0) -
+            _lastDownloadedSize;
+        dPrint(
+            "${fileDownloadInfoItemData?.downloadedSize ?? 0} - $_lastDownloadedSize == $downloadSpeed");
+        _lastDownloadedSize = fileDownloadInfoItemData?.downloadedSize ?? 0;
       }
       notifyListeners();
-      await Future.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(seconds: 1));
     }
   }
 }
