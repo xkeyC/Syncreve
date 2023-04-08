@@ -10,6 +10,7 @@ import (
 	"github.com/xkeyC/Syncreve/libsyncreve/cloudreve"
 	"github.com/xkeyC/Syncreve/libsyncreve/protos"
 	"github.com/xkeyC/Syncreve/libsyncreve/utils"
+	"os"
 )
 
 func AddDownloadTask(workingUrl string, instanceUrl string, fileID string, savePath string, fileName string, cookie string, downLoadType protos.DownloadInfoRequestType) (uuid.UUID, error) {
@@ -50,7 +51,10 @@ func AddDownloadTasksByDirPath(ctx context.Context, dirPath string, workingUrl s
 			return nil, err
 		}
 		fileSavePath := savePath + rPath
-
+		err = os.MkdirAll(fileSavePath, os.ModePerm)
+		if err != nil {
+			return nil, err
+		}
 		for _, fileObject := range directoryResult.Data.Objects {
 			if fileObject.Type == "file" {
 				taskID, err := AddDownloadTask(workingUrl, instanceUrl, fileObject.Id, fileSavePath, fileObject.Name, cookie, downLoadType)
