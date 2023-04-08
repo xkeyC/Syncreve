@@ -9,11 +9,12 @@ service FileSyncService {
 }
 
 message DownloadTaskRequest {
-  string  url = 1;
-  string  savePath = 2;
-  string  fileName = 3;
-  string  cookie = 4;
-  DownloadInfoRequestType downLoadType = 5;
+  string  workingUrl = 1;
+  string  fileID = 2;
+  string  savePath = 3;
+  string  fileName = 4;
+  string  cookie = 5;
+  DownloadInfoRequestType downLoadType = 6;
 }
 
 message DownloadTaskResult {
@@ -33,6 +34,7 @@ enum DownloadInfoRequestType {
   All = 0;
   Queue = 1;
   Temp = 2;
+  Sync = 3;
 }
 
 message DownloadInfoRequest {

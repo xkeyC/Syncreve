@@ -12,7 +12,7 @@ func (b *BaseResult) IsSuccess() bool {
 	return b.Code == 0
 }
 
-type DownloadLinkResult struct {
+type DownloadUrlResult struct {
 	BaseResult
 	Data string `json:"data"`
 }

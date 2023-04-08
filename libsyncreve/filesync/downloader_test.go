@@ -7,20 +7,30 @@ import (
 	"testing"
 )
 
+const (
+	workingUrl = ""
+	cookie     = ""
+)
+
 func TestRecursionPathFiles(t *testing.T) {
-	c := cloudreve.NewClient("", "")
+	c := cloudreve.NewClient(workingUrl, cookie)
 	fileTreeMap := make(map[string]*cloudreve.DirectoryResult)
 	err := RecursionPathFiles(context.Background(), c, "/", fileTreeMap)
 	if err != nil {
 		t.Error(err)
 		return
 	}
-	printTreeMap(fileTreeMap)
-}
-
-func printTreeMap(m map[string]*cloudreve.DirectoryResult) {
-	for s, result := range m {
+	for s, result := range fileTreeMap {
 		fmt.Println("PATH ===== ", s)
 		fmt.Println(*result)
 	}
+}
+
+func TestDoDownloadUrl(t *testing.T) {
+	c := cloudreve.NewClient(workingUrl, cookie)
+	downloadUrl, err := c.GetFileDownloadUrl(context.Background(), "m7Yu5")
+	if err != nil {
+		return
+	}
+	t.Log(downloadUrl)
 }

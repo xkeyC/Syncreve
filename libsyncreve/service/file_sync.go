@@ -19,7 +19,7 @@ func (*fileSyncServerImpl) AddDownloadTask(_ context.Context, r *protos.Download
 	if r.DownLoadType == protos.DownloadInfoRequestType_All {
 		return nil, errors.New("DownloadInfoRequestType_All Not Allow")
 	}
-	id, err := filesync.AddDownloadTask(r.Url, r.SavePath, r.FileName, r.Cookie, r.DownLoadType)
+	id, err := filesync.AddDownloadTask(r.WorkingUrl, r.FileID, r.SavePath, r.FileName, r.Cookie, r.DownLoadType)
 	fmt.Println("[libsyncreve] service.AddDownloadTask id==", id, "err=", err)
 	return &protos.DownloadTaskResult{
 		Id: id.String(),

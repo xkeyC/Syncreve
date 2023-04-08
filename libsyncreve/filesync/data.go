@@ -21,9 +21,10 @@ const (
 type FileDownloadQueueTaskData struct {
 	ID           uuid.UUID                      `json:"ID,omitempty"`
 	Context      context.Context                `json:"-"`
-	URL          string                         `json:"URL,omitempty"`
 	SavePath     string                         `json:"savePath,omitempty"`
 	FileName     string                         `json:"fileName,omitempty"`
+	WorkingUrl   string                         `json:"workingUrl,omitempty"`
+	FileID       string                         `json:"fileID,omitempty"`
 	Cookie       string                         `json:"cookie,omitempty"`
 	DownLoadType protos.DownloadInfoRequestType `json:"downLoadType,omitempty"`
 	Status       FileDownloadQueueStatusType    `json:"status,omitempty"`
@@ -39,9 +40,10 @@ type FileDownloadQueues struct {
 
 type FileDownloadingInfoItemData struct {
 	ID             uuid.UUID                      `json:"ID,omitempty"`
-	URL            string                         `json:"URL,omitempty"`
 	SavePath       string                         `json:"savePath,omitempty"`
 	FileName       string                         `json:"fileName,omitempty"`
+	FileID         string                         `json:"fileID,omitempty"`
+	WorkingUrl     string                         `json:"workingUrl,omitempty"`
 	Cookie         string                         `json:"cookie,omitempty"`
 	DownLoadType   protos.DownloadInfoRequestType `json:"downLoadType,omitempty"`
 	Status         FileDownloadQueueStatusType    `json:"status,omitempty"`

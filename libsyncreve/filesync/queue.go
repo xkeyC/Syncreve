@@ -11,16 +11,17 @@ import (
 	"github.com/xkeyC/Syncreve/libsyncreve/protos"
 )
 
-func AddDownloadTask(url string, savePath string, fileName string, cookie string, downLoadType protos.DownloadInfoRequestType) (uuid.UUID, error) {
+func AddDownloadTask(workingUrl string, fileID string, savePath string, fileName string, cookie string, downLoadType protos.DownloadInfoRequestType) (uuid.UUID, error) {
 	id := uuid.New()
 	c, cancel := context.WithCancel(context.Background())
 	queueData := &FileDownloadQueueTaskData{
+		WorkingUrl:   workingUrl,
 		ID:           id,
 		Context:      c,
 		CancelFunc:   cancel,
-		URL:          url,
 		SavePath:     savePath,
 		FileName:     fileName,
+		FileID:       fileID,
 		Cookie:       cookie,
 		DownLoadType: downLoadType,
 		Status:       FileDownloadQueueStatusWaiting,
@@ -37,10 +38,6 @@ func AddDownloadTasksByDirPath(ctx context.Context, dirPath string, workingUrl s
 		return err
 	}
 	return nil
-}
-
-func AddDownloadTasksByID() {
-
 }
 
 func CancelDownloadTask(id uuid.UUID) error {
@@ -188,7 +185,8 @@ func updateDownloadInfo(k uuid.UUID, taskInfo FileDownloadQueueTaskData, info *r
 		// first download create new
 		downloadInfo := &FileDownloadingInfoItemData{
 			ID:           taskInfo.ID,
-			URL:          taskInfo.URL,
+			WorkingUrl:   taskInfo.WorkingUrl,
+			FileID:       taskInfo.FileID,
 			SavePath:     taskInfo.SavePath,
 			FileName:     taskInfo.FileName,
 			Cookie:       taskInfo.Cookie,
