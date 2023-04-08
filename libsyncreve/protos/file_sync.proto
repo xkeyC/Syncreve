@@ -6,7 +6,6 @@ service FileSyncService {
   rpc GetDownloadInfoStream(DownloadInfoRequest) returns (stream DownLoadInfoResult) {}
   rpc GetDownloadInfo(DownloadInfoRequest) returns (DownLoadInfoResult) {}
   rpc CancelDownloadTask(DownloadTaskCancelRequest) returns (DownloadTaskCancelResult) {}
-  rpc AddDownloadTaskByFileIDs(IDsDownloadRequest) returns (IDsDownloadResult) {}
 }
 
 message DownloadTaskRequest {
@@ -44,14 +43,4 @@ message DownloadInfoRequest {
 message DownLoadInfoResult {
   DownloadInfoRequestType type = 1;
   bytes data = 2;
-}
-
-message IDsDownloadRequest {
-  repeated string  ids = 1;
-  string workingUrl = 2;
-  string cookies = 3;
-}
-
-message IDsDownloadResult {
-  int32  status = 1;
 }

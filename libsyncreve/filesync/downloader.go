@@ -5,9 +5,10 @@ import (
 	"errors"
 	"fmt"
 	"github.com/imroc/req/v3"
-	"github.com/xkeyC/Syncreve/libsyncreve/data"
+	"github.com/xkeyC/Syncreve/libsyncreve/cloudreve"
 	"github.com/xkeyC/Syncreve/libsyncreve/utils"
 	"os"
+	"strings"
 )
 
 func DoDownload(taskInfo *FileDownloadQueueTaskData, callback req.DownloadCallback) error {
@@ -39,16 +40,25 @@ func DoDownload(taskInfo *FileDownloadQueueTaskData, callback req.DownloadCallba
 	return nil
 }
 
-func GetFileDownloadUrlByID(ctx context.Context, id string, workingUrl string, cookies string) (string, error) {
-	var httpClient = req.C()
-	if httpClient.Headers == nil {
-		httpClient.Headers = make(map[string][]string)
+func RecursionPathFiles(ctx context.Context, c *cloudreve.Client, path string, fileTreeMap map[string]*cloudreve.DirectoryResult) error {
+	directoryResult, err := c.Dir(ctx, path)
+	if err != nil {
+		return err
 	}
-	httpClient.Headers.Set("cookie", cookies)
-	var d data.CloudreveResultData
-	r := httpClient.Put(workingUrl + "/api/v3/file/download/" + id).SetSuccessResult(&d).Do(ctx)
-	if r.IsSuccessState() {
-		return d.Data.(string), nil
+	for _, fileObject := range directoryResult.Data.Objects {
+		fileTreeMap[directoryResult.Path] = directoryResult
+		if fileObject.Type == "dir" {
+			newPathName := ""
+			if strings.Index(path, "/") == len(path)-1 {
+				newPathName = path + fileObject.Name
+			} else {
+				newPathName = path + "/" + fileObject.Name
+			}
+			err := RecursionPathFiles(ctx, c, newPathName, fileTreeMap)
+			if err != nil {
+				return err
+			}
+		}
 	}
-	return "", errors.New("req error")
+	return nil
 }

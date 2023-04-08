@@ -7,66 +7,9 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/imroc/req/v3"
+	"github.com/xkeyC/Syncreve/libsyncreve/cloudreve"
 	"github.com/xkeyC/Syncreve/libsyncreve/protos"
-	"sync"
 )
-
-var fileDownloadQueues = FileDownloadQueues{}
-
-type FileDownloadQueueStatusType int32
-
-const (
-	FileDownloadQueueStatusWaiting     FileDownloadQueueStatusType = 0
-	FileDownloadQueueStatusDownloading FileDownloadQueueStatusType = 1
-	FileDownloadQueueStatusDone        FileDownloadQueueStatusType = 2
-	FileDownloadQueueStatusError       FileDownloadQueueStatusType = -1
-)
-
-type FileDownloadQueueTaskData struct {
-	ID           uuid.UUID                      `json:"ID,omitempty"`
-	Context      context.Context                `json:"-"`
-	URL          string                         `json:"URL,omitempty"`
-	SavePath     string                         `json:"savePath,omitempty"`
-	FileName     string                         `json:"fileName,omitempty"`
-	Cookie       string                         `json:"cookie,omitempty"`
-	DownLoadType protos.DownloadInfoRequestType `json:"downLoadType,omitempty"`
-	Status       FileDownloadQueueStatusType    `json:"status,omitempty"`
-	CancelFunc   context.CancelFunc
-}
-
-type FileDownloadQueues struct {
-	mutex      sync.RWMutex
-	queuesMap  map[uuid.UUID]*FileDownloadQueueTaskData
-	queueLen   int
-	workingLen int
-}
-
-type FileDownloadingInfoItemData struct {
-	ID             uuid.UUID                      `json:"ID,omitempty"`
-	URL            string                         `json:"URL,omitempty"`
-	SavePath       string                         `json:"savePath,omitempty"`
-	FileName       string                         `json:"fileName,omitempty"`
-	Cookie         string                         `json:"cookie,omitempty"`
-	DownLoadType   protos.DownloadInfoRequestType `json:"downLoadType,omitempty"`
-	Status         FileDownloadQueueStatusType    `json:"status,omitempty"`
-	DownloadedSize int64                          `json:"downloadedSize,omitempty"`
-	ContentLength  int64                          `json:"contentLength,omitempty"`
-	ErrorInfo      string                         `json:"errorInfo,omitempty"`
-}
-
-var fileDownloadingInfo FileDownloadingInfo
-
-type FileDownloadingInfo struct {
-	Mutex      sync.RWMutex                               `json:"-"`
-	InfoMap    map[uuid.UUID]*FileDownloadingInfoItemData `json:"infoMap,omitempty"`
-	QueueLen   int                                        `json:"queueLen,omitempty"`
-	WorkingLen int                                        `json:"workingLen,omitempty"`
-}
-
-func init() {
-	fileDownloadQueues.queuesMap = make(map[uuid.UUID]*FileDownloadQueueTaskData)
-	fileDownloadingInfo.InfoMap = make(map[uuid.UUID]*FileDownloadingInfoItemData)
-}
 
 func AddDownloadTask(url string, savePath string, fileName string, cookie string, downLoadType protos.DownloadInfoRequestType) (uuid.UUID, error) {
 	id := uuid.New()
@@ -86,9 +29,18 @@ func AddDownloadTask(url string, savePath string, fileName string, cookie string
 	return id, err
 }
 
-func AddDownloadTasksByIds(ctx context.Context, ids []string, workingUrl string, cookies string) error {
-	// TODO
+func AddDownloadTasksByDirPath(ctx context.Context, dirPath string, workingUrl string, cookie string) error {
+	c := cloudreve.NewClient(workingUrl, cookie)
+	fileTreeMap := make(map[string]*cloudreve.DirectoryResult)
+	err := RecursionPathFiles(ctx, c, dirPath, fileTreeMap)
+	if err != nil {
+		return err
+	}
 	return nil
+}
+
+func AddDownloadTasksByID() {
+
 }
 
 func CancelDownloadTask(id uuid.UUID) error {
@@ -101,18 +53,6 @@ func CancelDownloadTask(id uuid.UUID) error {
 	} else {
 		fmt.Println("[libsyncreve] filesync.CancelDownloadTask error ==", "task not found")
 	}
-	return nil
-}
-
-func addTaskToList(queueData *FileDownloadQueueTaskData) error {
-	fileDownloadQueues.mutex.Lock()
-	defer fileDownloadQueues.mutex.Unlock()
-	if fileDownloadQueues.queuesMap[queueData.ID] != nil {
-		return errors.New("task ID already used")
-	}
-	fileDownloadQueues.queuesMap[queueData.ID] = queueData
-	fileDownloadQueues.queueLen++
-	go UpdateWorkingTask()
 	return nil
 }
 
@@ -158,6 +98,54 @@ func UpdateWorkingTask() {
 		go downloadAndListen(k)
 		fileDownloadQueues.workingLen++
 	}
+}
+
+func GetDownloadInfoJson(id *uuid.UUID, t protos.DownloadInfoRequestType) ([]byte, error) {
+	fileDownloadingInfo.Mutex.RLock()
+	defer fileDownloadingInfo.Mutex.RUnlock()
+	var info FileDownloadingInfo
+	if id != nil {
+		data := fileDownloadingInfo.InfoMap[*id]
+		if data == nil {
+			return nil, nil
+		}
+		newMap := map[uuid.UUID]*FileDownloadingInfoItemData{}
+		newMap[*id] = data
+		info = FileDownloadingInfo{
+			InfoMap:    newMap,
+			QueueLen:   GetTaskLen(),
+			WorkingLen: GetWorkingTaskLen(),
+		}
+	} else {
+		newMap := map[uuid.UUID]*FileDownloadingInfoItemData{}
+		for u, data := range fileDownloadingInfo.InfoMap {
+			if t == protos.DownloadInfoRequestType_All || data.DownLoadType == t {
+				newMap[u] = data
+			}
+		}
+		if len(newMap) == 0 {
+			return nil, nil
+		}
+		info = FileDownloadingInfo{
+			InfoMap:    newMap,
+			QueueLen:   GetTaskLen(),
+			WorkingLen: GetWorkingTaskLen(),
+		}
+	}
+	bytes, err := json.Marshal(&info)
+	return bytes, err
+}
+
+func addTaskToList(queueData *FileDownloadQueueTaskData) error {
+	fileDownloadQueues.mutex.Lock()
+	defer fileDownloadQueues.mutex.Unlock()
+	if fileDownloadQueues.queuesMap[queueData.ID] != nil {
+		return errors.New("task ID already used")
+	}
+	fileDownloadQueues.queuesMap[queueData.ID] = queueData
+	fileDownloadQueues.queueLen++
+	go UpdateWorkingTask()
+	return nil
 }
 
 func downloadAndListen(k uuid.UUID) {
@@ -227,40 +215,4 @@ func updateDownloadInfo(k uuid.UUID, taskInfo FileDownloadQueueTaskData, info *r
 	}
 	fileDownloadingInfo.QueueLen = GetTaskLen()
 	fileDownloadingInfo.WorkingLen = GetWorkingTaskLen()
-}
-
-func GetDownloadInfoJson(id *uuid.UUID, t protos.DownloadInfoRequestType) ([]byte, error) {
-	fileDownloadingInfo.Mutex.RLock()
-	defer fileDownloadingInfo.Mutex.RUnlock()
-	var info FileDownloadingInfo
-	if id != nil {
-		data := fileDownloadingInfo.InfoMap[*id]
-		if data == nil {
-			return nil, nil
-		}
-		newMap := map[uuid.UUID]*FileDownloadingInfoItemData{}
-		newMap[*id] = data
-		info = FileDownloadingInfo{
-			InfoMap:    newMap,
-			QueueLen:   GetTaskLen(),
-			WorkingLen: GetWorkingTaskLen(),
-		}
-	} else {
-		newMap := map[uuid.UUID]*FileDownloadingInfoItemData{}
-		for u, data := range fileDownloadingInfo.InfoMap {
-			if t == protos.DownloadInfoRequestType_All || data.DownLoadType == t {
-				newMap[u] = data
-			}
-		}
-		if len(newMap) == 0 {
-			return nil, nil
-		}
-		info = FileDownloadingInfo{
-			InfoMap:    newMap,
-			QueueLen:   GetTaskLen(),
-			WorkingLen: GetWorkingTaskLen(),
-		}
-	}
-	bytes, err := json.Marshal(&info)
-	return bytes, err
 }

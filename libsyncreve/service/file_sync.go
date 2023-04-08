@@ -26,14 +26,6 @@ func (*fileSyncServerImpl) AddDownloadTask(_ context.Context, r *protos.Download
 	}, err
 }
 
-func (*fileSyncServerImpl) AddDownloadTaskByFileIDs(ctx context.Context, r *protos.IDsDownloadRequest) (*protos.IDsDownloadResult, error) {
-	err := filesync.AddDownloadTasksByIds(ctx, r.Ids, r.WorkingUrl, r.Cookies)
-	if err != nil {
-		return nil, err
-	}
-	return &protos.IDsDownloadResult{Status: 0}, nil
-}
-
 func (*fileSyncServerImpl) CancelDownloadTask(_ context.Context, r *protos.DownloadTaskCancelRequest) (*protos.DownloadTaskCancelResult, error) {
 	id, err := uuid.Parse(r.Id)
 	if err != nil {
