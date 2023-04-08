@@ -34,14 +34,14 @@ class FileOpenTempDialogUIModel extends BaseUIModel {
     }
 
     try {
-      downloadID = await Downloader.addDownloadTask(
+      downloadID = (await Downloader.addDownloadTask(
           workingUrl: AppAccountManager.workingAccount!.workingUrl,
           instanceUrl: AppAccountManager.workingAccount!.instanceUrl,
-          fileID: fileObjectsData.id!,
+          fileIDs: [fileObjectsData.id!],
           savePath: p.savePath!,
           fileName: p.fileName!,
           cookie: AppAccountManager.workingAccount!.cloudreveSession,
-          type: DownloadInfoRequestType.Temp);
+          type: DownloadInfoRequestType.Temp))[0];
     } catch (e) {
       if (e == "file exists") {
         doOpenFile(p.fileSavedFullPath!);

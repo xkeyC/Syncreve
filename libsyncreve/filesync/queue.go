@@ -13,24 +13,32 @@ import (
 	"os"
 )
 
-func AddDownloadTask(workingUrl string, instanceUrl string, fileID string, savePath string, fileName string, cookie string, downLoadType protos.DownloadInfoRequestType) (uuid.UUID, error) {
-	id := uuid.New()
-	c, cancel := context.WithCancel(context.Background())
-	queueData := &FileDownloadQueueTaskData{
-		WorkingUrl:   workingUrl,
-		InstanceUrl:  instanceUrl,
-		ID:           id,
-		Context:      c,
-		CancelFunc:   cancel,
-		SavePath:     savePath,
-		FileName:     fileName,
-		FileID:       fileID,
-		Cookie:       cookie,
-		DownLoadType: downLoadType,
-		Status:       FileDownloadQueueStatusWaiting,
+func AddDownloadTask(workingUrl string, instanceUrl string, fileID []string, savePath string, fileName string, cookie string, downLoadType protos.DownloadInfoRequestType) ([]string, error) {
+
+	var ids []string
+	for _, fid := range fileID {
+		taskID := uuid.New()
+		c, cancel := context.WithCancel(context.Background())
+		queueData := &FileDownloadQueueTaskData{
+			WorkingUrl:   workingUrl,
+			InstanceUrl:  instanceUrl,
+			ID:           taskID,
+			Context:      c,
+			CancelFunc:   cancel,
+			SavePath:     savePath,
+			FileName:     fileName,
+			FileID:       fid,
+			Cookie:       cookie,
+			DownLoadType: downLoadType,
+			Status:       FileDownloadQueueStatusWaiting,
+		}
+		err := addTaskToList(queueData)
+		if err != nil {
+			return nil, err
+		}
+		ids = append(ids, taskID.String())
 	}
-	err := addTaskToList(queueData)
-	return id, err
+	return ids, nil
 }
 
 func AddDownloadTasksByDirPath(ctx context.Context, dirPath string, workingUrl string, instanceUrl string, cookie string, savePath string, downLoadType protos.DownloadInfoRequestType) ([]string, error) {
@@ -57,13 +65,13 @@ func AddDownloadTasksByDirPath(ctx context.Context, dirPath string, workingUrl s
 		}
 		for _, fileObject := range directoryResult.Data.Objects {
 			if fileObject.Type == "file" {
-				taskID, err := AddDownloadTask(workingUrl, instanceUrl, fileObject.Id, fileSavePath, fileObject.Name, cookie, downLoadType)
+				taskID, err := AddDownloadTask(workingUrl, instanceUrl, []string{fileObject.Id}, fileSavePath, fileObject.Name, cookie, downLoadType)
 				if err != nil {
 					fmt.Println("[libsyncreve] AddDownloadTasksByDirPath Task Error ==", err)
 					continue
 				}
 				fmt.Println("[libsyncreve] AddDownloadTasksByDirPath Task ID ==", taskID)
-				taskIDs = append(taskIDs, taskID.String())
+				taskIDs = append(taskIDs, taskID[0])
 			}
 		}
 	}

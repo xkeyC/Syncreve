@@ -3,7 +3,7 @@ option go_package = "../protos";
 
 service FileSyncService {
   rpc AddDownloadTask(DownloadTaskRequest) returns (DownloadTaskResult) {}
-  rpc AddDownloadTasksByDirPath(DownloadDirTaskRequest) returns (DownloadDirTaskResult) {}
+  rpc AddDownloadTasksByDirPath(DownloadDirTaskRequest) returns (DownloadTaskResult) {}
   rpc GetDownloadInfoStream(DownloadInfoRequest) returns (stream DownLoadInfoResult) {}
   rpc GetDownloadInfo(DownloadInfoRequest) returns (DownLoadInfoResult) {}
   rpc CancelDownloadTask(DownloadTaskCancelRequest) returns (DownloadTaskCancelResult) {}
@@ -12,7 +12,7 @@ service FileSyncService {
 message DownloadTaskRequest {
   string  workingUrl = 1;
   string  instanceUrl = 2;
-  string  fileID = 3;
+  repeated string  fileID = 3;
   string  savePath = 4;
   string  fileName = 5;
   string  cookie = 6;
@@ -29,10 +29,6 @@ message DownloadDirTaskRequest {
 }
 
 message DownloadTaskResult {
-  string id = 1;
-}
-
-message DownloadDirTaskResult {
   repeated string ids = 1;
 }
 

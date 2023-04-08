@@ -47,9 +47,10 @@ class AppGRPCManager {
     _isConnected = false;
   }
 
-  static Future<String> addDownloadTask(DownloadTaskRequest request) async {
+  static Future<List<String>> addDownloadTask(
+      DownloadTaskRequest request) async {
     final r = await _fileSyncClient.addDownloadTask(request);
-    return r.id;
+    return r.ids;
   }
 
   static ResponseStream<DownLoadInfoResult> getDownloadInfoStream(

@@ -158,8 +158,11 @@ class HomeFileUIModel extends BaseUIModel {
       files.add(f);
     }
     switch (actionKey) {
+      case "download":
+
+        return;
       case "more":
-        handelMenu(await FileMenuBottomSheetUI.show(context!, files), files);
+        handeBottomSheetMenu(await FileMenuBottomSheetUI.show(context!, files), files);
         return;
     }
   }
@@ -171,7 +174,7 @@ class HomeFileUIModel extends BaseUIModel {
     notifyListeners();
   }
 
-  void handelMenu(action, List<CloudreveFileObjectsData> files) {
+  void handeBottomSheetMenu(action, List<CloudreveFileObjectsData> files) {
     if (action == null) return;
     switch (action) {
       case "open":

@@ -16,9 +16,9 @@ class Downloader {
   static const fileDownloadQueueStatusDone = 2;
   static const fileDownloadQueueStatusError = -1;
 
-  static Future<String> addDownloadTask(
+  static Future<List<String>> addDownloadTask(
       {required String workingUrl,
-      required String fileID,
+      required List<String> fileIDs,
       required String savePath,
       required String fileName,
       required String cookie,
@@ -27,7 +27,7 @@ class Downloader {
     final r = DownloadTaskRequest(
         workingUrl: workingUrl,
         instanceUrl: instanceUrl,
-        fileID: fileID,
+        fileID: fileIDs,
         savePath: savePath,
         fileName: fileName,
         cookie: cookie,
@@ -40,9 +40,9 @@ class Downloader {
 
     dPrint("[Downloader] addDownloadTask r==$r");
 
-    final id = await AppGRPCManager.addDownloadTask(r);
-    dPrint("[Downloader] addDownloadTask result.id==$id");
-    return id;
+    final ids = await AppGRPCManager.addDownloadTask(r);
+    dPrint("[Downloader] addDownloadTask result.ids==$ids");
+    return ids;
   }
 
   static StreamSubscription getDownloadInfoStream(DownloadInfoRequestType type,
