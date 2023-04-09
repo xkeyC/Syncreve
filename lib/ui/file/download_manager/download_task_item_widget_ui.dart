@@ -44,7 +44,8 @@ class DownloadTaskItemWidgetUI extends BaseUI<DownloadTaskItemWidgetUIModel> {
                 ],
               ),
               if (itemData.status ==
-                  Downloader.fileDownloadQueueStatusDownloading) ...[
+                      Downloader.fileDownloadQueueStatusDownloading ||
+                  model.isDownloadComplete) ...[
                 const SizedBox(height: 4),
                 LinearProgressIndicator(
                   value: model.getDownloadProgressValue(itemData),

@@ -44,7 +44,8 @@ class DownloadManagerUI extends BaseUI<DownloadManagerUIModel> {
             final itemData = model.downloadingList![index];
             return Card(
               elevation: .1,
-              child: makeDownloadTaskItem(itemData, model,key: Key("${itemData.id}")),
+              child: makeDownloadTaskItem(itemData, model,
+                  key: Key("header_${itemData.id}")),
             );
           }, childCount: model.downloadingList?.length ?? 0))
         ];
@@ -61,9 +62,10 @@ class DownloadManagerUI extends BaseUI<DownloadManagerUIModel> {
               Row(
                 children: [
                   const SizedBox(width: 12),
-                  const Text(
-                    "Queue",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  Text(
+                    "Queue (${(model.downloadCountResult?.count.toInt() ?? 0) - (model.downloadingList?.length ?? 0)})",
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   const Spacer(),
                   TextButton(
@@ -92,7 +94,8 @@ class DownloadManagerUI extends BaseUI<DownloadManagerUIModel> {
                 cacheExtent: 30,
                 itemBuilder: (BuildContext context, int index) {
                   final itemData = model.bodyList![index];
-                  return makeDownloadTaskItem(itemData, model);
+                  return makeDownloadTaskItem(itemData, model,
+                      key: Key("body_${itemData.id}_${itemData.status}"));
                 },
               )),
             ],

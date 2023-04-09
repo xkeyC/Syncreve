@@ -28,7 +28,7 @@ type FileDownloadQueueTaskData struct {
 	FileID       string                         `json:"fileID,omitempty"`
 	Cookie       string                         `json:"cookie,omitempty"`
 	DownLoadType protos.DownloadInfoRequestType `json:"downLoadType,omitempty"`
-	Status       FileDownloadQueueStatusType    `json:"status,omitempty"`
+	Status       FileDownloadQueueStatusType    `json:"status"`
 	CancelFunc   context.CancelFunc
 }
 
@@ -48,7 +48,7 @@ type FileDownloadingInfoItemData struct {
 	InstanceUrl    string                         `json:"instanceUrl,omitempty"`
 	Cookie         string                         `json:"cookie,omitempty"`
 	DownLoadType   protos.DownloadInfoRequestType `json:"downLoadType,omitempty"`
-	Status         FileDownloadQueueStatusType    `json:"status,omitempty"`
+	Status         FileDownloadQueueStatusType    `json:"status"`
 	DownloadedSize int64                          `json:"downloadedSize,omitempty"`
 	ContentLength  int64                          `json:"contentLength,omitempty"`
 	ErrorInfo      string                         `json:"errorInfo,omitempty"`

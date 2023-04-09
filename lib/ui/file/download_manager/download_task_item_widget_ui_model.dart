@@ -14,6 +14,8 @@ class DownloadTaskItemWidgetUIModel extends BaseUIModel {
   num downloadSpeed = 0;
   num _lastDownloadedSize = 0;
 
+  bool isDownloadComplete = false;
+
   @override
   void initModel() {
     if (itemData.status == Downloader.fileDownloadQueueStatusDownloading) {
@@ -35,6 +37,7 @@ class DownloadTaskItemWidgetUIModel extends BaseUIModel {
       {required this.itemData, required this.downloadManagerUIModel});
 
   getDownloadStatusText(int? status) {
+    if (isDownloadComplete) return "completing...";
     return statusMap[status] ?? "?";
   }
 
@@ -56,13 +59,16 @@ class DownloadTaskItemWidgetUIModel extends BaseUIModel {
     if (value.infoMap != null) {
       final newV = value.infoMap![itemData.id];
       if (newV != null) {
-        itemData = GrpcFileDownloadInfoItemData.fromJson(newV);
+        final itemData = GrpcFileDownloadInfoItemData.fromJson(newV);
         notifyListeners();
         if (itemData.status != Downloader.fileDownloadQueueStatusDownloading) {
           downloadSub?.cancel();
           downloadSub = null;
-          downloadManagerUIModel.loadData();
+          isDownloadComplete = true;
+          itemData.downloadedSize = itemData.contentLength;
         }
+        this.itemData = itemData;
+        notifyListeners();
       }
     }
   }

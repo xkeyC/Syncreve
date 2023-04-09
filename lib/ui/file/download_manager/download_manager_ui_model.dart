@@ -11,6 +11,8 @@ class DownloadManagerUIModel extends BaseUIModel {
 
   DownloadCountResult? _downloadCountResult;
 
+  DownloadCountResult? get downloadCountResult => _downloadCountResult;
+
   GrpcFileDownloadInfoData? infoData;
 
   List<GrpcFileDownloadInfoItemData>? downloadingList;
@@ -59,25 +61,32 @@ class DownloadManagerUIModel extends BaseUIModel {
     notifyListeners();
   }
 
-  _listenDownloadCount() async {
+  _listenDownloadCount({int tryCount = 0}) async {
     _downloadCountListenSub = AppGRPCManager.getDownloadCountStream().listen(
         (value) {
+          if (tryCount != 0) {
+            tryCount = 0;
+          }
           dPrint(
               "<DownloadManagerUIModel> getDownloadCountStream: count == ${value.count} workingCount ${value.workingCount}");
           _downloadCountResult = value;
           notifyListeners();
-          _updateDownloadTasks();
         },
         cancelOnError: true,
         onError: (e, t) {
+          _downloadCountListenSub?.cancel();
           dPrint(
               "<DownloadManagerUIModel> getDownloadCountStream: onError $e $t");
+          if (tryCount >= 10) {
+            return;
+          }
+          return _listenDownloadCount(tryCount: tryCount++);
         });
   }
 
   String getDownloadTaskCountString({bool isWorkingCount = false}) {
     if (isWorkingCount) {
-      return "${_downloadCountResult?.workingCount.toInt() ?? 0}";
+      return "${downloadingList?.length ?? 0}";
     }
     return "${_downloadCountResult?.count.toInt() ?? 0}";
   }
@@ -94,7 +103,7 @@ class DownloadManagerUIModel extends BaseUIModel {
   void _timer() async {
     while (mounted) {
       _updateDownloadTasks();
-      await Future.delayed(const Duration(seconds: 3));
+      await Future.delayed(const Duration(seconds: 1));
     }
   }
 }

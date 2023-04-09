@@ -66,6 +66,8 @@ class HomeFileUIModel extends BaseUIModel {
         cancelOnError: true,
         onError: (e, t) {
           dPrint("<HomeFileUIModel> getDownloadCountStream: onError $e $t");
+          _downloadCountListenSub?.cancel();
+          return _listenDownloadCount();
         });
   }
 

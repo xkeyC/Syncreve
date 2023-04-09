@@ -195,6 +195,7 @@ func downloadAndListen(k uuid.UUID) {
 	if taskInfo == nil {
 		return
 	}
+	go updateDownloadInfo(k, *taskInfo, nil, nil, FileDownloadQueueStatusDownloading, "")
 	err := DoDownload(taskInfo, func(current int64, total int64) {
 		go updateDownloadInfo(k, *taskInfo, &current, &total, FileDownloadQueueStatusDownloading, "")
 	})
