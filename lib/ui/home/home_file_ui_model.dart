@@ -55,9 +55,12 @@ class HomeFileUIModel extends BaseUIModel {
     notifyListeners();
   }
 
-  _listenDownloadCount() {
+  _listenDownloadCount({int tryCount = 0}) {
     _downloadCountListenSub = AppGRPCManager.getDownloadCountStream().listen(
         (value) {
+          if (tryCount != 0) {
+            tryCount = 0;
+          }
           dPrint(
               "<HomeFileUIModel> getDownloadCountStream: count == ${value.count} workingCount ${value.workingCount}");
           _downloadCountResult = value;
@@ -66,8 +69,11 @@ class HomeFileUIModel extends BaseUIModel {
         cancelOnError: true,
         onError: (e, t) {
           dPrint("<HomeFileUIModel> getDownloadCountStream: onError $e $t");
+          if (tryCount >= 10) {
+            return;
+          }
           _downloadCountListenSub?.cancel();
-          return _listenDownloadCount();
+          return _listenDownloadCount(tryCount: tryCount++);
         });
   }
 
