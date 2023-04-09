@@ -13,6 +13,7 @@ import 'package:syncreve/data/file/cloudreve_file_data.dart';
 import 'package:syncreve/generated/grpc/libsyncreve/protos/file_sync.pb.dart';
 import 'package:syncreve/ui/account/account_switch_bottom_sheet_ui.dart';
 import 'package:syncreve/ui/account/account_switch_bottom_sheet_ui_model.dart';
+import 'package:syncreve/ui/file/download_manager/download_manager_ui.dart';
 import 'package:syncreve/ui/file/file_menu_bottom_sheet_ui.dart';
 import 'package:syncreve/ui/file/file_open_temp_dialog_ui.dart';
 import 'package:syncreve/ui/file/file_open_temp_dialog_ui_model.dart';
@@ -58,13 +59,13 @@ class HomeFileUIModel extends BaseUIModel {
     _downloadCountListenSub = AppGRPCManager.getDownloadCountStream().listen(
         (value) {
           dPrint(
-              "getDownloadCountStream: count == ${value.count} workingCount ${value.workingCount}");
+              "<HomeFileUIModel> getDownloadCountStream: count == ${value.count} workingCount ${value.workingCount}");
           _downloadCountResult = value;
           notifyListeners();
         },
         cancelOnError: true,
         onError: (e, t) {
-          dPrint("getDownloadCountStream: onError $e $t");
+          dPrint("<HomeFileUIModel> getDownloadCountStream: onError $e $t");
         });
   }
 
@@ -112,7 +113,9 @@ class HomeFileUIModel extends BaseUIModel {
     }
   }
 
-  void goDownload() {}
+  void goDownload() {
+    DownloadManagerUI.push(context!);
+  }
 
   Future<void> onChangeListStyle() async {
     final settingsBox = await Hive.openBox("settings");

@@ -31,54 +31,59 @@ class GrpcFileDownloadInfoData {
 }
 
 class GrpcFileDownloadInfoItemData {
-  GrpcFileDownloadInfoItemData(
-      {this.id,
-      this.url,
-      this.savePath,
-      this.fileName,
-      this.cookie,
-      this.downLoadType,
-      this.status,
-      this.downloadedSize,
-      this.contentLength,
-      this.errorInfo});
+  GrpcFileDownloadInfoItemData({
+    this.id,
+    this.savePath,
+    this.fileName,
+    this.fileID,
+    this.workingUrl,
+    this.cookie,
+    this.downLoadType,
+    this.status,
+    this.downloadedSize,
+    this.contentLength,
+    this.errorInfo,
+  });
 
   GrpcFileDownloadInfoItemData.fromJson(dynamic json) {
     id = json['ID'];
-    url = json['URL'];
     savePath = json['savePath'];
     fileName = json['fileName'];
+    fileID = json['fileID'];
+    workingUrl = json['workingUrl'];
     cookie = json['cookie'];
     downLoadType = json['downLoadType'];
     status = json['status'];
     downloadedSize = json['downloadedSize'];
     contentLength = json['contentLength'];
-    errorInfo = json["errorInfo"];
+    errorInfo = json['errorInfo'];
   }
 
   String? id;
-  String? url;
   String? savePath;
   String? fileName;
+  String? fileID;
+  String? workingUrl;
   String? cookie;
+  int? downLoadType;
+  int? status;
+  int? downloadedSize;
+  int? contentLength;
   String? errorInfo;
-  num? downLoadType;
-  num? status;
-  num? downloadedSize;
-  num? contentLength;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['ID'] = id;
-    map['URL'] = url;
     map['savePath'] = savePath;
     map['fileName'] = fileName;
+    map['fileID'] = fileID;
+    map['workingUrl'] = workingUrl;
     map['cookie'] = cookie;
+    map['errorInfo'] = errorInfo;
     map['downLoadType'] = downLoadType;
     map['status'] = status;
     map['downloadedSize'] = downloadedSize;
     map['contentLength'] = contentLength;
-    map["errorInfo"] = errorInfo;
     return map;
   }
 }

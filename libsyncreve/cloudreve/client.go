@@ -10,7 +10,7 @@ type Client struct {
 }
 
 func NewClient(workingUrl string, InstanceUrl string, cookie string) *Client {
-	reqClient := req.NewClient()
+	reqClient := req.C()
 	if reqClient.Headers == nil {
 		reqClient.Headers = make(map[string][]string)
 	}

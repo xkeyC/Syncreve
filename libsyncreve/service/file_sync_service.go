@@ -97,6 +97,7 @@ func (*fileSyncServerImpl) GetDownloadInfoStream(r *protos.DownloadInfoRequest, 
 				return err
 			}
 		case <-stream.Context().Done():
+			fmt.Println("[libsyncreve] GetDownloadInfoStream canceled")
 			return errors.New("canceled")
 		}
 	}
@@ -126,6 +127,7 @@ func (*fileSyncServerImpl) GetDownloadCountStream(_ *protos.DownloadCountRequest
 			lastL = l
 			time.Sleep(1 * time.Second)
 		case <-stream.Context().Done():
+			fmt.Println("[libsyncreve] GetDownloadCountStream canceled")
 			return errors.New("canceled")
 		}
 	}

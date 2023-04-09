@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/google/uuid"
-	"github.com/imroc/req/v3"
 	"github.com/xkeyC/Syncreve/libsyncreve/cloudreve"
 	"github.com/xkeyC/Syncreve/libsyncreve/protos"
 	"github.com/xkeyC/Syncreve/libsyncreve/utils"
@@ -195,14 +194,11 @@ func downloadAndListen(k uuid.UUID) {
 	if taskInfo == nil {
 		return
 	}
-	err := DoDownload(taskInfo, func(info req.DownloadInfo) {
-		if info.Response.Response == nil {
-			return
-		}
-		go updateDownloadInfo(k, *taskInfo, &info, FileDownloadQueueStatusDownloading, "")
+	go updateDownloadInfo(k, *taskInfo, nil, nil, FileDownloadQueueStatusWaiting, "")
+	err := DoDownload(taskInfo, func(current int64, total int64) {
+		go updateDownloadInfo(k, *taskInfo, &current, &total, FileDownloadQueueStatusDownloading, "")
 	})
 
-	taskInfo.CancelFunc()
 	// download complete remove Queue
 	fmt.Println("[libsyncreve] filesync.downloadAndListen complete,err ==", err)
 	fileDownloadQueues.mutex.Lock()
@@ -213,15 +209,15 @@ func downloadAndListen(k uuid.UUID) {
 	fmt.Println("[libsyncreve] filesync.downloadAndListen fileDownloadQueues mutex updated")
 
 	if err != nil {
-		go updateDownloadInfo(k, *taskInfo, nil, FileDownloadQueueStatusError, err.Error())
+		go updateDownloadInfo(k, *taskInfo, nil, nil, FileDownloadQueueStatusError, err.Error())
 	} else {
-		go updateDownloadInfo(k, *taskInfo, nil, FileDownloadQueueStatusDone, "")
+		go updateDownloadInfo(k, *taskInfo, nil, nil, FileDownloadQueueStatusDone, "")
 	}
 	go UpdateWorkingTask()
 }
 
-func updateDownloadInfo(k uuid.UUID, taskInfo FileDownloadQueueTaskData, info *req.DownloadInfo, status FileDownloadQueueStatusType, errorInfo string) {
-	fmt.Println("[libsyncreve] filesync.updateDownloadInfo ID == ", taskInfo.ID, "Status==", taskInfo.Status, "errorInfo==", errorInfo)
+func updateDownloadInfo(k uuid.UUID, taskInfo FileDownloadQueueTaskData, downloadedSize *int64, totalSize *int64, status FileDownloadQueueStatusType, errorInfo string) {
+	//fmt.Println("[libsyncreve] filesync.updateDownloadInfo ID == ", taskInfo.ID, "Status==", taskInfo.Status, "errorInfo==", errorInfo)
 	// update download info
 	fileDownloadingInfo.Mutex.Lock()
 	defer fileDownloadingInfo.Mutex.Unlock()
@@ -239,17 +235,22 @@ func updateDownloadInfo(k uuid.UUID, taskInfo FileDownloadQueueTaskData, info *r
 			Status:       status,
 			ErrorInfo:    errorInfo,
 		}
-		if info != nil {
-			downloadInfo.DownloadedSize = info.DownloadedSize
-			downloadInfo.ContentLength = info.Response.ContentLength
+		if downloadedSize != nil {
+			downloadInfo.DownloadedSize = *downloadedSize
 		}
+		if totalSize != nil {
+			downloadInfo.ContentLength = *totalSize
+		}
+
 		fileDownloadingInfo.InfoMap[k] = downloadInfo
 	} else {
 		// update progress only
 		downloadInfo := fileDownloadingInfo.InfoMap[k]
-		if info != nil {
-			downloadInfo.DownloadedSize = info.DownloadedSize
-			downloadInfo.ContentLength = info.Response.ContentLength
+		if downloadedSize != nil {
+			downloadInfo.DownloadedSize = *downloadedSize
+		}
+		if totalSize != nil {
+			downloadInfo.ContentLength = *totalSize
 		}
 		if downloadInfo.Status != FileDownloadQueueStatusDone && downloadInfo.Status != FileDownloadQueueStatusError {
 			downloadInfo.Status = status

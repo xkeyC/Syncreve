@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:syncreve/base/base_utils.dart';
+import 'package:syncreve/common/account_manager.dart';
 import 'package:syncreve/common/grpc/grpc_manager.dart';
 import 'package:syncreve/common/io/path_tools.dart';
 import 'package:syncreve/data/app/app_file_save_path_data.dart';
@@ -76,6 +77,17 @@ class Downloader {
     }, onDone: () {}, onError: (error, stackTrace) {}, cancelOnError: true);
   }
 
+  static Future<GrpcFileDownloadInfoData> getDownloadInfo(
+      DownloadInfoRequestType type) async {
+    final jsonData = await AppGRPCManager.getDownloadInfo(type);
+    if (jsonData.isEmpty) {
+      return GrpcFileDownloadInfoData(queueLen: 0, workingLen: 0, infoMap: {});
+    }
+    final data =
+        GrpcFileDownloadInfoData.fromJson(json.decode(utf8.decode(jsonData)));
+    return data;
+  }
+
   static Future<String> cancelDownloadTask(String id) {
     return AppGRPCManager.cancelDownloadTask(id);
   }
@@ -83,7 +95,7 @@ class Downloader {
   static AppFileSavePathData getTempFilePath(
       CloudreveFileObjectsData fileData) {
     final savePath =
-        "${AppPathTools.tempDownloadPath}/${fileData.id ?? "no_id"}/";
+        "${AppPathTools.tempDownloadPath}/${AppAccountManager.workingAccount}/${fileData.id ?? "no_id"}/";
     final fileName = fileData.name ?? fileData.id ?? "no_name";
     final filePath = getFilePath(savePath, fileName);
     return AppFileSavePathData(

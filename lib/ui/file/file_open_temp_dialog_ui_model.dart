@@ -134,10 +134,13 @@ class FileOpenTempDialogUIModel extends BaseUIModel {
         downloadSpeed = fileDownloadInfoItemData?.downloadedSize ?? 0;
         _lastDownloadedSize = downloadSpeed;
       } else {
-        downloadSpeed = (fileDownloadInfoItemData?.downloadedSize ?? 0) -
+        final sp = (fileDownloadInfoItemData?.downloadedSize ?? 0) -
             _lastDownloadedSize;
-        dPrint(
-            "${fileDownloadInfoItemData?.downloadedSize ?? 0} - $_lastDownloadedSize == $downloadSpeed");
+        if (sp != 0) {
+          downloadSpeed = sp;
+          _lastDownloadedSize = fileDownloadInfoItemData?.downloadedSize ?? 0;
+          notifyListeners();
+        }
         _lastDownloadedSize = fileDownloadInfoItemData?.downloadedSize ?? 0;
       }
       notifyListeners();

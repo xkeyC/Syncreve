@@ -4,16 +4,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/imroc/req/v3"
 	"github.com/xkeyC/Syncreve/libsyncreve/cloudreve"
 	"github.com/xkeyC/Syncreve/libsyncreve/utils"
 	"os"
 	"strings"
+	"time"
 )
 
-func DoDownload(taskInfo *FileDownloadQueueTaskData, callback req.DownloadCallback) error {
-	httpClient := req.C()
-	httpClient.DisableAutoDecode()
+func DoDownload(taskInfo *FileDownloadQueueTaskData, callback utils.FileDownloadCallback) error {
 	cloudreveClient := cloudreve.NewClient(taskInfo.WorkingUrl, taskInfo.InstanceUrl, taskInfo.Cookie)
 	filePath := taskInfo.SavePath + "/" + taskInfo.FileName
 	fmt.Println("[libsyncreve] filesync.DoDownload filePath ==", filePath)
@@ -21,6 +19,13 @@ func DoDownload(taskInfo *FileDownloadQueueTaskData, callback req.DownloadCallba
 	if utils.FileExist(filePath) {
 		fmt.Println("[libsyncreve] filesync.DoDownload (error) err == file exist")
 		return errors.New("file exist")
+	}
+
+	if !utils.FileExist(taskInfo.SavePath) {
+		err := os.MkdirAll(taskInfo.SavePath, os.ModePerm)
+		if err != nil {
+			return err
+		}
 	}
 
 	downloadUrl, err := cloudreveClient.GetFileDownloadUrl(taskInfo.Context, taskInfo.FileID)
@@ -34,11 +39,7 @@ func DoDownload(taskInfo *FileDownloadQueueTaskData, callback req.DownloadCallba
 
 	fmt.Println("[libsyncreve] filesync.DoDownload (start) url ==", downloadUrl)
 	tempFilePath := filePath + ".syncing"
-	if httpClient.Headers == nil {
-		httpClient.Headers = make(map[string][]string)
-	}
-	httpClient.Headers.Set("cookie", taskInfo.Cookie)
-	_, err = req.R().SetOutputFile(tempFilePath).SetDownloadCallback(callback).SetContext(taskInfo.Context).Get(downloadUrl)
+	err = utils.DownloadFile(taskInfo.Context, tempFilePath, downloadUrl, taskInfo.Cookie, callback, 100*time.Millisecond)
 	if err != nil {
 		fmt.Println("[libsyncreve] filesync.DoDownload (Error) Error ==", err)
 		return err
