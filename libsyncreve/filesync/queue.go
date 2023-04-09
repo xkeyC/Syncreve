@@ -186,6 +186,7 @@ func addTaskToList(queueData *FileDownloadQueueTaskData) error {
 	fileDownloadQueues.queuesMap[queueData.ID] = queueData
 	fileDownloadQueues.queueLen++
 	go UpdateWorkingTask()
+	go updateDownloadInfo(queueData.ID, *queueData, nil, nil, FileDownloadQueueStatusWaiting, "")
 	return nil
 }
 
@@ -194,7 +195,6 @@ func downloadAndListen(k uuid.UUID) {
 	if taskInfo == nil {
 		return
 	}
-	go updateDownloadInfo(k, *taskInfo, nil, nil, FileDownloadQueueStatusWaiting, "")
 	err := DoDownload(taskInfo, func(current int64, total int64) {
 		go updateDownloadInfo(k, *taskInfo, &current, &total, FileDownloadQueueStatusDownloading, "")
 	})
