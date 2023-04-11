@@ -62,10 +62,11 @@ class DownloadManagerUIModel extends BaseUIModel {
   }
 
   _listenDownloadCount({int tryCount = 0}) async {
+    var c = tryCount;
     _downloadCountListenSub = AppGRPCManager.getDownloadCountStream().listen(
         (value) {
-          if (tryCount != 0) {
-            tryCount = 0;
+          if (c != 0) {
+            c = 0;
           }
           dPrint(
               "<DownloadManagerUIModel> getDownloadCountStream: count == ${value.count} workingCount ${value.workingCount}");
@@ -74,13 +75,14 @@ class DownloadManagerUIModel extends BaseUIModel {
         },
         cancelOnError: true,
         onError: (e, t) {
+          c++;
           _downloadCountListenSub?.cancel();
           dPrint(
               "<DownloadManagerUIModel> getDownloadCountStream: onError $e $t");
-          if (tryCount >= 10) {
+          if (c >= 3) {
             return;
           }
-          return _listenDownloadCount(tryCount: tryCount++);
+          return _listenDownloadCount(tryCount: c);
         });
   }
 
