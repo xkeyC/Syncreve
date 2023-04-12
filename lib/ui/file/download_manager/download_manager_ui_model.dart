@@ -30,6 +30,7 @@ class DownloadManagerUIModel extends BaseUIModel {
     infoData = await handleError(
         () => Downloader.getDownloadInfo(DownloadInfoRequestType.All),
         showFullScreenError: true);
+    dPrint("${infoData?.infoMap}");
     if (infoData?.infoMap != null) {
       final List<GrpcFileDownloadInfoItemData> downloadingList = [];
       final List<GrpcFileDownloadInfoItemData> waitingList = [];

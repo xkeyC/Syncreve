@@ -28,7 +28,7 @@ class DownloadTaskItemWidgetUI extends BaseUI<DownloadTaskItemWidgetUIModel> {
                             maxLines: 1, overflow: TextOverflow.ellipsis),
                         const SizedBox(height: 2),
                         Text(
-                          "${filesize(itemData.downloadedSize ?? 0)}${itemData.status == Downloader.fileDownloadQueueStatusDownloading ? "/${filesize(itemData.contentLength ?? 0)}" : ""} ${model.getDownloadStatusText(itemData.status)} "
+                          "${filesize(itemData.downloadedSize ?? 0)}${itemData.status == Downloader.fileDownloadQueueStatusDownloading ? "/${filesize(itemData.totalSize ?? 0)}" : ""} ${model.getDownloadStatusText(itemData.status)} "
                           "${itemData.status == Downloader.fileDownloadQueueStatusError ? "${itemData.errorInfo}" : ""}"
                           "${itemData.status == Downloader.fileDownloadQueueStatusDownloading ? "  ${filesize(model.downloadSpeed)}/s" : ""}",
                           style: TextStyle(

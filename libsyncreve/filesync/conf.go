@@ -1,3 +1,3 @@
 package filesync
 
-var MaxWorkingTaskNumber int8 = 5
+var MaxWorkingTaskNumber int64 = 5

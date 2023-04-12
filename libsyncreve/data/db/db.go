@@ -35,7 +35,7 @@ func Init(workingDir string) error {
 			LogLevel:                  logger.Info, // Log level
 			IgnoreRecordNotFoundError: false,       // Ignore ErrRecordNotFound error for logger
 			ParameterizedQueries:      false,       // Don't include params in the SQL log
-			Colorful:                  true,        // Disable color
+			Colorful:                  false,       // Disable color
 		},
 	)
 

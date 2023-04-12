@@ -125,7 +125,7 @@ class FileOpenTempDialogUIModel extends BaseUIModel {
         fileDownloadInfoItemData?.downloadedSize == 0) {
       return (fileObjectsData.size?.toInt()) ?? 0;
     }
-    return fileDownloadInfoItemData!.contentLength!.toInt();
+    return fileDownloadInfoItemData!.totalSize!.toInt();
   }
 
   void _downloadSpeeder() async {

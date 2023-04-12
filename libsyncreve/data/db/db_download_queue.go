@@ -22,6 +22,7 @@ type DownloadQueue struct {
 	InstanceUrl  string                         `json:"instanceUrl,omitempty"`
 	Cookie       string                         `json:"cookie,omitempty"`
 	DownLoadType protos.DownloadInfoRequestType `gorm:"index" json:"downLoadType,omitempty"`
+	TotalSize    int64                          `json:"totalSize,omitempty"`
 	Status       DownloadQueueStatusType        `gorm:"index" json:"status"`
 	ErrorInfo    string                         `json:"errorInfo,omitempty"`
 }

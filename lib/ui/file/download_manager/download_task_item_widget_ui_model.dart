@@ -42,7 +42,7 @@ class DownloadTaskItemWidgetUIModel extends BaseUIModel {
   }
 
   double? getDownloadProgressValue(GrpcFileDownloadInfoItemData itemData) {
-    final fileSize = itemData.contentLength ?? 1;
+    final fileSize = itemData.totalSize ?? 1;
     if (fileSize == 0) return null;
     final p =
         (itemData.downloadedSize?.toDouble() ?? 0.0) / fileSize.toDouble();
@@ -65,7 +65,7 @@ class DownloadTaskItemWidgetUIModel extends BaseUIModel {
           downloadSub?.cancel();
           downloadSub = null;
           isDownloadComplete = true;
-          itemData.downloadedSize = itemData.contentLength;
+          itemData.downloadedSize = itemData.totalSize;
         }
         this.itemData = itemData;
         notifyListeners();

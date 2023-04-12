@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/xkeyC/Syncreve/libsyncreve/data"
 	"github.com/xkeyC/Syncreve/libsyncreve/data/db"
+	"github.com/xkeyC/Syncreve/libsyncreve/filesync"
 	"github.com/xkeyC/Syncreve/libsyncreve/service"
 	"github.com/xkeyC/Syncreve/libsyncreve/utils"
 	"gopkg.in/yaml.v3"
@@ -26,6 +27,7 @@ func StartService(confPath string) error {
 	fmt.Println("db.Init Error", err)
 	utils.IfPanic(err)
 	go service.StartGRPCService(conf.WorkingDir)
+	_ = filesync.UpdateWorkingTask()
 	return nil
 }
 
