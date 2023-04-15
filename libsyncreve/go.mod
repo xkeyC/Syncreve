@@ -8,6 +8,8 @@ require (
 	google.golang.org/grpc v1.54.0
 	google.golang.org/protobuf v1.30.0
 	gopkg.in/yaml.v3 v3.0.1
+	gorm.io/driver/sqlite v1.5.0
+	gorm.io/gorm v1.25.0
 )
 
 require (
@@ -17,6 +19,9 @@ require (
 	github.com/google/pprof v0.0.0-20230406165453-00490a63f317 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
+	github.com/jinzhu/inflection v1.0.0 // indirect
+	github.com/jinzhu/now v1.1.5 // indirect
+	github.com/mattn/go-sqlite3 v1.14.16 // indirect
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
 	github.com/onsi/ginkgo/v2 v2.9.2 // indirect
 	github.com/quic-go/qpack v0.4.0 // indirect
@@ -30,6 +35,6 @@ require (
 	golang.org/x/sys v0.7.0 // indirect
 	golang.org/x/text v0.9.0 // indirect
 	golang.org/x/tools v0.8.0 // indirect
-	google.golang.org/genproto v0.0.0-20230403163135-c38d8f061ccd // indirect
+	google.golang.org/genproto v0.0.0-20230410155749-daa745c078e1 // indirect
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
 )

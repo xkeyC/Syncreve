@@ -14,9 +14,9 @@ type fileSyncServerImpl struct {
 	protos.UnimplementedFileSyncServiceServer
 }
 
-func (*fileSyncServerImpl) AddDownloadTask(_ context.Context, r *protos.DownloadTaskRequest) (*protos.DownloadTaskResult, error) {
+func (*fileSyncServerImpl) AddDownloadTask(ctx context.Context, r *protos.DownloadTaskRequest) (*protos.DownloadTaskResult, error) {
 	fmt.Println("[libsyncreve] service.AddDownloadTask")
-	id, err := filesync.AddDownloadTask(r.FileInfos, r.WorkingUrl, r.InstanceUrl, r.SavePath, r.Cookie, r.DownLoadType)
+	id, err := filesync.AddDownloadTask(ctx, r.FileInfos, r.WorkingUrl, r.InstanceUrl, r.SavePath, r.Cookie, r.DownLoadType)
 	fmt.Println("[libsyncreve] service.AddDownloadTask id==", id, "err=", err)
 	return &protos.DownloadTaskResult{
 		Ids: id,
@@ -53,9 +53,11 @@ func (*fileSyncServerImpl) CancelDownloadTask(_ context.Context, r *protos.Downl
 
 func (*fileSyncServerImpl) GetDownloadInfo(_ context.Context, r *protos.DownloadInfoRequest) (*protos.DownLoadInfoResult, error) {
 	info, err := filesync.GetDownloadInfoJson(nil, r.Type)
+	fmt.Println("[libsyncreve]<fileSyncServerImpl> GetDownloadInfo err ==", err)
 	if err != nil {
 		return nil, err
 	}
+
 	return &protos.DownLoadInfoResult{Type: r.Type, Data: info}, nil
 }
 
@@ -80,10 +82,12 @@ func (*fileSyncServerImpl) GetDownloadInfoStream(r *protos.DownloadInfoRequest, 
 		select {
 		case <-time.After(updateTime):
 			info, err := filesync.GetDownloadInfoJson(id, r.Type)
+			fmt.Println("[libsyncreve]<fileSyncServerImpl> GetDownloadInfoStream err ==", err)
 			if info == nil {
 				time.Sleep(updateTime)
 				continue
 			}
+
 			if err != nil {
 				fmt.Println("[libsyncreve] service.GetDownloadInfoStream GetDownloadInfoJson error ==", err)
 				return err

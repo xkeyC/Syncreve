@@ -70,6 +70,8 @@ class Downloader {
     final s = AppGRPCManager.getDownloadInfoStream(
         DownloadInfoRequest(id: id, type: type));
     return s.listen((value) {
+      dPrint("getDownloadInfoStream  value ==\n$value");
+      dPrint("getDownloadInfoStream  value utf8 ==\n${utf8.decode(value.data)}");
       final data = GrpcFileDownloadInfoData.fromJson(
           json.decode(utf8.decode(value.data)));
       // dPrint("[Downloader] info stream :${data.toJson()}");

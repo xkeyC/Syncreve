@@ -30,6 +30,7 @@ class DownloadManagerUIModel extends BaseUIModel {
     infoData = await handleError(
         () => Downloader.getDownloadInfo(DownloadInfoRequestType.All),
         showFullScreenError: true);
+    dPrint("${infoData?.infoMap}");
     if (infoData?.infoMap != null) {
       final List<GrpcFileDownloadInfoItemData> downloadingList = [];
       final List<GrpcFileDownloadInfoItemData> waitingList = [];
@@ -62,10 +63,11 @@ class DownloadManagerUIModel extends BaseUIModel {
   }
 
   _listenDownloadCount({int tryCount = 0}) async {
+    var c = tryCount;
     _downloadCountListenSub = AppGRPCManager.getDownloadCountStream().listen(
         (value) {
-          if (tryCount != 0) {
-            tryCount = 0;
+          if (c != 0) {
+            c = 0;
           }
           dPrint(
               "<DownloadManagerUIModel> getDownloadCountStream: count == ${value.count} workingCount ${value.workingCount}");
@@ -74,19 +76,20 @@ class DownloadManagerUIModel extends BaseUIModel {
         },
         cancelOnError: true,
         onError: (e, t) {
+          c++;
           _downloadCountListenSub?.cancel();
           dPrint(
               "<DownloadManagerUIModel> getDownloadCountStream: onError $e $t");
-          if (tryCount >= 10) {
+          if (c >= 3) {
             return;
           }
-          return _listenDownloadCount(tryCount: tryCount++);
+          return _listenDownloadCount(tryCount: c);
         });
   }
 
   String getDownloadTaskCountString({bool isWorkingCount = false}) {
     if (isWorkingCount) {
-      return "${downloadingList?.length ?? 0}";
+      return "${_downloadCountResult?.workingCount.toInt() ?? 0}";
     }
     return "${_downloadCountResult?.count.toInt() ?? 0}";
   }
