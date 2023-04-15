@@ -89,7 +89,7 @@ class DownloadManagerUIModel extends BaseUIModel {
 
   String getDownloadTaskCountString({bool isWorkingCount = false}) {
     if (isWorkingCount) {
-      return "${downloadingList?.length ?? 0}";
+      return "${_downloadCountResult?.workingCount.toInt() ?? 0}";
     }
     return "${_downloadCountResult?.count.toInt() ?? 0}";
   }

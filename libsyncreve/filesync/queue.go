@@ -122,6 +122,7 @@ func UpdateWorkingTask() error {
 		if err != nil {
 			return err
 		}
+		fmt.Println("[libsyncreve] downloadAndListen Temp download", queueInfo.ID)
 		go downloadAndListen(queueInfo.ID)
 		continue
 	}
@@ -132,24 +133,26 @@ func UpdateWorkingTask() error {
 	if err != nil {
 		return err
 	}
+
+	fmt.Println("Check downloadingCount count == ", downloadingCount, "err == ", err)
 	/// queue busy, skip download
 	if downloadingCount >= MaxWorkingTaskNumber {
 		return nil
 	}
 
+	var queryCount = MaxWorkingTaskNumber - downloadingCount
 	/// then check download Queue
 	var queueItems []db.DownloadQueue
-	err = db.DB.Find(&queueItems, "down_load_type = ? AND status = ?", protos.DownloadInfoRequestType_Queue, db.DownloadQueueStatusWaiting).Error
+	err = db.DB.Limit(int(queryCount)).Find(&queueItems, "down_load_type = ? AND status = ?", protos.DownloadInfoRequestType_Queue, db.DownloadQueueStatusWaiting).Error
 	if err != nil {
 		fmt.Println("Find queueItems Error")
 		return err
 	}
-
 	for _, queueInfo := range queueItems {
-		if downloadingCount >= MaxWorkingTaskNumber {
-			return nil
+		if err := db.DB.Model(queueInfo).Update("status", db.DownloadQueueStatusDownloading).Error; err != nil {
+			return err
 		}
-		downloadingCount++
+		fmt.Println("[libsyncreve] downloadAndListen Queue download", queueInfo.ID)
 		go downloadAndListen(queueInfo.ID)
 	}
 	return nil
@@ -168,8 +171,6 @@ func GetDownloadInfoJson(id *uuid.UUID, t protos.DownloadInfoRequestType) ([]byt
 		downloadingData := DownloadingTaskMapData.Get(id.String())
 		if downloadingData != nil {
 			downloadedSize = downloadingData.DownloadedSize
-		} else {
-			fmt.Println("[libsyncreve] GetDownloadInfoJson  downloadingTaskMap.Load error")
 		}
 		fmt.Println("[libsyncreve] GetDownloadInfoJson  downloadedSize == ", downloadedSize)
 		newMap[taskInfo.ID] = FileDownloadingInfo{
@@ -181,7 +182,7 @@ func GetDownloadInfoJson(id *uuid.UUID, t protos.DownloadInfoRequestType) ([]byt
 			WorkingLen: GetWorkingTaskLen(),
 		}
 	} else {
-		var queues []db.DownloadQueue
+		var queues []*db.DownloadQueue
 		var err error
 		newMap := make(map[uuid.UUID]FileDownloadingInfo)
 		if t == protos.DownloadInfoRequestType_All {
@@ -198,7 +199,7 @@ func GetDownloadInfoJson(id *uuid.UUID, t protos.DownloadInfoRequestType) ([]byt
 					downloadedSize = downloadingData.DownloadedSize
 				}
 				newMap[taskInfo.ID] = FileDownloadingInfo{
-					&taskInfo, downloadedSize,
+					taskInfo, downloadedSize,
 				}
 			}
 		}
@@ -281,7 +282,7 @@ func updateDownloadInfo(k uuid.UUID, taskInfo *db.DownloadQueue, downloadedSize 
 				DownloadingTaskMapData.Set(k.String(), &item)
 			}
 		} else {
-			fmt.Println("[libsyncreve] updateDownloadInfo  downloadingTaskMap.Load error")
+
 		}
 	}
 

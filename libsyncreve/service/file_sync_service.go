@@ -53,7 +53,7 @@ func (*fileSyncServerImpl) CancelDownloadTask(_ context.Context, r *protos.Downl
 
 func (*fileSyncServerImpl) GetDownloadInfo(_ context.Context, r *protos.DownloadInfoRequest) (*protos.DownLoadInfoResult, error) {
 	info, err := filesync.GetDownloadInfoJson(nil, r.Type)
-	fmt.Println("[libsyncreve]<fileSyncServerImpl> GetDownloadInfo info ==", info, "err ==", err)
+	fmt.Println("[libsyncreve]<fileSyncServerImpl> GetDownloadInfo err ==", err)
 	if err != nil {
 		return nil, err
 	}
@@ -82,7 +82,7 @@ func (*fileSyncServerImpl) GetDownloadInfoStream(r *protos.DownloadInfoRequest, 
 		select {
 		case <-time.After(updateTime):
 			info, err := filesync.GetDownloadInfoJson(id, r.Type)
-			fmt.Println("[libsyncreve]<fileSyncServerImpl> GetDownloadInfo info ==", info, "err ==", err)
+			fmt.Println("[libsyncreve]<fileSyncServerImpl> GetDownloadInfoStream err ==", err)
 			if info == nil {
 				time.Sleep(updateTime)
 				continue

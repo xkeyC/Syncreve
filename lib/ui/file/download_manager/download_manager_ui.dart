@@ -63,7 +63,7 @@ class DownloadManagerUI extends BaseUI<DownloadManagerUIModel> {
                 children: [
                   const SizedBox(width: 12),
                   Text(
-                    "Queue (${(model.downloadCountResult?.count.toInt() ?? 0) - (model.downloadingList?.length ?? 0)})",
+                    "Queue (${(model.downloadCountResult?.count.toInt() ?? 0)})",
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.bold),
                   ),

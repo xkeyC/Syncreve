@@ -39,7 +39,7 @@ func Init(workingDir string) error {
 		},
 	)
 
-	dbPath := workingDir + "/db/libsyncreve"
+	dbPath := workingDir + "/libsyncreve/db"
 	dbFilPath := dbPath + "/database.db"
 	fmt.Println("Sqlite Path ==", dbFilPath)
 	err := os.MkdirAll(dbPath, os.ModePerm)
