@@ -28,7 +28,7 @@ jobs:
       - name: Check flutter Vsersion
         run: flutter --version
       - name: Build libsyncreve  
-        run: cd ./libsyncreve/moblie/ && bash ./build_android_library.sh && cd ../../
+        run: cd ./libsyncreve/moblie/ && go install golang.org/x/mobile/cmd/gomobile@latest && bash ./build_android_library.sh && cd ../../
       - name: Flutter pub get
         run: flutter pub get
       - name: Flutter format code
