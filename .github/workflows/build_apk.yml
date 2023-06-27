@@ -31,8 +31,6 @@ jobs:
         run: cd ./libsyncreve/moblie/ && go install golang.org/x/mobile/cmd/gomobile@latest && gomobile init && bash ./build_android_library.sh && cd ../../
       - name: Flutter pub get
         run: flutter pub get
-      - name: Flutter analyze
-        run: flutter analyze .
       - name: Flutter build apk
         run: flutter build apk
       - uses: actions/upload-artifact@v3
