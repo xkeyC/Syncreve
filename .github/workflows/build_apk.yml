@@ -28,8 +28,7 @@ jobs:
       - name: Check flutter Vsersion
         run: flutter --version
       - name: Build libsyncreve  
-        working-directory: ./libsyncreve/moblie/
-        run: bash ./build_android_library.sh
+        run: cd ./libsyncreve/moblie/ && bash ./build_android_library.sh && cd ../../
       - name: Flutter pub get
         run: flutter pub get
       - name: Flutter format code
