@@ -1,0 +1,39 @@
+name: Flutter build apk
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'microsoft'
+      - name: Setup Flutter  
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+      - name: Setup golang    
+        uses: actions/setup-go@v4
+        with:
+          go-version: '^1.20'
+      - name: Check golang Vsersion    
+        run: go version
+      - name: Check flutter Vsersion
+        run: flutter --version
+      - name: Build libsyncreve  
+        run: cd ./libsyncreve/moblie/ && go install golang.org/x/mobile/cmd/gomobile@latest && gomobile init && bash ./build_android_library.sh && cd ../../
+      - name: Flutter pub get
+        run: flutter pub get
+      - name: Flutter build apk
+        run: flutter build apk
+      - uses: actions/upload-artifact@v3
+        with:
+          name: release-apk
+          path: build/app/outputs/apk/release/app-release.apk
