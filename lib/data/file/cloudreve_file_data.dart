@@ -13,9 +13,7 @@ class CloudreveFileData {
         objects?.add(CloudreveFileObjectsData.fromJson(v));
       });
     }
-    policy = json['policy'] != null
-        ? CloudreveFilePolicyData.fromJson(json['policy'])
-        : null;
+    policy = json['policy'] != null ? CloudreveFilePolicyData.fromJson(json['policy']) : null;
   }
 
   String? parent;
@@ -34,6 +32,12 @@ class CloudreveFileData {
     return map;
   }
 }
+
+/// id : "o2fK"
+/// name : "Default storage policy"
+/// type : "local"
+/// max_size : 0
+/// file_type : []
 
 class CloudreveFilePolicyData {
   CloudreveFilePolicyData({
@@ -76,12 +80,22 @@ class CloudreveFilePolicyData {
   }
 }
 
+/// id : "m7Yu5"
+/// name : "VRChat_2023-03-20_00-40-59.651_7680x4320.png"
+/// path : "/图片/vrchat/2023-03"
+/// thumb : false
+/// size : 41144367
+/// type : "file"
+/// date : "2023-03-20T01:27:42.788506345+08:00"
+/// create_date : "2023-03-20T01:11:41.236619094+08:00"
+/// source_enabled : true
+
 class CloudreveFileObjectsData {
   CloudreveFileObjectsData({
     this.id,
     this.name,
     this.path,
-    this.pic,
+    this.thumb,
     this.size,
     this.type,
     this.date,
@@ -93,7 +107,7 @@ class CloudreveFileObjectsData {
     id = json['id'];
     name = json['name'];
     path = json['path'];
-    pic = json['pic'];
+    thumb = json['thumb'];
     size = json['size'];
     type = json['type'];
     date = json['date'];
@@ -104,7 +118,7 @@ class CloudreveFileObjectsData {
   String? id;
   String? name;
   String? path;
-  String? pic;
+  bool? thumb;
   num? size;
   String? type;
   String? date;
@@ -116,7 +130,7 @@ class CloudreveFileObjectsData {
     map['id'] = id;
     map['name'] = name;
     map['path'] = path;
-    map['pic'] = pic;
+    map['thumb'] = thumb;
     map['size'] = size;
     map['type'] = type;
     map['date'] = date;

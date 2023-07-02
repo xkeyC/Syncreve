@@ -110,7 +110,7 @@ class HomeFileUI extends BaseUI<HomeFileUIModel> {
                   top: 6, bottom: model.isInSelectMode ? 64 : 0),
               itemBuilder: (BuildContext context, int index) {
                 final file = model.files!.objects![index];
-                final isPic = file.pic?.isNotEmpty ?? false;
+                final isPic = file.thumb == true;
                 return model.isCardFileList
                     ? makeCardItem(context, model, file, isPic, cardWidth)
                     : makeListItem(context, model, file, isPic);
