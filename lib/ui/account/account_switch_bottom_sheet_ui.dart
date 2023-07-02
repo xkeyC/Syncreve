@@ -33,9 +33,9 @@ class AccountSwitchBottomSheetUI
                     child: InkWell(
                       child: fastPadding(
                           all: 12,
-                          child: Row(
+                          child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
+                            children: [
                               Icon(Icons.add),
                               SizedBox(width: 32),
                               Text("New Account"),

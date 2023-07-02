@@ -75,8 +75,8 @@ class DownloadManagerUI extends BaseUI<DownloadManagerUIModel> {
                       onLongPress: () {
                         model.cleanAllComplete(cleanError: true);
                       },
-                      child: Row(
-                        children: const [
+                      child: const Row(
+                        children: [
                           Icon(Icons.clear_all, size: 16),
                           SizedBox(width: 6),
                           Text(

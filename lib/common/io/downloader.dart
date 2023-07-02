@@ -24,13 +24,13 @@ class Downloader {
       required String cookie,
       required DownloadInfoRequestType type,
       required String instanceUrl}) async {
-    final r = DownloadTaskRequest(
-        fileInfos: fileInfo,
-        workingUrl: workingUrl,
-        instanceUrl: instanceUrl,
-        savePath: savePath,
-        cookie: cookie,
-        downLoadType: type);
+    final r = DownloadTaskRequest()
+      ..fileInfos.addAll(fileInfo)
+      ..workingUrl = workingUrl
+      ..instanceUrl = instanceUrl
+      ..savePath = savePath
+      ..cookie = cookie
+      ..downLoadType = type;
 
     if (fileInfo.length == 1) {
       if (await File("$savePath/${fileInfo[0].fileName}").exists()) {
@@ -52,14 +52,14 @@ class Downloader {
       required String cookie,
       required DownloadInfoRequestType type,
       required String instanceUrl}) async {
-    final ids = await AppGRPCManager.addDownloadTasksByDirPath(
-        DownloadDirTaskRequest(
-            workingUrl: workingUrl,
-            instanceUrl: instanceUrl,
-            dirPath: path,
-            savePath: savePath,
-            cookie: cookie,
-            downLoadType: type));
+    final ids =
+        await AppGRPCManager.addDownloadTasksByDirPath(DownloadDirTaskRequest()
+          ..workingUrl = workingUrl
+          ..instanceUrl = instanceUrl
+          ..dirPath = path
+          ..savePath = savePath
+          ..cookie = cookie
+          ..downLoadType = type);
 
     dPrint("[Downloader] addDownloadTasksByDirPath result.ids==$ids");
     return ids;
@@ -67,11 +67,13 @@ class Downloader {
 
   static StreamSubscription getDownloadInfoStream(DownloadInfoRequestType type,
       {String? id, void Function(GrpcFileDownloadInfoData value)? onData}) {
-    final s = AppGRPCManager.getDownloadInfoStream(
-        DownloadInfoRequest(id: id, type: type));
+    final s = AppGRPCManager.getDownloadInfoStream(DownloadInfoRequest()
+      ..id = id ?? ""
+      ..type = type);
     return s.listen((value) {
       dPrint("getDownloadInfoStream  value ==\n$value");
-      dPrint("getDownloadInfoStream  value utf8 ==\n${utf8.decode(value.data)}");
+      dPrint(
+          "getDownloadInfoStream  value utf8 ==\n${utf8.decode(value.data)}");
       final data = GrpcFileDownloadInfoData.fromJson(
           json.decode(utf8.decode(value.data)));
       // dPrint("[Downloader] info stream :${data.toJson()}");

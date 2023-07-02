@@ -246,8 +246,9 @@ class HomeFileUIModel extends BaseUIModel {
       for (var element in files!.objects!) {
         if (selectedFilesId[element.id] == true) {
           if (element.type == "file") {
-            dFilesInfo.add(DownloadTaskRequestFileInfo(
-                fileID: element.id, fileName: element.name));
+            dFilesInfo.add(DownloadTaskRequestFileInfo()
+              ..fileID = element.id ?? ""
+              ..fileName = element.name ?? "");
           } else {
             dFilesPaths.add("${path.join("/")}/${element.name}");
           }

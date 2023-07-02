@@ -35,7 +35,7 @@ class AppGRPCManager {
 
   static Future pingServer() async {
     try {
-      final result = await _pingClient.pingServer(PingRequest(name: "ping"));
+      final result = await _pingClient.pingServer(PingRequest()..name = "ping");
       if (result.pong == "pong") {
         dPrint("[AppGRPCManager] gRPC service Connected");
         _isConnected = true;
@@ -65,8 +65,8 @@ class AppGRPCManager {
   }
 
   static Future<List<int>> getDownloadInfo(DownloadInfoRequestType type) async {
-    final r =
-        await _fileSyncClient.getDownloadInfo(DownloadInfoRequest(type: type));
+    final r = await _fileSyncClient
+        .getDownloadInfo(DownloadInfoRequest()..type = type);
     return r.data;
   }
 
@@ -82,7 +82,7 @@ class AppGRPCManager {
 
   static Future<String> cancelDownloadTask(String id) async {
     final r = await _fileSyncClient
-        .cancelDownloadTask(DownloadTaskCancelRequest(id: id));
+        .cancelDownloadTask(DownloadTaskCancelRequest()..id = id);
     return r.status;
   }
 }

@@ -38,8 +38,9 @@ class FileOpenTempDialogUIModel extends BaseUIModel {
           workingUrl: AppAccountManager.workingAccount!.workingUrl,
           instanceUrl: AppAccountManager.workingAccount!.instanceUrl,
           fileInfo: [
-            DownloadTaskRequestFileInfo(
-                fileID: fileObjectsData.id!, fileName: p.fileName!)
+            DownloadTaskRequestFileInfo()
+              ..fileID = fileObjectsData.id!
+              ..fileName = p.fileName!
           ],
           savePath: p.savePath!,
           cookie: AppAccountManager.workingAccount!.cloudreveSession,

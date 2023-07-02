@@ -92,11 +92,11 @@ class MyEasyLoadingAnimation extends EasyLoadingAnimation {
       AlignmentGeometry alignment) {
     return Opacity(
       opacity: controller.value,
-      child: AlertDialog(
-        title: const Text("Working ..."),
+      child: const AlertDialog(
+        title: Text("Working ..."),
         content: Column(
           mainAxisSize: MainAxisSize.min,
-          children: const [
+          children: [
             LinearProgressIndicator(),
           ],
         ),

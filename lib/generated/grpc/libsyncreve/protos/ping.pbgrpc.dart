@@ -1,18 +1,25 @@
-///
+//
 //  Generated code. Do not modify.
 //  source: libsyncreve/protos/ping.proto
 //
 // @dart = 2.12
-// ignore_for_file: annotate_overrides,camel_case_types,constant_identifier_names,directives_ordering,library_prefixes,non_constant_identifier_names,prefer_final_fields,return_of_invalid_type,unnecessary_const,unnecessary_import,unnecessary_this,unused_import,unused_shown_name
+
+// ignore_for_file: annotate_overrides, camel_case_types
+// ignore_for_file: constant_identifier_names, library_prefixes
+// ignore_for_file: non_constant_identifier_names, prefer_final_fields
+// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
 
 import 'dart:async' as $async;
-
 import 'dart:core' as $core;
 
 import 'package:grpc/service_api.dart' as $grpc;
+import 'package:protobuf/protobuf.dart' as $pb;
+
 import 'ping.pb.dart' as $1;
+
 export 'ping.pb.dart';
 
+@$pb.GrpcServiceName('PingService')
 class PingServiceClient extends $grpc.Client {
   static final _$pingServer = $grpc.ClientMethod<$1.PingRequest, $1.PingResult>(
       '/PingService/PingServer',
@@ -22,14 +29,15 @@ class PingServiceClient extends $grpc.Client {
   PingServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
       $core.Iterable<$grpc.ClientInterceptor>? interceptors})
-      : super(channel, options: options, interceptors: interceptors);
+      : super(channel, options: options,
+        interceptors: interceptors);
 
-  $grpc.ResponseFuture<$1.PingResult> pingServer($1.PingRequest request,
-      {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$1.PingResult> pingServer($1.PingRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$pingServer, request, options: options);
   }
 }
 
+@$pb.GrpcServiceName('PingService')
 abstract class PingServiceBase extends $grpc.Service {
   $core.String get $name => 'PingService';
 
@@ -43,11 +51,9 @@ abstract class PingServiceBase extends $grpc.Service {
         ($1.PingResult value) => value.writeToBuffer()));
   }
 
-  $async.Future<$1.PingResult> pingServer_Pre(
-      $grpc.ServiceCall call, $async.Future<$1.PingRequest> request) async {
+  $async.Future<$1.PingResult> pingServer_Pre($grpc.ServiceCall call, $async.Future<$1.PingRequest> request) async {
     return pingServer(call, await request);
   }
 
-  $async.Future<$1.PingResult> pingServer(
-      $grpc.ServiceCall call, $1.PingRequest request);
+  $async.Future<$1.PingResult> pingServer($grpc.ServiceCall call, $1.PingRequest request);
 }
