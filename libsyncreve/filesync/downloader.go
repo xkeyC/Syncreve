@@ -34,6 +34,9 @@ func DoDownload(ctx context.Context, taskInfo *db.DownloadQueue, callback utils.
 		return err
 	}
 
+	if !strings.HasPrefix(downloadUrl, "http://") && !strings.HasPrefix(downloadUrl, "https://") {
+		downloadUrl = taskInfo.InstanceUrl + downloadUrl
+	}
 	if taskInfo.WorkingUrl != taskInfo.InstanceUrl && strings.HasPrefix(downloadUrl, taskInfo.InstanceUrl) {
 		downloadUrl = strings.Replace(downloadUrl, taskInfo.InstanceUrl, taskInfo.WorkingUrl, 1)
 	}
