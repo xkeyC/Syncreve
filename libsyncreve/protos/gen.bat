@@ -1,1 +1,1 @@
-protoc --go_out=plugins=grpc:. *.proto
+protoc --proto_path=. --go_out=. --go-grpc_out=. *.proto
