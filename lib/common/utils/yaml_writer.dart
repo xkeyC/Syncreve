@@ -1,5 +1,6 @@
 /// YamlWriter by Isaac Skelton
 /// https://stackoverflow.com/questions/60051282/how-to-write-a-map-to-a-yaml-file-in-dart
+library;
 
 class YamlWriter {
   /// The amount of spaces for each level.

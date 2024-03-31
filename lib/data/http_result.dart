@@ -1,6 +1,7 @@
 /// code : 0
 /// data : null
 /// msg : ""
+library;
 
 class AppHttpResultData {
   AppHttpResultData({

@@ -1,6 +1,7 @@
 /// port : 39399
 /// working_dir : "/"
 /// temp_dir : "/"
+library;
 
 class AppGrpcServiceConfigData {
   AppGrpcServiceConfigData({

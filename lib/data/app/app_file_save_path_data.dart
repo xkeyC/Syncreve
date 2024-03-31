@@ -1,6 +1,7 @@
 /// filePath : ""
 /// savePath : ""
 /// fileName : ""
+library;
 
 class AppFileSavePathData {
   AppFileSavePathData({

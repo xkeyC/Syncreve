@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class FadeTransitionRoute<T> extends MaterialPageRoute<T> {
   FadeTransitionRoute({
-    required WidgetBuilder builder,
+    required super.builder,
     super.settings,
-  }) : super(builder: builder);
+  });
 
   @override
   Duration get transitionDuration => const Duration(milliseconds: 800);

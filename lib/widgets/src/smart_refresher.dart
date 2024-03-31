@@ -12,14 +12,14 @@ class AppSmartRefresher extends StatelessWidget {
   final bool enablePullUp;
 
   const AppSmartRefresher({
-    Key? key,
+    super.key,
     this.child,
     this.controller,
     this.onRefresh,
     this.onLoading,
     this.enablePullDown = true,
     this.enablePullUp = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

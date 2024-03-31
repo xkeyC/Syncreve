@@ -59,7 +59,7 @@ class _CacheImageState extends State<CacheImage> with TickerProviderStateMixin {
     return widget.borderRadius == null
         ? getImageWidget()
         : ClipRRect(
-            borderRadius: widget.borderRadius,
+            borderRadius: widget.borderRadius!,
             child: getImageWidget(),
           );
   }
